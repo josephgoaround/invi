@@ -748,6 +748,27 @@
   /* ════════════════════════════════════════════
      SCROLLBAR
   ════════════════════════════════════════════ */
+  /* ── Snap link button ── */
+  .snap-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 18px;
+    margin-top: 20px;
+    background: var(--char);
+    color: #fff;
+    border-radius: var(--radius-card);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    letter-spacing: .1em;
+    text-decoration: none;
+    transition: background .2s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .snap-link-btn:active { transform: scale(.98); background: #333; }
+
   /* ════════════════════════════════════════════
      GUESTBOOK (댓글)
   ════════════════════════════════════════════ */
@@ -1195,8 +1216,8 @@
         <span class="en-text" style="font-size:19px; display:block">Lotte Hotel World<br>Crystal Ballroom</span>
       </div>
       <div class="d-sub">
-        <span class="ko-text">서울 송파구 올림픽로 240<br>웨딩센터 02-411-7450</span>
-        <span class="en-text">240 Olympic-ro, Songpa-gu, Seoul<br>Wedding Center 02-411-7450</span>
+        <span class="ko-text">서울 송파구 올림픽로 240</span>
+        <span class="en-text">240 Olympic-ro, Songpa-gu, Seoul</span>
       </div>
     </div>
 
@@ -1368,7 +1389,7 @@
 </section>
 
 <!-- ══════════════════════════════════════════
-     GUEST SNAP EVENT
+     GUEST SNAP LINK
 ══════════════════════════════════════════ -->
 <section class="reveal">
   <span class="eyebrow">
@@ -1376,7 +1397,6 @@
     <span class="en-text">Guest Snap</span>
   </span>
 
-  <!-- Hero banner -->
   <div class="snap-hero">
     <h3>
       <span class="ko-text">하객 <em>스냅</em> 이벤트</span>
@@ -1385,83 +1405,25 @@
     <p class="ko-block">
       그날을 기억하는 방식은 모두 다릅니다.<br>
       찍어주신 사진 한 장 한 장이<br>
-      저희에게는 소중한 기억이 됩니다 ✦
+      저희에게는 소중한 기억이 됩니다 ✦<br><br>
+      선정된 사진에는 소정의 감사 선물을 드립니다.
     </p>
     <p class="en-block">
       Every photograph tells a different story.<br>
       Each image you share becomes a memory<br>
-      we will hold close, always ✦
+      we will hold close, always ✦<br><br>
+      Selected photos will receive a small gift of appreciation.
     </p>
   </div>
 
-  <!-- Submit form -->
-  <div class="snap-form-wrap" id="snapFormWrap">
-
-    <div class="form-field">
-      <label class="f-label" for="snapName">
-        <span class="ko-text">성함 *</span>
-        <span class="en-text">Your Name *</span>
-      </label>
-      <input type="text" id="snapName" class="f-input"
-             placeholder="홍길동" autocomplete="name" />
-    </div>
-
-    <div class="form-field">
-      <label class="f-label" for="snapContact">
-        <span class="ko-text">연락처 *</span>
-        <span class="en-text">Contact *</span>
-      </label>
-      <input type="tel" id="snapContact" class="f-input"
-             placeholder="010-0000-0000" autocomplete="tel" />
-    </div>
-
-    <!-- Upload zone -->
-    <div class="upload-zone" id="uploadZone" role="button"
-         tabindex="0" aria-label="사진 선택"
-         onclick="document.getElementById('fileInput').click()"
-         onkeydown="if(event.key==='Enter')document.getElementById('fileInput').click()">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-      </svg>
-      <p class="ko-block">탭하여 사진 또는 동영상을 선택하세요</p>
-      <p class="en-block">Tap to choose photos or videos</p>
-      <small class="ko-block">사진 (JPG·PNG·WEBP) · 동영상 (MP4·MOV) &nbsp;·&nbsp; 최대 20개</small>
-      <small class="en-block">Photos (JPG·PNG·WEBP) · Videos (MP4·MOV) &nbsp;·&nbsp; Up to 20 files</small>
-    </div>
-    <input type="file" id="fileInput" accept="image/*,video/*" multiple aria-label="사진/동영상 파일 선택" />
-
-    <!-- Chosen file count indicator -->
-    <div class="file-chosen" id="fileChosen" style="display:none" aria-live="polite">
-      <span id="fileChosenKo"></span>
-      <span id="fileChosenEn" style="display:none"></span>
-    </div>
-
-    <button class="snap-submit-btn" id="snapSubmitBtn" onclick="submitSnap()">
-      <span class="ko-text">제출하기</span>
-      <span class="en-text">Submit</span>
-    </button>
-  </div>
-
-  <!-- Thank you state (hidden until submit) -->
-  <div class="snap-thanks" id="snapThanks" style="display:none" aria-live="polite">
-    <div class="thanks-sym">✦ &nbsp; ✦ &nbsp; ✦</div>
-    <p class="ko-block">
-      감사합니다.<br>
-      소중한 기억을 나눠주셨습니다.<br>
-      당일에 뵙겠습니다.
-    </p>
-    <p class="en-block">
-      Thank you.<br>
-      Your memories have been received.<br>
-      We look forward to seeing you on the day.
-    </p>
-    <button class="snap-again-btn" onclick="resetSnap()">
-      <span class="ko-text">다른 사진 추가하기</span>
-      <span class="en-text">Add more photos</span>
-    </button>
-  </div>
-
+  <a href="snap.html" class="snap-link-btn">
+    <span class="ko-text">사진 · 동영상 제출하기</span>
+    <span class="en-text">Submit Photos &amp; Videos</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </svg>
+  </a>
 </section>
 
 <!-- ══════════════════════════════════════════
@@ -1541,7 +1503,7 @@
 
 /* ── 0. CONFIG ── */
 // Google Apps Script 배포 후 URL을 아래에 입력하세요
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw4cKqUGQsgcSPLdurXXFS-1v0y_wssHxcnpKE66NR96iGuuJAthQFWtcMxufak3yvB/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGJwlleNBAdqOC750dn6JWigyFqiKMOeJmi-aMYmtTHY_pKNTHWmwekrYL3poUwNs9/exec';
 
 /* ── RSVP MODAL ── */
 const RSVP_KEY = 'rsvpDone_kye2026';
@@ -1653,161 +1615,7 @@ function showToast(msg, ms) {
   toastTimer = setTimeout(() => el.classList.remove('show'), ms);
 }
 
-/* ── 4. GUEST SNAP EVENT ── */
-const STORAGE_KEY = 'weddingSnaps_kye2026';
-const MAX_FILES   = 20;
-let submissions   = [];
-let pendingFiles  = [];
-
-try {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  submissions = raw ? JSON.parse(raw) : [];
-} catch (e) { submissions = []; }
-renderBoard();
-
-function renderBoard() {
-  const count   = submissions.length;
-  const elKo    = document.getElementById('snapCount');
-  const elEn    = document.getElementById('snapCountEn');
-  const nameBox = document.getElementById('snapNames');
-  if (elKo) elKo.textContent = count;
-  if (elEn) elEn.textContent = count;
-  nameBox.querySelectorAll('.name-chip').forEach(el => el.remove());
-  const empties = nameBox.querySelectorAll('.empty-txt');
-  if (count === 0) { empties.forEach(el => el.style.display = ''); return; }
-  empties.forEach(el => el.style.display = 'none');
-  submissions.forEach(s => {
-    const chip = document.createElement('span');
-    chip.className = 'name-chip';
-    chip.textContent = s.name;
-    nameBox.appendChild(chip);
-  });
-}
-
-document.getElementById('fileInput').addEventListener('change', function () {
-  pendingFiles = Array.from(this.files)
-    .filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'))
-    .slice(0, MAX_FILES);
-  updateFileIndicator();
-});
-
-function updateFileIndicator() {
-  const wrap = document.getElementById('fileChosen');
-  const ko   = document.getElementById('fileChosenKo');
-  const en   = document.getElementById('fileChosenEn');
-  if (!pendingFiles.length) { wrap.style.display = 'none'; return; }
-  const photos = pendingFiles.filter(f => f.type.startsWith('image/')).length;
-  const videos = pendingFiles.filter(f => f.type.startsWith('video/')).length;
-  wrap.style.display = 'block';
-  ko.textContent = photos && videos ? `사진 ${photos}장, 동영상 ${videos}개 선택됨`
-                 : photos           ? `사진 ${photos}장 선택됨`
-                                    : `동영상 ${videos}개 선택됨`;
-  en.textContent = photos && videos ? `${photos} photo(s) & ${videos} video(s) selected`
-                 : photos           ? `${photos} photo(s) selected`
-                                    : `${videos} video(s) selected`;
-  ko.style.display = currentLang === 'ko' ? '' : 'none';
-  en.style.display = currentLang === 'en' ? '' : 'none';
-}
-
-async function submitSnap() {
-  const nameVal    = (document.getElementById('snapName').value    || '').trim();
-  const contactVal = (document.getElementById('snapContact').value || '').trim();
-  const lang       = currentLang;
-
-  if (!nameVal)         { showToast(lang==='ko'?'성함을 입력해 주세요':'Please enter your name'); document.getElementById('snapName').focus(); return; }
-  if (!contactVal)      { showToast(lang==='ko'?'연락처를 입력해 주세요':'Please enter your contact'); document.getElementById('snapContact').focus(); return; }
-  if (!pendingFiles.length) { showToast(lang==='ko'?'파일을 선택해 주세요':'Please select files'); return; }
-
-  const btn = document.getElementById('snapSubmitBtn');
-  btn.disabled = true;
-  btn.querySelector('span.ko-text') && (btn.querySelector('span.ko-text').textContent = '전송 중…');
-  btn.querySelector('span.en-text') && (btn.querySelector('span.en-text').textContent = 'Uploading…');
-
-  // 파일을 base64로 읽기 — 파일명: 성함_순서 (예: 홍길동_1.jpg)
-  const filesData = [];
-  for (let i = 0; i < pendingFiles.length; i++) {
-    const f = pendingFiles[i];
-    try {
-      const base64 = await readAsBase64(f);
-      const ext = f.name.includes('.') ? f.name.split('.').pop().toLowerCase()
-                : f.type.startsWith('video/') ? 'mp4' : 'jpg';
-      filesData.push({ base64, mimeType: f.type, ext, savedName: `${nameVal}_${i + 1}.${ext}` });
-    } catch(e) { /* skip */ }
-  }
-
-  const payload = {
-    type: 'snap',
-    name: nameVal,
-    contact: contactVal,
-    timestamp: new Date().toISOString(),
-    fileCount: filesData.length,
-    files: filesData
-  };
-
-  // Google Drive + Sheets 전송
-  if (APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
-    try {
-      await fetch(APPS_SCRIPT_URL, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload)
-      });
-    } catch(e) { /* silent */ }
-  }
-
-  // localStorage에는 파일 제외 메타만 저장
-  const localEntry = { name: nameVal, contact: contactVal, timestamp: payload.timestamp, fileCount: filesData.length };
-  submissions.push(localEntry);
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(submissions)); } catch(e) {}
-
-  pendingFiles = [];
-  document.getElementById('fileInput').value = '';
-  renderBoard();
-
-  document.getElementById('snapFormWrap').style.display = 'none';
-  document.getElementById('snapThanks').style.display   = 'block';
-  btn.disabled = false;
-}
-
-/* Reset back to form */
-function resetSnap() {
-  document.getElementById('snapName').value    = '';
-  document.getElementById('snapContact').value = '';
-  pendingFiles = [];
-  document.getElementById('fileChosen').style.display  = 'none';
-  document.getElementById('snapThanks').style.display  = 'none';
-  document.getElementById('snapFormWrap').style.display = '';
-  const btn = document.getElementById('snapSubmitBtn');
-  btn.querySelector('span.ko-text') && (btn.querySelector('span.ko-text').textContent = '제출하기');
-  btn.querySelector('span.en-text') && (btn.querySelector('span.en-text').textContent = 'Submit');
-}
-
-function readAsBase64(file) {
-  return new Promise((resolve, reject) => {
-    const r = new FileReader();
-    r.onload  = e => resolve(e.target.result.split(',')[1]); // base64 only
-    r.onerror = () => reject(new Error('read failed'));
-    r.readAsDataURL(file);
-  });
-}
-
-// Drag & drop on upload zone
-(function () {
-  const zone = document.getElementById('uploadZone');
-  let dc = 0;
-  zone.addEventListener('dragenter', e => { e.preventDefault(); dc++; zone.classList.add('drag-over'); });
-  zone.addEventListener('dragleave', () => { dc--; if (dc <= 0) { dc = 0; zone.classList.remove('drag-over'); } });
-  zone.addEventListener('dragover',  e => { e.preventDefault(); });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); dc = 0; zone.classList.remove('drag-over');
-    if (e.dataTransfer && e.dataTransfer.files.length) {
-      pendingFiles = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')).slice(0, MAX_PHOTOS);
-      updateFileIndicator();
-    }
-  });
-})();
-
-// Note: language toggle also refreshes the file indicator (handled inline in toggleLang above)
+/* ── 4. GUEST SNAP EVENT — moved to snap.html ── */
 
 /* ── 6. GUESTBOOK (방명록) ── */
 const GB_KEY = 'guestbook_kye2026';

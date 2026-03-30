@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko" data-lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no,address=no,date=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#1C1814" />
+  <title>하객 스냅 이벤트 · 강영석 ♥ 권지은</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ivory:   #F7F4EE;
+    --cream:   #EDE8DE;
+    --gold:    #B4925A;
+    --gold-lt: #D4B280;
+    --rose:    #C09080;
+    --char:    #1A1A1A;
+    --mid:     #5A5248;
+    --light:   #9A9088;
+    --border:  rgba(180,146,90,.18);
+    --card-bg: rgba(255,255,255,.98);
+    --radius-card: 14px;
+    --dark-bg: #1C1814;
+  }
+
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--dark-bg);
+    color: #fff;
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  /* KO / EN */
+  .ko-block { display: block; }
+  .en-block { display: none; }
+  span.ko-text { display: inline; }
+  span.en-text { display: none; }
+  [data-lang="en"] .ko-block { display: none; }
+  [data-lang="en"] .en-block { display: block; }
+  [data-lang="en"] span.ko-text { display: none; }
+  [data-lang="en"] span.en-text { display: inline; }
+  [data-lang="en"] body { font-family: 'Cormorant Garamond', 'Georgia', serif; }
+
+  /* LANGUAGE TOGGLE */
+  .lang-btn {
+    position: fixed;
+    top: 18px; right: 18px;
+    z-index: 200;
+    background: rgba(28,24,20,.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(180,146,90,.3);
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: .15em;
+    color: var(--gold-lt);
+    cursor: pointer;
+    transition: background .25s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .lang-btn:active { transform: scale(.96); }
+
+  /* HERO */
+  .snap-page-hero {
+    position: relative;
+    padding: 80px 28px 48px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .snap-page-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 55% at 50% 0%, rgba(180,146,90,.18), transparent);
+    pointer-events: none;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: .15em;
+    color: rgba(255,255,255,.35);
+    text-decoration: none;
+    margin-bottom: 36px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .back-link:hover { color: var(--gold-lt); }
+  .eyebrow {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px;
+    letter-spacing: .4em;
+    text-transform: uppercase;
+    color: var(--gold-lt);
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px;
+    font-weight: 300;
+    line-height: 1.25;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-lt); }
+  .hero-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,.45);
+    line-height: 2;
+    letter-spacing: .03em;
+    margin-bottom: 0;
+  }
+  [data-lang="en"] .hero-sub { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-style: italic; }
+
+  /* PRIZE BADGE */
+  .prize-badge {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 20px;
+    border: 1px solid rgba(180,146,90,.35);
+    border-radius: 999px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    color: var(--gold-lt);
+    letter-spacing: .08em;
+  }
+
+  /* FORM CARD */
+  .form-card {
+    background: var(--ivory);
+    border-radius: 24px 24px 0 0;
+    padding: 36px 28px;
+    padding-bottom: max(60px, calc(env(safe-area-inset-bottom, 0px) + 48px));
+    min-height: 60vh;
+  }
+
+  .f-label {
+    display: block;
+    font-size: 11.5px;
+    letter-spacing: .1em;
+    color: var(--mid);
+    margin-bottom: 8px;
+  }
+  [data-lang="en"] .f-label { font-family: 'Cormorant Garamond', serif; font-size: 13px; }
+
+  .f-input {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+    font-size: 14px;
+    color: var(--char);
+    font-weight: 300;
+    outline: none;
+    transition: border-color .2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .f-input:focus { border-color: var(--gold); }
+  .f-input::placeholder { color: var(--light); }
+  [data-lang="en"] .f-input { font-family: 'Cormorant Garamond', serif; font-size: 15px; }
+
+  .form-field { margin-bottom: 14px; }
+
+  /* optional badge */
+  .optional-badge {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    color: var(--light);
+    letter-spacing: .05em;
+    margin-left: 6px;
+  }
+
+  /* UPLOAD ZONE */
+  .upload-zone {
+    border: 1.5px dashed rgba(180,146,90,.38);
+    border-radius: 16px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    background: var(--card-bg);
+    transition: all .25s ease;
+    margin-bottom: 12px;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .upload-zone:active, .upload-zone.drag-over {
+    border-color: var(--gold);
+    background: rgba(180,146,90,.04);
+  }
+  .upload-zone svg { color: var(--gold); margin-bottom: 10px; }
+  .upload-zone p { font-size: 13px; color: var(--mid); line-height: 1.9; }
+  .upload-zone small { font-size: 11px; color: var(--light); }
+  [data-lang="en"] .upload-zone p { font-family: 'Cormorant Garamond', serif; font-size: 15px; }
+  [data-lang="en"] .upload-zone small { font-family: 'Cormorant Garamond', serif; font-size: 13px; }
+  #fileInput { display: none; }
+
+  .file-chosen {
+    text-align: center;
+    font-size: 12px;
+    color: var(--gold);
+    padding: 4px 0 12px;
+    letter-spacing: .04em;
+  }
+  [data-lang="en"] .file-chosen { font-family: 'Cormorant Garamond', serif; font-size: 14px; }
+
+  /* SUBMIT BTN */
+  .submit-btn {
+    width: 100%;
+    padding: 17px;
+    background: var(--char);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-card);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    letter-spacing: .1em;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+    margin-top: 4px;
+  }
+  .submit-btn:active { transform: scale(.98); background: #333; }
+  .submit-btn:disabled { opacity: .45; cursor: default; transform: none; }
+
+  /* PROGRESS BAR */
+  .upload-progress-wrap {
+    margin-top: 14px;
+    display: none;
+  }
+  .upload-progress-wrap p {
+    font-size: 12px;
+    color: var(--mid);
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: .05em;
+  }
+  .upload-progress-bar {
+    height: 3px;
+    background: var(--cream);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .upload-progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 99px;
+    width: 0%;
+    transition: width .3s ease;
+  }
+
+  /* THANK YOU */
+  .snap-thanks {
+    text-align: center;
+    padding: 60px 24px;
+  }
+  .snap-thanks .thanks-sym {
+    font-size: 20px;
+    color: var(--gold);
+    letter-spacing: .3em;
+    margin-bottom: 24px;
+  }
+  .snap-thanks p {
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 2.4;
+    margin-bottom: 28px;
+    word-break: keep-all;
+  }
+  [data-lang="en"] .snap-thanks p { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; }
+  .again-btn {
+    background: none;
+    border: 1px solid rgba(180,146,90,.3);
+    border-radius: 999px;
+    padding: 10px 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: .1em;
+    color: var(--mid);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 32px; left: 50%;
+    transform: translateX(-50%) translateY(14px);
+    background: var(--char);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: .05em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s, transform .3s;
+    z-index: 500;
+    white-space: nowrap;
+    max-width: calc(100vw - 40px);
+    text-align: center;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(180,146,90,.22); border-radius: 99px; }
+  </style>
+</head>
+<body>
+
+<button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+
+<!-- HERO -->
+<div class="snap-page-hero">
+  <a class="back-link" href="index.html">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    <span class="ko-text">청첩장으로 돌아가기</span>
+    <span class="en-text">Back to Invitation</span>
+  </a>
+
+  <span class="eyebrow">
+    <span class="ko-text">하객 스냅 이벤트</span>
+    <span class="en-text">Guest Snap Event</span>
+  </span>
+  <h1 class="hero-title">
+    <span class="ko-text">그날의 기억을<br><em>나눠주세요</em></span>
+    <span class="en-text">Share Your<br><em>Memories</em></span>
+  </h1>
+  <p class="hero-sub ko-block">
+    그날을 기억하는 방식은 모두 다릅니다.<br>
+    찍어주신 사진 한 장 한 장이<br>
+    저희에게는 소중한 기억이 됩니다.
+  </p>
+  <p class="hero-sub en-block">
+    Every photograph tells a different story.<br>
+    Each image you share becomes a memory<br>
+    we will hold close, always.
+  </p>
+  <span class="prize-badge">
+    <span class="ko-text">✦ &nbsp; 선정된 사진에 소정의 감사 선물 증정</span>
+    <span class="en-text">✦ &nbsp; Selected photos receive a gift of appreciation</span>
+  </span>
+</div>
+
+<!-- FORM CARD -->
+<div class="form-card">
+
+  <!-- Form -->
+  <div id="snapFormWrap">
+
+    <div class="form-field">
+      <label class="f-label" for="snapName">
+        <span class="ko-text">성함 *</span>
+        <span class="en-text">Your Name *</span>
+      </label>
+      <input type="text" id="snapName" class="f-input"
+             placeholder="홍길동" autocomplete="name" />
+    </div>
+
+    <div class="form-field">
+      <label class="f-label" for="snapContact">
+        <span class="ko-text">연락처 *</span>
+        <span class="en-text">
+          Contact
+          <span class="optional-badge">(optional)</span>
+        </span>
+      </label>
+      <input type="tel" id="snapContact" class="f-input"
+             placeholder="010-0000-0000" autocomplete="tel" />
+    </div>
+
+    <!-- Upload zone -->
+    <div class="upload-zone" id="uploadZone" role="button"
+         tabindex="0" aria-label="파일 선택"
+         onclick="document.getElementById('fileInput').click()"
+         onkeydown="if(event.key==='Enter')document.getElementById('fileInput').click()">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+      </svg>
+      <p class="ko-block">탭하여 사진 또는 동영상을 선택하세요</p>
+      <p class="en-block">Tap to choose photos or videos</p>
+      <small class="ko-block">사진 (JPG · PNG · WEBP) · 동영상 (MP4 · MOV) &nbsp;·&nbsp; 최대 20개</small>
+      <small class="en-block">Photos (JPG · PNG · WEBP) · Videos (MP4 · MOV) &nbsp;·&nbsp; Up to 20 files</small>
+    </div>
+    <input type="file" id="fileInput" accept="image/*,video/*" multiple />
+
+    <div class="file-chosen" id="fileChosen" style="display:none" aria-live="polite">
+      <span id="fileChosenTxt"></span>
+    </div>
+
+    <!-- Progress -->
+    <div class="upload-progress-wrap" id="progressWrap">
+      <p>
+        <span class="ko-text" id="progressTxtKo">업로드 중…</span>
+        <span class="en-text" id="progressTxtEn">Uploading…</span>
+      </p>
+      <div class="upload-progress-bar">
+        <div class="upload-progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="snapSubmitBtn" onclick="submitSnap()">
+      <span class="ko-text">제출하기</span>
+      <span class="en-text">Submit</span>
+    </button>
+  </div>
+
+  <!-- Thank you -->
+  <div class="snap-thanks" id="snapThanks" style="display:none" aria-live="polite">
+    <div class="thanks-sym">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <p class="ko-block">
+      감사합니다.<br>
+      소중한 기억을 나눠주셨습니다.<br>
+      선물 당첨 시 연락드리겠습니다.
+    </p>
+    <p class="en-block">
+      Thank you.<br>
+      Your memories have been received.<br>
+      We'll be in touch if your photo is selected.
+    </p>
+    <button class="again-btn" onclick="resetSnap()">
+      <span class="ko-text">다른 파일 추가하기</span>
+      <span class="en-text">Submit more files</span>
+    </button>
+  </div>
+
+</div>
+
+<div class="toast" id="toastEl" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGJwlleNBAdqOC750dn6JWigyFqiKMOeJmi-aMYmtTHY_pKNTHWmwekrYL3poUwNs9/exec';
+const MAX_FILES = 20;
+let pendingFiles = [];
+let currentLang = 'ko';
+
+/* Language toggle */
+const htmlEl  = document.documentElement;
+const langBtn = document.getElementById('langBtn');
+
+function toggleLang() {
+  currentLang = currentLang === 'ko' ? 'en' : 'ko';
+  htmlEl.setAttribute('data-lang', currentLang);
+  htmlEl.lang = currentLang;
+  langBtn.textContent = currentLang === 'ko' ? 'EN' : '한';
+  document.title = currentLang === 'ko'
+    ? '하객 스냅 이벤트 · 강영석 ♥ 권지은'
+    : 'Guest Snap · Joseph ♥ Ji-Eun';
+  updateFileIndicator();
+}
+
+/* Toast */
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toastEl');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+/* File input */
+document.getElementById('fileInput').addEventListener('change', function () {
+  pendingFiles = Array.from(this.files)
+    .filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'))
+    .slice(0, MAX_FILES);
+  updateFileIndicator();
+});
+
+function updateFileIndicator() {
+  const wrap = document.getElementById('fileChosen');
+  const txt  = document.getElementById('fileChosenTxt');
+  if (!pendingFiles.length) { wrap.style.display = 'none'; return; }
+  const photos = pendingFiles.filter(f => f.type.startsWith('image/')).length;
+  const videos = pendingFiles.filter(f => f.type.startsWith('video/')).length;
+  wrap.style.display = 'block';
+  if (currentLang === 'ko') {
+    txt.textContent = photos && videos ? `사진 ${photos}장, 동영상 ${videos}개 선택됨`
+                    : photos           ? `사진 ${photos}장 선택됨`
+                                       : `동영상 ${videos}개 선택됨`;
+  } else {
+    txt.textContent = photos && videos ? `${photos} photo(s) & ${videos} video(s) selected`
+                    : photos           ? `${photos} photo(s) selected`
+                                       : `${videos} video(s) selected`;
+  }
+}
+
+/* Submit */
+async function submitSnap() {
+  const nameVal    = (document.getElementById('snapName').value    || '').trim();
+  const contactVal = (document.getElementById('snapContact').value || '').trim();
+  const lang       = currentLang;
+
+  if (!nameVal) {
+    showToast(lang === 'ko' ? '성함을 입력해 주세요' : 'Please enter your name');
+    document.getElementById('snapName').focus();
+    return;
+  }
+  // 한국어는 연락처 필수, 영문은 선택
+  if (lang === 'ko' && !contactVal) {
+    showToast('연락처를 입력해 주세요');
+    document.getElementById('snapContact').focus();
+    return;
+  }
+  if (!pendingFiles.length) {
+    showToast(lang === 'ko' ? '파일을 선택해 주세요' : 'Please select files');
+    return;
+  }
+
+  const btn = document.getElementById('snapSubmitBtn');
+  btn.disabled = true;
+
+  // 진행 표시
+  const progressWrap = document.getElementById('progressWrap');
+  const progressFill = document.getElementById('progressFill');
+  progressWrap.style.display = 'block';
+
+  // base64 인코딩 — 파일명: 성함_1.jpg
+  const filesData = [];
+  for (let i = 0; i < pendingFiles.length; i++) {
+    const f = pendingFiles[i];
+    try {
+      const base64 = await readAsBase64(f);
+      const ext = f.name.includes('.')
+        ? f.name.split('.').pop().toLowerCase()
+        : f.type.startsWith('video/') ? 'mp4' : 'jpg';
+      filesData.push({ base64, mimeType: f.type, ext, savedName: `${nameVal}_${i + 1}.${ext}` });
+      // 진행률 업데이트
+      progressFill.style.width = `${Math.round((i + 1) / pendingFiles.length * 70)}%`;
+    } catch(e) { /* skip */ }
+  }
+
+  const payload = {
+    type: 'snap',
+    name: nameVal,
+    contact: contactVal || '-',
+    timestamp: new Date().toISOString(),
+    fileCount: filesData.length,
+    files: filesData
+  };
+
+  progressFill.style.width = '85%';
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) { /* silent */ }
+
+  progressFill.style.width = '100%';
+  await new Promise(r => setTimeout(r, 400));
+
+  pendingFiles = [];
+  document.getElementById('fileInput').value = '';
+  document.getElementById('fileChosen').style.display = 'none';
+  progressWrap.style.display = 'none';
+  progressFill.style.width = '0%';
+
+  document.getElementById('snapFormWrap').style.display = 'none';
+  document.getElementById('snapThanks').style.display   = 'block';
+  btn.disabled = false;
+}
+
+function resetSnap() {
+  document.getElementById('snapName').value    = '';
+  document.getElementById('snapContact').value = '';
+  pendingFiles = [];
+  document.getElementById('fileChosen').style.display  = 'none';
+  document.getElementById('snapThanks').style.display  = 'none';
+  document.getElementById('snapFormWrap').style.display = '';
+}
+
+function readAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload  = e => resolve(e.target.result.split(',')[1]);
+    r.onerror = () => reject(new Error('read failed'));
+    r.readAsDataURL(file);
+  });
+}
+
+/* Drag & drop */
+(function () {
+  const zone = document.getElementById('uploadZone');
+  let dc = 0;
+  zone.addEventListener('dragenter', e => { e.preventDefault(); dc++; zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => { dc--; if (dc <= 0) { dc = 0; zone.classList.remove('drag-over'); } });
+  zone.addEventListener('dragover',  e => { e.preventDefault(); });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); dc = 0; zone.classList.remove('drag-over');
+    if (e.dataTransfer && e.dataTransfer.files.length) {
+      pendingFiles = Array.from(e.dataTransfer.files)
+        .filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'))
+        .slice(0, MAX_FILES);
+      updateFileIndicator();
+    }
+  });
+})();
+</script>
+</body>
+</html>
