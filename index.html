@@ -1,1513 +1,410 @@
 <!DOCTYPE html>
-<html lang="ko" data-lang="ko">
+<html class="light" lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="format-detection" content="telephone=no,address=no,date=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="theme-color" content="#F7F4EE" />
-  <title>강영석 ♥ 권지은</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>강영석 &amp; 권지은 | Wedding Invitation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
-  <!-- ── Fonts: Korean sans + English serif ── -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
-
-  <style>
-  /* ════════════════════════════════════════════
-     RESET & CUSTOM PROPERTIES
-  ════════════════════════════════════════════ */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --ivory:    #F7F4EE;
-    --cream:    #EDE8DE;
-    --gold:     #B4925A;
-    --gold-lt:  #D4B280;
-    --rose:     #C09080;
-    --sage:     #7A8C72;
-    --char:     #1A1A1A;
-    --mid:      #5A5248;
-    --light:    #9A9088;
-    --border:   rgba(180,146,90,.18);
-    --card-bg:  rgba(255,255,255,.98);
-    --radius-card: 14px;
-  }
-
-  html {
-    scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-
-  body {
-    background: var(--ivory);
-    color: var(--char);
-    /* Korean font stack — system fallbacks for offline */
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', '맑은 고딕', 'Malgun Gothic', sans-serif;
-    font-weight: 300;
-    max-width: 480px;
-    margin: 0 auto;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    word-break: keep-all;
-    overflow-wrap: break-word;
-  }
-
-  /* ── KO / EN VISIBILITY ── */
-  .ko-block { display: block; }
-  .en-block { display: none;  }
-  span.ko-text { display: inline; }
-  span.en-text { display: none;  }
-
-  [data-lang="en"] .ko-block { display: none; }
-  [data-lang="en"] .en-block { display: block; }
-  [data-lang="en"] span.ko-text { display: none; }
-  [data-lang="en"] span.en-text { display: inline; }
-
-  /* English body switches to elegant western serif */
-  [data-lang="en"] body {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
-  }
-
-  /* ── LANGUAGE TOGGLE BUTTON ── */
-  .lang-btn {
-    position: fixed;
-    top: 18px;
-    right: 18px;
-    z-index: 200;
-    background: rgba(247,244,238,.9);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 9px 18px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: .15em;
-    color: var(--gold);
-    cursor: pointer;
-    transition: background .25s, transform .15s;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
-  .lang-btn:active { transform: scale(.96); }
-
-  /* ════════════════════════════════════════════
-     SECTION BASE
-  ════════════════════════════════════════════ */
-  section {
-    padding: 72px 28px;
-    position: relative;
-  }
-  section + section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 28px; right: 28px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(180,146,90,.35), transparent);
-  }
-
-  .eyebrow {
-    display: block;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 10px;
-    letter-spacing: .4em;
-    text-transform: uppercase;
-    color: var(--gold);
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 30px;
-    font-weight: 300;
-    text-align: center;
-    color: var(--char);
-    line-height: 1.35;
-    letter-spacing: .02em;
-    margin-bottom: 32px;
-  }
-  [data-lang="en"] .section-title {
-    font-style: italic;
-  }
-
-  /* ════════════════════════════════════════════
-     HERO
-  ════════════════════════════════════════════ */
-  .hero {
-    position: relative;
-    /* svh for mobile nav bar awareness; vh as fallback */
-    min-height: 100vh;
-    min-height: 100svh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 80px 32px;
-    padding-bottom: max(80px, calc(env(safe-area-inset-bottom, 0px) + 56px));
-    background: var(--ivory);
-    overflow: hidden;
-  }
-
-  .hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 70% 35% at 50% 0%,  rgba(180,146,90,.10), transparent),
-      radial-gradient(ellipse 80% 40% at 50% 100%, rgba(192,144,128,.09), transparent);
-    pointer-events: none;
-  }
-
-  /* Botanical ornament */
-  .hero-ornament {
-    width: 96px;
-    margin-bottom: 36px;
-    opacity: .5;
-    will-change: opacity;
-  }
-
-  .hero-meta {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 10.5px;
-    letter-spacing: .42em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 28px;
-    text-align: center;
-  }
-
-  /* Korean name display */
-  .hero-names-ko {
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    font-size: 44px;
-    font-weight: 300;
-    line-height: 1.2;
-    text-align: center;
-    color: var(--char);
-    letter-spacing: .04em;
-  }
-  /* English name display */
-  .hero-names-en {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 42px;
-    font-weight: 300;
-    font-style: italic;
-    line-height: 1.25;
-    text-align: center;
-    color: var(--char);
-    letter-spacing: .02em;
-    display: none;
-  }
-  [data-lang="en"] .hero-names-ko { display: none; }
-  [data-lang="en"] .hero-names-en { display: block; }
-
-  .hero-amp {
-    display: block;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 30px;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--gold);
-    margin: 6px 0;
-  }
-
-  .hero-rule {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    max-width: 220px;
-    width: 100%;
-    margin: 28px auto;
-  }
-  .hero-rule span {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(180,146,90,.55), transparent);
-  }
-  .hero-rule i {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--gold);
-    opacity: .75;
-    flex-shrink: 0;
-  }
-
-  .hero-detail {
-    text-align: center;
-    line-height: 2.1;
-    font-size: 13.5px;
-    color: var(--mid);
-    letter-spacing: .05em;
-  }
-  [data-lang="en"] .hero-detail {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    letter-spacing: .03em;
-  }
-
-  .hero-scroll {
-    position: absolute;
-    bottom: max(28px, env(safe-area-inset-bottom, 28px));
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    animation: scrollBounce 2.4s ease-in-out infinite;
-  }
-  .hero-scroll .scroll-lbl {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 8.5px;
-    letter-spacing: .35em;
-    text-transform: uppercase;
-    color: var(--light);
-  }
-  @keyframes scrollBounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); opacity: .45; }
-    50%       { transform: translateX(-50%) translateY(8px); opacity: .25; }
-  }
-
-  /* ════════════════════════════════════════════
-     INVITATION TEXT
-  ════════════════════════════════════════════ */
-  .poem {
-    font-size: 14px;
-    line-height: 2.5;
-    color: var(--mid);
-    text-align: center;
-    letter-spacing: .04em;
-    word-break: keep-all;
-  }
-  [data-lang="en"] .poem {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16.5px;
-    font-style: italic;
-    line-height: 2.3;
-    letter-spacing: .01em;
-  }
-  .poem .stanza + .stanza { margin-top: 28px; }
-
-  .invite-names {
-    margin-top: 44px;
-    text-align: center;
-    font-size: 13px;
-    color: var(--mid);
-    line-height: 2.3;
-    border-top: 1px solid var(--border);
-    padding-top: 32px;
-  }
-  [data-lang="en"] .invite-names {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 15px;
-    line-height: 2.2;
-  }
-  .invite-names .name-highlight {
-    font-weight: 400;
-    color: var(--char);
-    font-size: 16px;
-  }
-  [data-lang="en"] .invite-names .name-highlight {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 19px;
-    font-style: italic;
-  }
-  .invite-names .name-row { margin-bottom: 4px; }
-
-  /* ════════════════════════════════════════════
-     DETAIL CARDS
-  ════════════════════════════════════════════ */
-  .detail-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .d-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    padding: 22px 16px;
-    text-align: center;
-  }
-  .d-card.wide { grid-column: 1 / -1; }
-  .d-card .d-label {
-    display: block;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 9.5px;
-    letter-spacing: .32em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 12px;
-  }
-  .d-card .d-main {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: 300;
-    color: var(--char);
-    line-height: 1.35;
-  }
-  .d-card .d-sub {
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    font-size: 11px;
-    color: var(--light);
-    margin-top: 8px;
-    line-height: 1.75;
-    font-weight: 300;
-  }
-  [data-lang="en"] .d-card .d-sub {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-  }
-
-  /* ════════════════════════════════════════════
-     GALLERY
-  ════════════════════════════════════════════ */
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
-  }
-  .g-cell {
-    aspect-ratio: 1;
-    background: var(--cream);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .g-cell.lg { grid-column: span 2; grid-row: span 2; }
-  .g-cell svg { opacity: .15; color: var(--gold); }
-  .gallery-note {
-    margin-top: 18px;
-    text-align: center;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 12px;
-    letter-spacing: .1em;
-    color: var(--light);
-  }
-
-  /* ════════════════════════════════════════════
-     VENUE + MAP
-  ════════════════════════════════════════════ */
-  .map-wrap {
-    width: 100%;
-    aspect-ratio: 4/3;
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    background: var(--cream);
-    margin-bottom: 16px;
-  }
-  .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
-
-  .addr-bar {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    padding: 16px 18px;
-    margin-bottom: 24px;
-  }
-  .addr-bar svg { flex-shrink: 0; color: var(--gold); }
-  .addr-bar .addr-txt p { font-size: 13.5px; color: var(--char); line-height: 1.75; }
-  .addr-bar .addr-txt small { font-size: 11px; color: var(--light); display: block; margin-top: 3px; }
-  [data-lang="en"] .addr-bar .addr-txt p { font-family: 'Cormorant Garamond', serif; font-size: 15px; }
-  [data-lang="en"] .addr-bar .addr-txt small { font-family: 'Cormorant Garamond', serif; font-size: 13px; }
-
-  /* ── Transport cards ── */
-  .t-stack { display: flex; flex-direction: column; gap: 10px; }
-  .t-card {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    padding: 18px;
-  }
-  .t-icon {
-    width: 42px; height: 42px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-  .t-icon.subway { background: #EAF2FF; }
-  .t-icon.bus    { background: #EBF6EC; }
-  .t-icon.car    { background: #FEF7EB; }
-  .t-icon.park   { background: #F2EEFA; }
-
-  .t-body h4 {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--char);
-    margin-bottom: 9px;
-    letter-spacing: .03em;
-  }
-  [data-lang="en"] .t-body h4 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 17px;
-    font-weight: 400;
-  }
-  .t-body p {
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    font-size: 12px;
-    color: var(--mid);
-    line-height: 2;
-    font-weight: 300;
-  }
-  [data-lang="en"] .t-body p {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 14.5px;
-    line-height: 1.9;
-  }
-
-  .badge {
-    display: inline-block;
-    padding: 2px 9px;
-    border-radius: 99px;
-    font-size: 10.5px;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-weight: 400;
-    margin-right: 3px;
-  }
-  .b-line2  { background: rgba(0,122,255,.1);  color: #0055CC; }
-  .b-line8  { background: rgba(255,159,10,.12); color: #CC7700; }
-  .b-walk   { background: rgba(180,146,90,.12); color: var(--gold); }
-  .b-blue   { background: rgba(0,122,255,.1);  color: #0055CC; }
-  .b-green  { background: rgba(52,199,89,.1);  color: #1A8C2A; }
-
-  /* ════════════════════════════════════════════
-     GUEST SNAP EVENT
-  ════════════════════════════════════════════ */
-  .snap-hero {
-    background: linear-gradient(145deg, #1C1814 0%, #3A2E26 100%);
-    border-radius: 20px;
-    padding: 40px 24px;
-    text-align: center;
-    margin-bottom: 28px;
-    position: relative;
-    overflow: hidden;
-  }
-  .snap-hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 55% at 50% 0%, rgba(180,146,90,.22), transparent);
-  }
-  .snap-hero h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 300;
-    color: #fff;
-    position: relative;
-    margin-bottom: 12px;
-  }
-  .snap-hero h3 em { font-style: italic; color: var(--gold-lt); }
-  .snap-hero p {
-    font-size: 12.5px;
-    color: rgba(255,255,255,.5);
-    line-height: 2.1;
-    position: relative;
-    letter-spacing: .03em;
-    word-break: keep-all;
-  }
-  [data-lang="en"] .snap-hero p {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 15px;
-    font-style: italic;
-    letter-spacing: .01em;
-  }
-
-  /* ── SNAP FORM FIELDS ── */
-  .snap-form-wrap { margin-bottom: 4px; }
-  .form-field { margin-bottom: 14px; }
-  .f-label {
-    display: block;
-    font-size: 11.5px;
-    letter-spacing: .1em;
-    color: var(--mid);
-    margin-bottom: 8px;
-  }
-  [data-lang="en"] .f-label { font-family: 'Cormorant Garamond', serif; font-size: 13px; }
-  .f-input {
-    width: 100%;
-    padding: 14px 16px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    font-size: 14px;
-    color: var(--char);
-    font-weight: 300;
-    outline: none;
-    transition: border-color .2s;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-  .f-input:focus { border-color: var(--gold); }
-  .f-input::placeholder { color: var(--light); }
-  [data-lang="en"] .f-input { font-family: 'Cormorant Garamond', serif; font-size: 15px; }
-
-  .upload-zone {
-    border: 1.5px dashed rgba(180,146,90,.38);
-    border-radius: 16px;
-    padding: 28px 20px;
-    text-align: center;
-    cursor: pointer;
-    background: var(--card-bg);
-    transition: all .25s ease;
-    margin-bottom: 12px;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
-  .upload-zone:active, .upload-zone.drag-over {
-    border-color: var(--gold);
-    background: rgba(180,146,90,.04);
-  }
-  .upload-zone svg { color: var(--gold); margin-bottom: 10px; }
-  .upload-zone p { font-size: 13px; color: var(--mid); line-height: 1.9; }
-  .upload-zone small { font-size: 11px; color: var(--light); }
-  [data-lang="en"] .upload-zone p { font-family: 'Cormorant Garamond', serif; font-size: 15px; }
-  [data-lang="en"] .upload-zone small { font-family: 'Cormorant Garamond', serif; font-size: 13px; }
-  #fileInput { display: none; }
-
-  .file-chosen {
-    text-align: center;
-    font-size: 12px;
-    color: var(--gold);
-    padding: 4px 0 12px;
-    letter-spacing: .04em;
-  }
-  [data-lang="en"] .file-chosen { font-family: 'Cormorant Garamond', serif; font-size: 14px; }
-
-  .snap-submit-btn {
-    width: 100%;
-    padding: 16px;
-    background: var(--char);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-card);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    letter-spacing: .1em;
-    cursor: pointer;
-    transition: background .2s, transform .15s;
-    -webkit-tap-highlight-color: transparent;
-    margin-top: 4px;
-  }
-  .snap-submit-btn:active { transform: scale(.98); background: #333; }
-  .snap-submit-btn:disabled { opacity: .45; cursor: default; transform: none; }
-
-  /* Thank you state */
-  .snap-thanks {
-    text-align: center;
-    padding: 44px 24px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    margin-bottom: 20px;
-  }
-  .snap-thanks .thanks-sym {
-    font-size: 20px;
-    color: var(--gold);
-    letter-spacing: .3em;
-    margin-bottom: 20px;
-  }
-  .snap-thanks p {
-    font-size: 14px;
-    color: var(--mid);
-    line-height: 2.4;
-    margin-bottom: 24px;
-    word-break: keep-all;
-  }
-  [data-lang="en"] .snap-thanks p { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; }
-  .snap-again-btn {
-    background: none;
-    border: 1px solid rgba(180,146,90,.3);
-    border-radius: 999px;
-    padding: 9px 22px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    letter-spacing: .1em;
-    color: var(--mid);
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .snap-again-btn:active { opacity: .6; }
-
-  /* Submission board */
-  .snap-board {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    padding: 20px;
-    margin-top: 8px;
-  }
-  .snap-board-hd {
-    font-size: 10px;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 14px;
-  }
-  [data-lang="en"] .snap-board-hd { font-family: 'Cormorant Garamond', serif; font-size: 12px; }
-  .snap-names {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    min-height: 20px;
-  }
-  .snap-names .empty-txt { font-size: 12px; color: var(--light); }
-  .name-chip {
-    display: inline-block;
-    padding: 5px 13px;
-    background: var(--cream);
-    border-radius: 999px;
-    font-size: 12px;
-    color: var(--mid);
-    letter-spacing: .03em;
-  }
-
-  /* ════════════════════════════════════════════
-     FOOTER
-  ════════════════════════════════════════════ */
-  footer {
-    padding: 60px 28px;
-    padding-bottom: max(60px, calc(env(safe-area-inset-bottom, 0px) + 40px));
-    text-align: center;
-    border-top: 1px solid var(--border);
-  }
-  .footer-ornament { width: 58px; opacity: .28; margin-bottom: 28px; }
-  .footer-quote {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 15.5px;
-    font-style: italic;
-    color: var(--mid);
-    line-height: 2.2;
-    margin-bottom: 28px;
-  }
-  .footer-stamp {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 11px;
-    letter-spacing: .18em;
-    color: var(--light);
-    text-transform: uppercase;
-  }
-
-  /* ════════════════════════════════════════════
-     SCROLL REVEAL
-  ════════════════════════════════════════════ */
-  .reveal {
-    opacity: 0;
-    transform: translateY(26px);
-    transition: opacity .72s ease, transform .72s ease;
-    will-change: opacity, transform;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* ════════════════════════════════════════════
-     TOAST
-  ════════════════════════════════════════════ */
-  .toast {
-    position: fixed;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%) translateY(14px);
-    background: var(--char);
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 999px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    letter-spacing: .05em;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .3s ease, transform .3s ease;
-    z-index: 500;
-    white-space: nowrap;
-    max-width: calc(100vw - 40px);
-    text-align: center;
-  }
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  /* ════════════════════════════════════════════
-     SCROLLBAR
-  ════════════════════════════════════════════ */
-  ::-webkit-scrollbar { width: 3px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(180,146,90,.22); border-radius: 99px; }
-
-  /* ════════════════════════════════════════════
-     RESPONSIVE FINE-TUNING
-  ════════════════════════════════════════════ */
-  /* Very small screens (iPhone SE 375px) */
-  @media (max-width: 390px) {
-    .hero-names-ko { font-size: 38px; }
-    .hero-names-en { font-size: 34px; }
-    .poem { font-size: 13px; }
-    section { padding: 60px 22px; }
-  }
-
-  /* Landscape mode */
-  @media (max-height: 500px) and (orientation: landscape) {
-    .hero {
-      min-height: 100vw;
-      padding: 40px 32px;
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "background": "#fcf9f3",
+                    "surface": "#fcf9f3",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f6f3ed",
+                    "surface-container": "#f0eee8",
+                    "primary": "#765a27",
+                    "primary-container": "#b4925a",
+                    "on-primary": "#ffffff",
+                    "secondary": "#655d53",
+                    "secondary-container": "#ede1d3",
+                    "tertiary": "#7b5455",
+                    "on-surface": "#1c1c18",
+                    "outline": "#807668",
+                    "outline-variant": "#d1c5b5",
+                },
+                fontFamily: {
+                    "headline": ["Noto Serif KR", "serif"],
+                    "body": ["Plus Jakarta Sans", "sans-serif"],
+                    "label": ["Plus Jakarta Sans", "sans-serif"]
+                },
+            },
+        },
     }
-    .hero-scroll { display: none; }
-  }
-  </style>
+</script>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+    }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    body { min-height: 100dvh; scroll-behavior: smooth; }
+    
+    /* RSVP Modal Styles */
+    #rsvpModal { transition: opacity 0.3s ease; }
+    #rsvpModal.hidden { opacity: 0; pointer-events: none; display: none; }
+    #rsvpModal:not(.hidden) { opacity: 1; pointer-events: auto; display: flex; }
+
+    /* Custom Animation */
+    .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+</style>
 </head>
-<body>
 
-<!-- ══════════════════════════════════════════
-     LANGUAGE TOGGLE
-══════════════════════════════════════════ -->
-<button class="lang-btn" id="langBtn" aria-label="Switch language" onclick="toggleLang()">EN</button>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-white">
 
-<!-- ══════════════════════════════════════════
-     HERO
-══════════════════════════════════════════ -->
-<section class="hero">
+<!-- TopAppBar -->
+<header class="bg-[#fcf9f3]/80 backdrop-blur-md text-primary fixed top-0 w-full z-40 transition-colors duration-500 shadow-[0_10px_30px_-15px_rgba(28,28,24,0.05)]">
+    <div class="flex justify-between items-center px-6 h-16 w-full max-w-md mx-auto">
+        <span class="material-symbols-outlined text-2xl">menu</span>
+        <h1 class="font-headline text-xl tracking-[0.2em] text-primary">Y &amp; J</h1>
+        <span class="material-symbols-outlined text-2xl">favorite</span>
+    </div>
+</header>
 
-  <!-- Botanical SVG ornament -->
-  <svg class="hero-ornament" viewBox="0 0 96 52" fill="none" aria-hidden="true">
-    <path d="M48 30 Q36 10 16 16 Q30 20 32 30 Q30 20 20 6 Q32 16 48 30Z" fill="#B4925A" opacity=".75"/>
-    <path d="M48 30 Q60 10 80 16 Q66 20 64 30 Q66 20 76 6 Q64 16 48 30Z" fill="#B4925A" opacity=".75"/>
-    <path d="M16 30 Q32 24 48 30 Q32 36 16 30Z" fill="#B4925A" opacity=".22"/>
-    <path d="M80 30 Q64 24 48 30 Q64 36 80 30Z" fill="#B4925A" opacity=".22"/>
-    <circle cx="48" cy="30" r="2.8" fill="#B4925A"/>
-    <path d="M48 30 Q45 46 42 50 Q47 40 48 30Z" fill="#7A8C72" opacity=".55"/>
-    <path d="M48 30 Q51 46 54 50 Q49 40 48 30Z" fill="#7A8C72" opacity=".55"/>
-    <path d="M48 30 Q40 40 36 46 Q44 37 48 30Z" fill="#7A8C72" opacity=".35"/>
-    <path d="M48 30 Q56 40 60 46 Q52 37 48 30Z" fill="#7A8C72" opacity=".35"/>
-  </svg>
+<main class="pt-16 pb-32 max-w-md mx-auto">
 
-  <p class="hero-meta">September 2026 · Seoul</p>
-
-  <!-- Korean names -->
-  <div class="hero-names-ko" aria-label="강영석과 권지은">
-    강영석<span class="hero-amp">&amp;</span>권지은
-  </div>
-
-  <!-- English names -->
-  <div class="hero-names-en" aria-label="Young-Seok and Ji-Eun">
-    Young-Seok<span class="hero-amp">&amp;</span>Ji-Eun
-  </div>
-
-  <div class="hero-rule" aria-hidden="true"><span></span><i></i><span></span></div>
-
-  <div class="hero-detail">
-    <span class="ko-block">2026년 9월 5일 토요일<br>낮 12시 30분<br>롯데호텔월드 크리스탈볼룸</span>
-    <span class="en-block">Saturday, September 5, 2026<br>12 : 30 PM<br>Crystal Ballroom · Lotte Hotel World</span>
-  </div>
-
-  <div class="hero-scroll" aria-hidden="true">
-    <span class="scroll-lbl">scroll</span>
-    <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
-      <path d="M7 1v13M1 9l6 6 6-6" stroke="#B4925A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </div>
+<!-- Hero Section -->
+<section class="px-6 pt-8 mb-16 reveal" id="story">
+    <div class="relative w-full aspect-[4/5] overflow-hidden rounded-xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] bg-surface-container">
+        <!-- Main Wedding Photo -->
+        <img alt="Wedding portrait" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800" />
+        <div class="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent"></div>
+    </div>
+    <div class="mt-8 text-center space-y-4">
+        <h2 class="font-headline text-3xl tracking-widest text-primary">강영석 &amp; 권지은</h2>
+        <p class="font-headline italic text-lg text-secondary">2026년 9월 5일</p>
+        <div class="flex items-center justify-center space-x-2 text-primary">
+            <span class="h-[1px] w-8 bg-outline-variant/80"></span>
+            <span class="font-label text-[10px] tracking-[0.3em] uppercase">Wedding Invitation</span>
+            <span class="h-[1px] w-8 bg-outline-variant/80"></span>
+        </div>
+    </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     INVITATION TEXT
-══════════════════════════════════════════ -->
-<section class="reveal">
-  <span class="eyebrow"><span class="ko-text">청첩장</span><span class="en-text">Invitation</span></span>
-
-  <!-- ── 기획팀 작성 청첩 문구 ── -->
-  <!-- 배경: 직장인 대학원, 비밀연애 → 결혼 -->
-
-  <div class="poem">
-
-    <!-- 한국어: 간접적이고 문학적인 표현 + 한국의 정서로 겸손하게 -->
-    <div class="ko-block">
-      <p class="stanza">
-        저희 두 사람,<br>
-        같은 길 위에서 서로를 알아가며<br>
-        남몰래 쌓아온 시간이 있었습니다.
-      </p>
-      <p class="stanza">
+<!-- Welcome Message -->
+<section class="px-8 mb-20 text-center reveal">
+    <h3 class="font-headline text-xl mb-6 text-on-surface">초대합니다</h3>
+    <p class="text-secondary leading-loose font-light text-sm font-headline break-keep">
+        저희 두 사람, 같은 길 위에서 서로를 알아가며<br>
+        남몰래 쌓아온 시간이 있었습니다.<br><br>
         그 시간이 이제 충분히 깊어져<br>
-        세상 앞에 처음으로 나란히 서고자 합니다.
-      </p>
-      <p class="stanza">
-        부족한 두 사람의 앞날에<br>
-        귀한 걸음 해 주시어<br>
+        세상 앞에 처음으로 나란히 서고자 합니다.<br><br>
+        부족한 두 사람의 앞날에 귀한 걸음 해 주시어<br>
         따뜻한 축복을 내려주시면<br>
         더없는 기쁨으로 간직하겠습니다.
-      </p>
-    </div>
-
-    <!-- English: literary, indirect -->
-    <div class="en-block">
-      <p class="stanza">
-        Two people who found each other along the same path,<br>
-        quietly building something no one else could see—
-      </p>
-      <p class="stanza">
-        that time has now grown deep enough<br>
-        to be shared, for the very first time, with the world.
-      </p>
-      <p class="stanza">
-        As we take our first steps together,<br>
-        we humbly ask for your presence<br>
-        and the warmth of your blessing.
-      </p>
-    </div>
-
-  </div>
-
-  <!-- Parent names + couple names -->
-  <div class="invite-names">
-    <div class="ko-block">
-      <div class="name-row">
-        강중용 · 송영숙의 장남 <span class="name-highlight">강영석</span>
-      </div>
-      <div class="name-row">
-        권경현 · 안혜숙의 장녀 <span class="name-highlight">권지은</span>
-      </div>
-    </div>
-    <div class="en-block">
-      <div class="name-row">
-        The first son of Joong-Yong Kang &amp; Young-Sook Song<br>
-        <span class="name-highlight">Young-Seok Kang</span>
-      </div>
-      <div class="name-row" style="margin-top:18px">
-        The first daughter of Kyeong-Hyeon Kwon &amp; Hye-Sook Ahn<br>
-        <span class="name-highlight">Ji-Eun Kwon</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     WEDDING DETAILS
-══════════════════════════════════════════ -->
-<section class="reveal">
-  <span class="eyebrow">Details</span>
-
-  <div class="detail-grid">
-
-    <div class="d-card">
-      <span class="d-label">Date</span>
-      <div class="d-main">2026<br>09 · 05</div>
-      <div class="d-sub">
-        <span class="ko-text">토요일</span>
-        <span class="en-text">Saturday</span>
-      </div>
-    </div>
-
-    <div class="d-card">
-      <span class="d-label">Time</span>
-      <div class="d-main">12 : 30</div>
-      <div class="d-sub">
-        <span class="ko-text">낮 12시 30분<br>점심 예식</span>
-        <span class="en-text">12:30 PM<br>Luncheon</span>
-      </div>
-    </div>
-
-    <div class="d-card wide">
-      <span class="d-label">Venue</span>
-      <div class="d-main">
-        <span class="ko-text" style="font-size:19px; display:block">롯데호텔월드<br>크리스탈볼룸</span>
-        <span class="en-text" style="font-size:19px; display:block">Lotte Hotel World<br>Crystal Ballroom</span>
-      </div>
-      <div class="d-sub">
-        <span class="ko-text">서울 송파구 올림픽로 240<br>웨딩센터 02-411-7450</span>
-        <span class="en-text">240 Olympic-ro, Songpa-gu, Seoul<br>Wedding Center 02-411-7450</span>
-      </div>
-    </div>
-
-    <!-- Add to Calendar Button -->
-    <div class="d-card wide" style="padding:12px; border:none; background:transparent;">
-      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=영석+♥+지은+결혼식&dates=20260905T033000Z/20260905T060000Z&details=강영석+♥+권지은+결혼식에+초대합니다.&location=롯데호텔월드+크리스탈볼룸" 
-         target="_blank" class="calendar-btn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-        <span class="ko-text">구글 캘린더 추가</span>
-        <span class="en-text">Add to Google Calendar</span>
-      </a>
-    </div>
-
-  </div>
-
-  <style>
-    .calendar-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 100%; padding: 14px; border-radius: 12px;
-      background: var(--cream); color: var(--gold);
-      text-decoration: none; font-size: 12px; letter-spacing: 0.05em;
-      transition: all 0.2s; border: 1px solid var(--border);
-    }
-    .calendar-btn:active { background: var(--gold); color: #fff; }
-  </style>
-</section>
-
-<!-- ══════════════════════════════════════════
-     GALLERY (empty — to be filled)
-══════════════════════════════════════════ -->
-<section class="reveal">
-  <span class="eyebrow">Gallery</span>
-  <h2 class="section-title">
-    <span class="ko-text">우리의 이야기</span>
-    <span class="en-text">Our Story</span>
-  </h2>
-
-  <div class="gallery-grid" aria-label="Gallery placeholder">
-    <div class="g-cell lg">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M21 19V5c0-1.1-.9-2-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zm-8.5-5.5-2 2.51L8 13l-3 4h14l-4.5-5.5z"/>
-      </svg>
-    </div>
-    <div class="g-cell"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
-    <div class="g-cell"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3c3.09 0 5.5 2.42 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
-    <div class="g-cell"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
-    <div class="g-cell"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
-  </div>
-  <p class="gallery-note">
-    <span class="ko-text">✦ &nbsp;사진은 추후 업로드 예정입니다&nbsp; ✦</span>
-    <span class="en-text">✦ &nbsp;Photos coming soon&nbsp; ✦</span>
-  </p>
-</section>
-
-<!-- ══════════════════════════════════════════
-     VENUE & DIRECTIONS
-══════════════════════════════════════════ -->
-<section class="reveal">
-  <span class="eyebrow">
-    <span class="ko-text">오시는 길</span>
-    <span class="en-text">Getting Here</span>
-  </span>
-  <h2 class="section-title">
-    <span class="ko-block">롯데호텔월드<br>크리스탈볼룸</span>
-    <span class="en-block">Lotte Hotel World<br>Crystal Ballroom</span>
-  </h2>
-
-  <!-- Map Placeholder (Kakao Map Recommended) -->
-  <div class="map-wrap" id="mapContainer">
-    <!-- Note: For a real Kakao/Naver map, you'd insert their JS API here. 
-         This is a styled placeholder that links to the maps. -->
-    <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#f9f9f9; position:relative;">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="var(--gold)" opacity="0.8" style="margin-bottom:12px;">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>
-      <p style="font-size:13px; color:var(--mid);">롯데호텔월드</p>
-      <div style="margin-top:20px; display:flex; gap:8px;">
-        <a href="https://map.kakao.com/link/to/롯데호텔월드,37.51123,127.09595" target="_blank" class="map-link-btn">카카오맵</a>
-        <a href="https://map.naver.com/v5/search/롯데호텔월드" target="_blank" class="map-link-btn">네이버지도</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=롯데호텔월드" target="_blank" class="map-link-btn">Google Maps</a>
-      </div>
-    </div>
-  </div>
-
-  <style>
-    .map-link-btn {
-      padding: 8px 14px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 11px;
-      text-decoration: none;
-      color: var(--mid);
-      background: #fff;
-      transition: all 0.2s;
-    }
-    .map-link-btn:active { background: var(--cream); }
-  </style>
-
-  <!-- Address bar -->
-  <div class="addr-bar">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-    </svg>
-    <div class="addr-txt">
-      <p class="ko-block">서울 송파구 올림픽로 240</p>
-      <p class="en-block">240 Olympic-ro, Songpa-gu, Seoul</p>
-      <small class="ko-block">롯데호텔월드 크리스탈볼룸 · 웨딩센터 02-411-7450</small>
-      <small class="en-block">Crystal Ballroom · Wedding Center 02-411-7450</small>
-    </div>
-  </div>
-
-  <!-- Transport cards -->
-  <div class="t-stack">
-    <!-- ... (rest of transport cards) -->
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     GIVING HEART (Account Numbers)
-══════════════════════════════════════════ -->
-<section class="reveal">
-  <span class="eyebrow">
-    <span class="ko-text">마음 전하실 곳</span>
-    <span class="en-text">Giving Heart</span>
-  </span>
-  <h2 class="section-title">
-    <span class="ko-text">축복의 마음을 담아</span>
-    <span class="en-text">Blessings &amp; Gifts</span>
-  </h2>
-
-  <p class="ko-block" style="text-align:center; font-size:13px; color:var(--mid); line-height:2; margin-bottom:32px;">
-    축하의 마음을 보내주시는 분들께<br>깊은 감사의 인사를 드립니다.
-  </p>
-  <p class="en-block" style="text-align:center; font-size:15px; color:var(--mid); line-height:1.8; margin-bottom:32px; font-family:'Cormorant Garamond', serif;">
-    For those who wish to share their blessings,<br>we thank you with all our hearts.
-  </p>
-
-  <div class="account-accordion">
-    <!-- Groom Side -->
-    <div class="acc-item">
-      <button class="acc-trigger" onclick="toggleAccordion(this)">
-        <span class="ko-text">신랑측 계좌번호</span>
-        <span class="en-text">Groom's Side Account</span>
-        <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <div class="acc-content">
-        <div class="acc-row">
-          <div class="acc-info">
-            <span class="bank">우리은행</span>
-            <span class="number">1002-123-456789</span>
-            <span class="owner">강영석</span>
-          </div>
-          <button class="copy-btn" onclick="copyText('1002123456789')">복사</button>
-        </div>
-        <div class="acc-row">
-          <div class="acc-info">
-            <span class="bank">국민은행</span>
-            <span class="number">123456-01-123456</span>
-            <span class="owner">강중용</span>
-          </div>
-          <button class="copy-btn" onclick="copyText('12345601123456')">복사</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bride Side -->
-    <div class="acc-item" style="margin-top:10px;">
-      <button class="acc-trigger" onclick="toggleAccordion(this)">
-        <span class="ko-text">신부측 계좌번호</span>
-        <span class="en-text">Bride's Side Account</span>
-        <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <div class="acc-content">
-        <div class="acc-row">
-          <div class="acc-info">
-            <span class="bank">신한은행</span>
-            <span class="number">110-123-456789</span>
-            <span class="owner">권지은</span>
-          </div>
-          <button class="copy-btn" onclick="copyText('110123456789')">복사</button>
-        </div>
-        <div class="acc-row">
-          <div class="acc-info">
-            <span class="bank">농협은행</span>
-            <span class="number">302-1234-5678-99</span>
-            <span class="owner">권경현</span>
-          </div>
-          <button class="copy-btn" onclick="copyText('3021234567899')">복사</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <style>
-    .account-accordion { width: 100%; }
-    .acc-item { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff; }
-    .acc-trigger {
-      width: 100%; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center;
-      background: none; border: none; font-size: 14px; color: var(--char); cursor: pointer;
-    }
-    .acc-trigger .chevron { transition: transform 0.3s; color: var(--gold); opacity: 0.6; }
-    .acc-item.active .chevron { transform: rotate(180deg); }
-    .acc-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: var(--ivory); }
-    .acc-item.active .acc-content { max-height: 200px; padding: 4px 0; }
-    .acc-row { padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(180,146,90,0.1); }
-    .acc-info { display: flex; flex-direction: column; gap: 4px; }
-    .acc-info .bank { font-size: 11px; color: var(--light); }
-    .acc-info .number { font-size: 14px; color: var(--char); letter-spacing: 0.02em; }
-    .acc-info .owner { font-size: 12px; color: var(--mid); }
-    .copy-btn { padding: 6px 14px; border: 1px solid var(--gold); border-radius: 6px; font-size: 11px; color: var(--gold); background: #fff; cursor: pointer; }
-    .copy-btn:active { background: var(--gold); color: #fff; }
-  </style>
-</section>
-
-<!-- ══════════════════════════════════════════
-     GUEST SNAP EVENT
-══════════════════════════════════════════ -->
-<section class="reveal">
-  <span class="eyebrow">
-    <span class="ko-text">하객 스냅</span>
-    <span class="en-text">Guest Snap</span>
-  </span>
-
-  <!-- Hero banner -->
-  <div class="snap-hero">
-    <h3>
-      <span class="ko-text">하객 <em>스냅</em> 이벤트</span>
-      <span class="en-text">Guest <em>Snap</em> Event</span>
-    </h3>
-    <p class="ko-block">
-      그날을 기억하는 방식은 모두 다릅니다.<br>
-      찍어주신 사진 한 장 한 장이<br>
-      저희에게는 소중한 기억이 됩니다 ✦
     </p>
-    <p class="en-block">
-      Every photograph tells a different story.<br>
-      Each image you share becomes a memory<br>
-      we will hold close, always ✦
-    </p>
-  </div>
-
-  <!-- Submit form -->
-  <div class="snap-form-wrap" id="snapFormWrap">
-
-    <div class="form-field">
-      <label class="f-label" for="snapName">
-        <span class="ko-text">성함 *</span>
-        <span class="en-text">Your Name *</span>
-      </label>
-      <input type="text" id="snapName" class="f-input"
-             placeholder="홍길동" autocomplete="name" />
+    <div class="mt-10 mb-6 text-sm text-secondary font-headline">
+        강중용 · 송영숙의 장남 <strong>강영석</strong><br>
+        권경현 · 안혜숙의 장녀 <strong>권지은</strong>
     </div>
-
-    <div class="form-field">
-      <label class="f-label" for="snapContact">
-        <span class="ko-text">연락처 *</span>
-        <span class="en-text">Contact *</span>
-      </label>
-      <input type="tel" id="snapContact" class="f-input"
-             placeholder="010-0000-0000" autocomplete="tel" />
+    <div class="flex justify-center">
+        <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center">
+            <span class="material-symbols-outlined text-tertiary">spa</span>
+        </div>
     </div>
-
-    <!-- Upload zone -->
-    <div class="upload-zone" id="uploadZone" role="button"
-         tabindex="0" aria-label="사진 선택"
-         onclick="document.getElementById('fileInput').click()"
-         onkeydown="if(event.key==='Enter')document.getElementById('fileInput').click()">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-      </svg>
-      <p class="ko-block">탭하여 사진을 선택하세요</p>
-      <p class="en-block">Tap to choose your photos</p>
-      <small class="ko-block">JPG · PNG · WEBP &nbsp;·&nbsp; 최대 20장</small>
-      <small class="en-block">JPG · PNG · WEBP &nbsp;·&nbsp; Up to 20 photos</small>
-    </div>
-    <input type="file" id="fileInput" accept="image/*" multiple aria-label="사진 파일 선택" />
-
-    <!-- Chosen file count indicator -->
-    <div class="file-chosen" id="fileChosen" style="display:none" aria-live="polite">
-      <span id="fileChosenKo"></span>
-      <span id="fileChosenEn" style="display:none"></span>
-    </div>
-
-    <button class="snap-submit-btn" id="snapSubmitBtn" onclick="submitSnap()">
-      <span class="ko-text">제출하기</span>
-      <span class="en-text">Submit</span>
-    </button>
-  </div>
-
-  <!-- Thank you state (hidden until submit) -->
-  <div class="snap-thanks" id="snapThanks" style="display:none" aria-live="polite">
-    <div class="thanks-sym">✦ &nbsp; ✦ &nbsp; ✦</div>
-    <p class="ko-block">
-      감사합니다.<br>
-      소중한 기억을 나눠주셨습니다.<br>
-      당일에 뵙겠습니다.
-    </p>
-    <p class="en-block">
-      Thank you.<br>
-      Your memories have been received.<br>
-      We look forward to seeing you on the day.
-    </p>
-    <button class="snap-again-btn" onclick="resetSnap()">
-      <span class="ko-text">다른 사진 추가하기</span>
-      <span class="en-text">Add more photos</span>
-    </button>
-  </div>
-
-  <!-- Submission board: shows names (no photos) -->
-  <div class="snap-board" id="snapBoard">
-    <div class="snap-board-hd">
-      <span class="ko-text">함께해 주신 분들 &nbsp;(<span id="snapCount">0</span>)</span>
-      <span class="en-text">Guests who shared &nbsp;(<span id="snapCountEn">0</span>)</span>
-    </div>
-    <div class="snap-names" id="snapNames">
-      <span class="empty-txt ko-text">아직 등록된 분이 없습니다</span>
-      <span class="empty-txt en-text" style="display:none">No submissions yet</span>
-    </div>
-  </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
-<footer class="reveal">
-  <svg class="footer-ornament" viewBox="0 0 58 32" fill="none" aria-hidden="true">
-    <path d="M29 18 Q21 4 10 8 Q20 11 21 18 Q20 11 13 3 Q21 10 29 18Z" fill="#B4925A"/>
-    <path d="M29 18 Q37 4 48 8 Q38 11 37 18 Q38 11 45 3 Q37 10 29 18Z" fill="#B4925A"/>
-    <circle cx="29" cy="18" r="2.2" fill="#B4925A"/>
-  </svg>
+<!-- Details Bento Grid -->
+<section class="px-6 mb-20 space-y-4 reveal" id="details">
+    <div class="grid grid-cols-2 gap-4">
+        <!-- Date Card -->
+        <div class="bg-surface-container-lowest p-6 rounded-xl flex flex-col items-center text-center shadow-[0_10px_40px_rgba(28,28,24,0.04)]">
+            <span class="material-symbols-outlined text-primary mb-3">calendar_today</span>
+            <span class="font-label text-[10px] tracking-widest uppercase text-secondary mb-2">Date</span>
+            <span class="font-headline text-base">2026. 09. 05</span>
+            <span class="font-headline text-sm text-secondary">토요일</span>
+        </div>
+        <!-- Time Card -->
+        <div class="bg-surface-container-lowest p-6 rounded-xl flex flex-col items-center text-center shadow-[0_10px_40px_rgba(28,28,24,0.04)]">
+            <span class="material-symbols-outlined text-primary mb-3">schedule</span>
+            <span class="font-label text-[10px] tracking-widest uppercase text-secondary mb-2">Time</span>
+            <span class="font-headline text-base">낮 12:30</span>
+            <span class="font-headline text-sm text-secondary">점심 예식</span>
+        </div>
+    </div>
+    <!-- Venue Card -->
+    <div class="bg-surface-container-low p-8 rounded-xl shadow-[0_10px_40px_rgba(28,28,24,0.04)] overflow-hidden relative text-center">
+        <span class="material-symbols-outlined text-primary mb-3">account_balance</span>
+        <span class="font-label text-[10px] tracking-widest uppercase text-secondary mb-2 block">Venue</span>
+        <h4 class="font-headline text-xl text-on-surface mb-2">롯데호텔월드 크리스탈볼룸</h4>
+        <p class="text-secondary font-light text-sm">서울 송파구 올림픽로 240</p>
+        
+        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=영석+♥+지은+결혼식&dates=20260905T033000Z/20260905T060000Z&details=강영석+♥+권지은+결혼식에+초대합니다.&location=롯데호텔월드+크리스탈볼룸" 
+           target="_blank" class="mt-6 inline-flex items-center justify-center w-full py-3 rounded-full bg-white border border-outline-variant text-primary text-xs tracking-widest shadow-sm active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-sm mr-2">event</span>
+            구글 캘린더 추가
+        </a>
+    </div>
+</section>
 
-  <div class="footer-stamp">
-    2026 &nbsp;·&nbsp; 09 &nbsp;·&nbsp; 05 &nbsp;·&nbsp;
-    <span class="ko-text">강영석 ♥ 권지은</span>
-    <span class="en-text">Young-Seok &amp; Ji-Eun</span>
-  </div>
+<!-- Gallery -->
+<section class="px-6 mb-20 reveal" id="gallery">
+    <div class="flex justify-between items-end mb-6">
+        <div>
+            <span class="font-label text-[10px] tracking-widest uppercase text-secondary">Gallery</span>
+            <h3 class="font-headline text-xl">우리의 순간들</h3>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+        <img class="w-full aspect-[3/4] object-cover rounded-lg" src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=400" />
+        <img class="w-full aspect-[3/4] object-cover rounded-lg" src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=400" />
+        <img class="w-full aspect-square object-cover rounded-lg" src="https://images.unsplash.com/photo-1465495910483-34a170a7bb00?auto=format&fit=crop&q=80&w=400" />
+        <img class="w-full aspect-square object-cover rounded-lg" src="https://images.unsplash.com/photo-1522673607200-1648832cee98?auto=format&fit=crop&q=80&w=400" />
+    </div>
+</section>
+
+<!-- Location Map -->
+<section class="px-6 mb-20 reveal">
+    <div class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_15px_45px_rgba(28,28,24,0.06)] border border-outline-variant/20">
+        <!-- Static Map Placeholder -->
+        <div class="relative h-48 w-full bg-surface-dim flex items-center justify-center overflow-hidden">
+             <img class="w-full h-full object-cover opacity-60 grayscale" src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=800" />
+             <div class="absolute inset-0 bg-primary/5 flex items-center justify-center flex-col">
+                <div class="bg-white/90 p-3 rounded-full shadow-lg mb-2">
+                    <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+                </div>
+                <p class="text-xs text-primary font-headline font-bold">롯데호텔월드</p>
+             </div>
+        </div>
+        
+        <div class="p-6">
+            <div class="flex justify-center space-x-3 mb-4">
+                <a href="https://map.kakao.com/link/to/롯데호텔월드,37.51123,127.09595" target="_blank" class="flex-1 py-3 text-center border border-outline-variant rounded-xl text-xs text-secondary hover:bg-surface-container-low transition-colors font-medium">카카오맵</a>
+                <a href="https://map.naver.com/v5/search/롯데호텔월드" target="_blank" class="flex-1 py-3 text-center border border-outline-variant rounded-xl text-xs text-secondary hover:bg-surface-container-low transition-colors font-medium">네이버지도</a>
+            </div>
+            
+            <div class="space-y-4 mt-6 text-sm font-light text-secondary leading-relaxed">
+                <div>
+                    <strong class="text-on-surface font-normal block mb-1">지하철</strong>
+                    <span class="text-[10px] bg-green-500 text-white px-1.5 py-0.5 rounded mr-1">2</span>
+                    <span class="text-[10px] bg-pink-500 text-white px-1.5 py-0.5 rounded mr-1">8</span>
+                    잠실역 3번 출구 (지하 연결 통로 도보 2분)
+                </div>
+                <div>
+                    <strong class="text-on-surface font-normal block mb-1">자가용 / 주차</strong>
+                    호텔 입구 진입 후 <strong>지하 H구역</strong> 이용 (축하객 무료 주차 지원)
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Giving Heart (Account Numbers) -->
+<section class="px-6 mb-20 reveal">
+    <div class="text-center mb-8">
+        <span class="font-label text-[10px] tracking-widest uppercase text-secondary">Giving Heart</span>
+        <h3 class="font-headline text-xl">마음 전하실 곳</h3>
+    </div>
+    
+    <div class="space-y-4">
+        <!-- Groom -->
+        <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 overflow-hidden shadow-sm">
+            <button onclick="toggleAcc('groom-acc')" class="w-full px-6 py-5 flex justify-between items-center bg-surface-container-low/30 hover:bg-surface-container-low transition-colors">
+                <span class="font-headline text-sm text-primary">신랑측 계좌번호</span>
+                <span class="material-symbols-outlined text-primary transition-transform duration-300" id="groom-icon">expand_more</span>
+            </button>
+            <div id="groom-acc" class="hidden px-6 py-5 space-y-5 border-t border-outline-variant/10">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] text-secondary tracking-widest mb-1">우리은행</p>
+                        <p class="text-sm font-medium">1002-123-456789 <span class="text-xs font-normal text-secondary ml-1">강영석</span></p>
+                    </div>
+                    <button onclick="copyToClipboard('1002123456789')" class="px-4 py-1.5 border border-primary/20 rounded-lg text-[10px] text-primary hover:bg-primary/5 active:scale-95 transition-all">복사</button>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] text-secondary tracking-widest mb-1">국민은행</p>
+                        <p class="text-sm font-medium">123456-01-123456 <span class="text-xs font-normal text-secondary ml-1">강중용</span></p>
+                    </div>
+                    <button onclick="copyToClipboard('12345601123456')" class="px-4 py-1.5 border border-primary/20 rounded-lg text-[10px] text-primary hover:bg-primary/5 active:scale-95 transition-all">복사</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bride -->
+        <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 overflow-hidden shadow-sm">
+            <button onclick="toggleAcc('bride-acc')" class="w-full px-6 py-5 flex justify-between items-center bg-surface-container-low/30 hover:bg-surface-container-low transition-colors">
+                <span class="font-headline text-sm text-tertiary">신부측 계좌번호</span>
+                <span class="material-symbols-outlined text-tertiary transition-transform duration-300" id="bride-icon">expand_more</span>
+            </button>
+            <div id="bride-acc" class="hidden px-6 py-5 space-y-5 border-t border-outline-variant/10">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] text-secondary tracking-widest mb-1">신한은행</p>
+                        <p class="text-sm font-medium">110-123-456789 <span class="text-xs font-normal text-secondary ml-1">권지은</span></p>
+                    </div>
+                    <button onclick="copyToClipboard('110123456789')" class="px-4 py-1.5 border border-tertiary/20 rounded-lg text-[10px] text-tertiary hover:bg-tertiary/5 active:scale-95 transition-all">복사</button>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] text-secondary tracking-widest mb-1">농협은행</p>
+                        <p class="text-sm font-medium">302-1234-5678-99 <span class="text-xs font-normal text-secondary ml-1">권경현</span></p>
+                    </div>
+                    <button onclick="copyToClipboard('3021234567899')" class="px-4 py-1.5 border border-tertiary/20 rounded-lg text-[10px] text-tertiary hover:bg-tertiary/5 active:scale-95 transition-all">복사</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Guest Wishes (Disqus) -->
+<section class="px-6 mb-20 reveal" id="guestbook">
+    <div class="bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10">
+        <h3 class="font-headline text-xl mb-2 text-center">축하 메시지</h3>
+        <p class="text-secondary text-xs text-center mb-8 font-light italic">Leave a note for the happy couple</p>
+        
+        <!-- Disqus Thread -->
+        <div id="disqus_thread" class="min-h-[300px]"></div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="w-full py-16 px-8 flex flex-col items-center space-y-4 border-t border-outline-variant/10 reveal">
+    <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center opacity-40">
+        <span class="material-symbols-outlined text-primary text-xl">favorite</span>
+    </div>
+    <p class="text-primary font-headline text-xs tracking-[0.2em] text-center leading-relaxed">2026. 09. 05<br>Young-Seok &amp; Ji-Eun</p>
 </footer>
+</main>
 
-<!-- Toast notification -->
-<div class="toast" id="toastEl" role="status" aria-live="polite"></div>
+<!-- BottomNavBar -->
+<nav class="bg-[#fcf9f3]/95 backdrop-blur-lg text-primary fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pt-3 pb-8 z-40 shadow-[0_-10px_40px_rgba(28,28,24,0.06)] md:hidden rounded-t-[2.5rem] border-t border-outline-variant/10">
+    <a href="#story" class="flex flex-col items-center justify-center text-secondary opacity-60 hover:opacity-100 transition-opacity">
+        <span class="material-symbols-outlined mb-1 text-xl">favorite</span>
+        <span class="font-label text-[8px] uppercase tracking-widest">Story</span>
+    </a>
+    <a href="#details" class="flex flex-col items-center justify-center text-secondary opacity-60 hover:opacity-100 transition-opacity">
+        <span class="material-symbols-outlined mb-1 text-xl">event_note</span>
+        <span class="font-label text-[8px] uppercase tracking-widest">Details</span>
+    </a>
+    <a href="#gallery" class="flex flex-col items-center justify-center text-secondary opacity-60 hover:opacity-100 transition-opacity">
+        <span class="material-symbols-outlined mb-1 text-xl">photo_library</span>
+        <span class="font-label text-[8px] uppercase tracking-widest">Gallery</span>
+    </a>
+    <button onclick="openRsvp()" class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-full px-6 py-2 active:scale-95 transition-transform shadow-sm">
+        <span class="material-symbols-outlined mb-1 text-xl">mail</span>
+        <span class="font-label text-[8px] uppercase tracking-widest font-bold">RSVP</span>
+    </button>
+</nav>
 
-<!-- ══════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════ -->
+<!-- RSVP Modal -->
+<div id="rsvpModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md">
+    <div class="bg-surface w-full max-w-sm rounded-[2rem] p-10 shadow-2xl relative border border-outline-variant/20">
+        <button onclick="closeRsvp()" class="absolute top-6 right-6 text-secondary hover:text-primary transition-colors">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <h3 class="font-headline text-2xl text-center text-primary mb-2">참석 여부 알리기</h3>
+        <p class="text-center text-[13px] text-secondary mb-8 leading-relaxed font-headline">정성껏 자리를 준비할 수 있도록<br>참석 여부를 알려주시면 감사하겠습니다.</p>
+        
+        <!-- Google Form Action (Optional) -->
+        <form class="space-y-6" onsubmit="event.preventDefault(); alert('참석 여부가 전달되었습니다.'); closeRsvp();">
+            <div>
+                <label class="block text-[11px] uppercase tracking-widest text-secondary mb-2 ml-1">성함</label>
+                <input type="text" required placeholder="이름을 입력해 주세요" class="w-full bg-surface-container-low border border-outline-variant/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 text-sm transition-all placeholder:text-outline/40">
+            </div>
+            <div>
+                <label class="block text-[11px] uppercase tracking-widest text-secondary mb-2 ml-1">참석 인원</label>
+                <select class="w-full bg-surface-container-low border border-outline-variant/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-primary text-sm appearance-none">
+                    <option value="1">본인 1명</option>
+                    <option value="2">본인 포함 2명</option>
+                    <option value="3">본인 포함 3명</option>
+                    <option value="4">본인 포함 4명</option>
+                </select>
+            </div>
+            <div class="flex space-x-2">
+                <label class="flex-1 text-center border border-outline-variant/40 rounded-xl py-3 text-xs cursor-pointer hover:bg-surface-container-low has-[:checked]:bg-primary/10 has-[:checked]:border-primary has-[:checked]:text-primary transition-all font-medium">
+                    <input type="radio" name="attend" value="yes" class="hidden" checked> 참석합니다
+                </label>
+                <label class="flex-1 text-center border border-outline-variant/40 rounded-xl py-3 text-xs cursor-pointer hover:bg-surface-container-low has-[:checked]:bg-primary/10 has-[:checked]:border-primary has-[:checked]:text-primary transition-all font-medium">
+                    <input type="radio" name="attend" value="no" class="hidden"> 마음만 전합니다
+                </label>
+            </div>
+            <button type="submit" class="w-full bg-primary text-white py-4 rounded-xl mt-4 text-xs tracking-[0.2em] font-bold shadow-lg active:scale-95 transition-all uppercase">
+                Submit RSVP
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="fixed bottom-32 left-1/2 transform -translate-x-1/2 bg-on-surface/90 text-surface px-8 py-3.5 rounded-full text-xs opacity-0 transition-opacity z-50 pointer-events-none shadow-xl font-medium">
+    계좌번호가 복사되었습니다.
+</div>
+
 <script>
-'use strict';
+    // Reveal Animation on Scroll
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
 
-/* ── 1. LANGUAGE TOGGLE ── */
-const htmlEl = document.documentElement;
-const langBtn = document.getElementById('langBtn');
-let currentLang = 'ko';
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-function toggleLang() {
-  currentLang = currentLang === 'ko' ? 'en' : 'ko';
-  htmlEl.setAttribute('data-lang', currentLang);
-  htmlEl.lang = currentLang;
-  langBtn.textContent = currentLang === 'ko' ? 'EN' : '한';
-  document.title = currentLang === 'ko' ? '강영석 ♥ 권지은' : 'Young-Seok ♥ Ji-Eun';
-  // Refresh file indicator language
-  if (typeof updateFileIndicator === 'function') updateFileIndicator();
-}
-
-/* ── 2. SCROLL REVEAL ── */
-(function () {
-  const els = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window)) {
-    // Fallback: show all immediately
-    els.forEach(el => el.classList.add('visible'));
-    return;
-  }
-  const io = new IntersectionObserver(
-    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-  );
-  els.forEach(el => io.observe(el));
-})();
-
-/* ── 3. TOAST ── */
-let toastTimer;
-function showToast(msg, ms) {
-  ms = ms || 2800;
-  const el = document.getElementById('toastEl');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), ms);
-}
-
-/* ── 4. GIVING HEART ACCORDION & COPY ── */
-function toggleAccordion(btn) {
-  const item = btn.parentElement;
-  const isActive = item.classList.contains('active');
-  
-  // Close other accordions
-  document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('active'));
-  
-  if (!isActive) {
-    item.classList.add('active');
-  }
-}
-
-function copyText(text) {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => {
-      showToast(currentLang === 'ko' ? '계좌번호가 복사되었습니다' : 'Account number copied');
-    });
-  } else {
-    // Fallback
-    const input = document.createElement('textarea');
-    input.value = text;
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand('copy');
-    document.body.removeChild(input);
-    showToast(currentLang === 'ko' ? '계좌번호가 복사되었습니다' : 'Account number copied');
-  }
-}
-
-/* ── 5. GUEST SNAP EVENT ── */
-const STORAGE_KEY = 'weddingSnaps_kye2026';
-const MAX_PHOTOS  = 20;
-let submissions   = [];  // [{name, contact, timestamp, photoCount, photos:[]}]
-let pendingFiles  = [];  // files selected, not yet submitted
-
-// Load submissions
-try {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  submissions = raw ? JSON.parse(raw) : [];
-} catch (e) {
-  submissions = [];
-}
-renderBoard();
-
-/* Render the name board (no photos shown) */
-function renderBoard() {
-  const count   = submissions.length;
-  const elKo    = document.getElementById('snapCount');
-  const elEn    = document.getElementById('snapCountEn');
-  const nameBox = document.getElementById('snapNames');
-
-  if (elKo) elKo.textContent = count;
-  if (elEn) elEn.textContent = count;
-
-  // Remove old chips
-  nameBox.querySelectorAll('.name-chip').forEach(el => el.remove());
-
-  const empties = nameBox.querySelectorAll('.empty-txt');
-  if (count === 0) {
-    empties.forEach(el => el.style.display = '');
-    return;
-  }
-  empties.forEach(el => el.style.display = 'none');
-
-  submissions.forEach(s => {
-    const chip = document.createElement('span');
-    chip.className = 'name-chip';
-    chip.textContent = s.name;
-    nameBox.appendChild(chip);
-  });
-}
-
-/* File input: capture selection, don't upload yet */
-document.getElementById('fileInput').addEventListener('change', function () {
-  pendingFiles = Array.from(this.files).filter(f => f.type.startsWith('image/')).slice(0, MAX_PHOTOS);
-  updateFileIndicator();
-});
-
-function updateFileIndicator() {
-  const wrap = document.getElementById('fileChosen');
-  const ko   = document.getElementById('fileChosenKo');
-  const en   = document.getElementById('fileChosenEn');
-  if (!pendingFiles.length) { wrap.style.display = 'none'; return; }
-  wrap.style.display = 'block';
-  ko.textContent = `${pendingFiles.length}장의 사진이 선택되었습니다`;
-  en.textContent = `${pendingFiles.length} photo(s) selected`;
-  // Show correct language
-  ko.style.display = currentLang === 'ko' ? '' : 'none';
-  en.style.display = currentLang === 'en' ? '' : 'none';
-}
-
-/* Submit handler */
-async function submitSnap() {
-  const nameVal    = (document.getElementById('snapName').value    || '').trim();
-  const contactVal = (document.getElementById('snapContact').value || '').trim();
-
-  if (!nameVal) {
-    showToast(currentLang === 'ko' ? '성함을 입력해 주세요' : 'Please enter your name');
-    document.getElementById('snapName').focus();
-    return;
-  }
-  if (!contactVal) {
-    showToast(currentLang === 'ko' ? '연락처를 입력해 주세요' : 'Please enter your contact');
-    document.getElementById('snapContact').focus();
-    return;
-  }
-  if (!pendingFiles.length) {
-    showToast(currentLang === 'ko' ? '사진을 선택해 주세요' : 'Please select photos');
-    return;
-  }
-
-  const btn = document.getElementById('snapSubmitBtn');
-  btn.disabled = true;
-
-  // Read photo data
-  const photoData = [];
-  for (const f of pendingFiles) {
-    try { photoData.push(await readAsDataURL(f)); } catch (e) { /* skip */ }
-  }
-
-  const entry = {
-    name:       nameVal,
-    contact:    contactVal,
-    timestamp:  new Date().toISOString(),
-    photoCount: photoData.length,
-    photos:     photoData   // stored privately, never rendered
-  };
-
-  submissions.push(entry);
-
-  // Save — if quota exceeded, retry without photo binaries
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(submissions));
-  } catch (e) {
-    entry.photos = [];
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(submissions)); } catch (e2) { /* ignore */ }
-  }
-
-  // Reset state
-  pendingFiles = [];
-  document.getElementById('fileInput').value = '';
-  renderBoard();
-
-  // Show thank-you, hide form
-  document.getElementById('snapFormWrap').style.display = 'none';
-  document.getElementById('snapThanks').style.display   = 'block';
-
-  btn.disabled = false;
-}
-
-/* Reset back to form */
-function resetSnap() {
-  document.getElementById('snapName').value    = '';
-  document.getElementById('snapContact').value = '';
-  pendingFiles = [];
-  document.getElementById('fileChosen').style.display  = 'none';
-  document.getElementById('snapThanks').style.display  = 'none';
-  document.getElementById('snapFormWrap').style.display = '';
-}
-
-function readAsDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const r = new FileReader();
-    r.onload  = e => resolve(e.target.result);
-    r.onerror = () => reject(new Error('read failed'));
-    r.readAsDataURL(file);
-  });
-}
-
-// Drag & drop on upload zone
-(function () {
-  const zone = document.getElementById('uploadZone');
-  let dc = 0;
-  zone.addEventListener('dragenter', e => { e.preventDefault(); dc++; zone.classList.add('drag-over'); });
-  zone.addEventListener('dragleave', () => { dc--; if (dc <= 0) { dc = 0; zone.classList.remove('drag-over'); } });
-  zone.addEventListener('dragover',  e => { e.preventDefault(); });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); dc = 0; zone.classList.remove('drag-over');
-    if (e.dataTransfer && e.dataTransfer.files.length) {
-      pendingFiles = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')).slice(0, MAX_PHOTOS);
-      updateFileIndicator();
+    // Accordion Logic
+    function toggleAcc(id) {
+        const content = document.getElementById(id);
+        const icon = document.getElementById(id.replace('-acc', '-icon'));
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            icon.style.transform = 'rotate(180deg)';
+        } else {
+            content.classList.add('hidden');
+            icon.style.transform = 'rotate(0deg)';
+        }
     }
-  });
-})();
 
-// Note: language toggle also refreshes the file indicator (handled inline in toggleLang above)
+    // Copy to Clipboard
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+        });
+    }
+
+    // RSVP Modal Logic
+    function openRsvp() {
+        document.getElementById('rsvpModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; 
+    }
+    
+    function closeRsvp() {
+        document.getElementById('rsvpModal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    // Close modal on background click
+    window.onclick = function(event) {
+        const modal = document.getElementById('rsvpModal');
+        if (event.target == modal) {
+            closeRsvp();
+        }
+    }
+
+    // Disqus Integration
+    var disqus_config = function () {
+        this.page.url = window.location.href;  
+        this.page.identifier = 'invi-wedding-2026-v2'; 
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://invi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
 </script>
+
 </body>
 </html>
