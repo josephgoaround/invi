@@ -30,6 +30,8 @@ function doPost(e) {
       handleRsvp(data);
     } else if (data.type === 'snap') {
       handleSnap(data);
+    } else if (data.type === 'comment') {
+      handleComment(data);
     }
 
     return ContentService
@@ -65,6 +67,28 @@ function handleRsvp(data) {
     data.attending === 'yes' ? '✓ 참석' : '✕ 불참',
     data.partySize || '-',
     data.message   || ''
+  ]);
+}
+
+// ── 방명록 댓글 → RSVP 시트의 "방명록" 탭에 기록 ──────────
+function handleComment(data) {
+  const ss = SpreadsheetApp.openById(RSVP_SHEET_ID);
+  let sheet = ss.getSheetByName('방명록');
+
+  if (!sheet) {
+    sheet = ss.insertSheet('방명록');
+    const header = ['타임스탬프', '성함', '메시지'];
+    sheet.appendRow(header);
+    sheet.getRange(1, 1, 1, header.length)
+      .setFontWeight('bold')
+      .setBackground('#F7F4EE');
+    sheet.setFrozenRows(1);
+  }
+
+  sheet.appendRow([
+    Utilities.formatDate(new Date(data.timestamp), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
+    data.name,
+    data.message
   ]);
 }
 

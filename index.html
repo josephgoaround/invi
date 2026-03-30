@@ -748,6 +748,69 @@
   /* ════════════════════════════════════════════
      SCROLLBAR
   ════════════════════════════════════════════ */
+  /* ════════════════════════════════════════════
+     GUESTBOOK (댓글)
+  ════════════════════════════════════════════ */
+  .gb-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .gb-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+  }
+  .gb-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .gb-item-name {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--char);
+    letter-spacing: .03em;
+  }
+  .gb-item-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    color: var(--light);
+    letter-spacing: .05em;
+  }
+  .gb-item-msg {
+    font-size: 13.5px;
+    color: var(--mid);
+    line-height: 1.85;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  [data-lang="en"] .gb-item-msg { font-family: 'Cormorant Garamond', serif; font-size: 15px; }
+  .gb-empty {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--light);
+    padding: 32px 0;
+    letter-spacing: .08em;
+  }
+  .gb-form {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 20px 18px;
+  }
+  .gb-form-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    letter-spacing: .12em;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
   ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(180,146,90,.22); border-radius: 99px; }
@@ -1080,20 +1143,20 @@
   <div class="invite-names">
     <div class="ko-block">
       <div class="name-row">
-        강중용 · 송영숙의 장남 <span class="name-highlight">강영석</span>
+        강 중용 · 송 영숙의 장남 <span class="name-highlight">영석</span>
       </div>
       <div class="name-row">
-        권경현 · 안혜숙의 장녀 <span class="name-highlight">권지은</span>
+        권 경현 · 안 혜숙의 장녀 <span class="name-highlight">지은</span>
       </div>
     </div>
     <div class="en-block">
       <div class="name-row">
         The first son of Joong-Yong Kang &amp; Young-Sook Song<br>
-        <span class="name-highlight">Joseph Kang</span>
+        <span class="name-highlight">Joseph</span>
       </div>
       <div class="name-row" style="margin-top:18px">
         The first daughter of Kyeong-Hyeon Kwon &amp; Hye-Sook Ahn<br>
-        <span class="name-highlight">Ji-Eun Kwon</span>
+        <span class="name-highlight">Ji-Eun</span>
       </div>
     </div>
   </div>
@@ -1199,8 +1262,8 @@
     <div class="addr-txt">
       <p class="ko-block">서울 송파구 올림픽로 240</p>
       <p class="en-block">240 Olympic-ro, Songpa-gu, Seoul</p>
-      <small class="ko-block">롯데호텔월드 크리스탈볼룸 · 웨딩센터 02-411-7450</small>
-      <small class="en-block">Crystal Ballroom · Wedding Center 02-411-7450</small>
+      <small class="ko-block">롯데호텔월드 크리스탈볼룸</small>
+      <small class="en-block">Crystal Ballroom, Lotte Hotel World</small>
     </div>
   </div>
 
@@ -1399,16 +1462,54 @@
     </button>
   </div>
 
-  <!-- Submission board: shows names (no photos) -->
-  <div class="snap-board" id="snapBoard">
-    <div class="snap-board-hd">
-      <span class="ko-text">함께해 주신 분들 &nbsp;(<span id="snapCount">0</span>)</span>
-      <span class="en-text">Guests who shared &nbsp;(<span id="snapCountEn">0</span>)</span>
+</section>
+
+<!-- ══════════════════════════════════════════
+     GUESTBOOK
+══════════════════════════════════════════ -->
+<section class="reveal">
+  <span class="eyebrow">
+    <span class="ko-text">방명록</span>
+    <span class="en-text">Guestbook</span>
+  </span>
+  <h2 class="section-title">
+    <span class="ko-text">축하 메시지</span>
+    <span class="en-text">Leave a Message</span>
+  </h2>
+
+  <!-- 댓글 목록 -->
+  <div class="gb-list" id="gbList">
+    <p class="gb-empty" id="gbEmpty">
+      <span class="ko-text">✦ &nbsp; 첫 번째 메시지를 남겨주세요 &nbsp; ✦</span>
+      <span class="en-text">✦ &nbsp; Be the first to leave a message &nbsp; ✦</span>
+    </p>
+  </div>
+
+  <!-- 댓글 작성 폼 -->
+  <div class="gb-form">
+    <p class="gb-form-title">
+      <span class="ko-text">✦ &nbsp; 메시지 남기기</span>
+      <span class="en-text">✦ &nbsp; Write a Message</span>
+    </p>
+    <div class="form-field">
+      <label class="f-label" for="gbName">
+        <span class="ko-text">성함 *</span>
+        <span class="en-text">Your Name *</span>
+      </label>
+      <input type="text" id="gbName" class="f-input" placeholder="홍길동" autocomplete="name" />
     </div>
-    <div class="snap-names" id="snapNames">
-      <span class="empty-txt ko-text">아직 등록된 분이 없습니다</span>
-      <span class="empty-txt en-text" style="display:none">No submissions yet</span>
+    <div class="form-field">
+      <label class="f-label" for="gbMsg">
+        <span class="ko-text">메시지 *</span>
+        <span class="en-text">Message *</span>
+      </label>
+      <textarea id="gbMsg" class="f-input" rows="4"
+        placeholder="두 사람을 축하하는 메시지를 남겨주세요 ✦" style="resize:none;line-height:1.8"></textarea>
     </div>
+    <button class="snap-submit-btn" id="gbSubmitBtn" onclick="submitComment()">
+      <span class="ko-text">등록하기</span>
+      <span class="en-text">Post</span>
+    </button>
   </div>
 </section>
 
@@ -1707,6 +1808,79 @@ function readAsBase64(file) {
 })();
 
 // Note: language toggle also refreshes the file indicator (handled inline in toggleLang above)
+
+/* ── 6. GUESTBOOK (방명록) ── */
+const GB_KEY = 'guestbook_kye2026';
+let comments = [];
+
+try {
+  const raw = localStorage.getItem(GB_KEY);
+  comments = raw ? JSON.parse(raw) : [];
+} catch(e) { comments = []; }
+renderComments();
+
+function renderComments() {
+  const list  = document.getElementById('gbList');
+  const empty = document.getElementById('gbEmpty');
+  // 기존 댓글 아이템 제거
+  list.querySelectorAll('.gb-item').forEach(el => el.remove());
+
+  if (!comments.length) { empty.style.display = ''; return; }
+  empty.style.display = 'none';
+
+  // 최신순 표시
+  [...comments].reverse().forEach(c => {
+    const item = document.createElement('div');
+    item.className = 'gb-item';
+    const d = new Date(c.timestamp);
+    const dateStr = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    item.innerHTML = `
+      <div class="gb-item-header">
+        <span class="gb-item-name">${escHtml(c.name)}</span>
+        <span class="gb-item-date">${dateStr}</span>
+      </div>
+      <p class="gb-item-msg">${escHtml(c.message).replace(/\n/g,'<br>')}</p>`;
+    list.appendChild(item);
+  });
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function submitComment() {
+  const name = (document.getElementById('gbName').value || '').trim();
+  const msg  = (document.getElementById('gbMsg').value  || '').trim();
+  const lang = currentLang;
+
+  if (!name) { showToast(lang==='ko'?'성함을 입력해 주세요':'Please enter your name'); document.getElementById('gbName').focus(); return; }
+  if (!msg)  { showToast(lang==='ko'?'메시지를 입력해 주세요':'Please enter a message'); document.getElementById('gbMsg').focus(); return; }
+
+  const btn = document.getElementById('gbSubmitBtn');
+  btn.disabled = true;
+
+  const entry = { name, message: msg, timestamp: new Date().toISOString() };
+
+  // Google Sheets 전송
+  if (APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ type: 'comment', ...entry })
+      });
+    } catch(e) { /* silent */ }
+  }
+
+  comments.push(entry);
+  try { localStorage.setItem(GB_KEY, JSON.stringify(comments)); } catch(e) {}
+
+  document.getElementById('gbName').value = '';
+  document.getElementById('gbMsg').value  = '';
+  renderComments();
+  showToast(lang==='ko'?'메시지가 등록되었습니다 ✦':'Message posted ✦');
+  btn.disabled = false;
+}
 </script>
 </body>
 </html>
