@@ -4,17 +4,17 @@
  * 배포 방법:
  *  1. https://script.google.com 에서 새 프로젝트 생성
  *  2. 이 코드를 붙여넣기
- *  3. SHEET_ID, DRIVE_FOLDER_ID 를 본인 값으로 교체
- *  4. 배포 > 새 배포 > 웹 앱
+ *  3. 배포 > 새 배포 > 웹 앱
  *     - 실행 계정: 나(Me)
  *     - 액세스: 모든 사용자(Anyone)
- *  5. 배포 URL을 index.html 의 APPS_SCRIPT_URL 에 입력
+ *  4. 배포 URL을 index.html 의 APPS_SCRIPT_URL 에 입력
  */
 
-// ── 설정값 (반드시 교체) ──────────────────────────────
-const SHEET_ID       = 'YOUR_GOOGLE_SHEET_ID';       // Google Sheet URL의 /d/ 뒤 ID
-const DRIVE_FOLDER_ID = 'YOUR_DRIVE_FOLDER_ID';      // Google Drive 폴더 URL의 /folders/ 뒤 ID
-// ────────────────────────────────────────────────────
+// ── 설정값 ────────────────────────────────────────────
+const RSVP_SHEET_ID   = '1jcLL_HM00aGnfyOL1FxdXTy31dae5ezOxqxEg3FV7_U'; // 본식 RSVP
+const SNAP_SHEET_ID   = '1JpCAUW23zn1a_ZNiJrENMMtrHIhmt9tepHxJRc9jhAY'; // 스냅 제출 명단
+const DRIVE_FOLDER_ID = '1pkuh2kDPZWCKxT62I_i5EXuzyURt4k3g';              // 하객 스냅 사진 폴더
+// ─────────────────────────────────────────────────────
 
 function doGet() {
   return ContentService
@@ -43,13 +43,13 @@ function doPost(e) {
   }
 }
 
-// ── RSVP 처리 → "RSVP" 시트에 기록 ──────────────────
+// ── RSVP → 본식 RSVP 시트 기록 ──────────────────────
 function handleRsvp(data) {
-  const ss = SpreadsheetApp.openById(SHEET_ID);
-  let sheet = ss.getSheetByName('RSVP');
+  const ss = SpreadsheetApp.openById(RSVP_SHEET_ID);
+  let sheet = ss.getSheets()[0]; // 첫 번째 시트 사용
 
-  if (!sheet) {
-    sheet = ss.insertSheet('RSVP');
+  // 헤더가 없으면 추가
+  if (sheet.getLastRow() === 0) {
     const header = ['타임스탬프', '성함', '연락처', '참석여부', '인원수', '메시지'];
     sheet.appendRow(header);
     sheet.getRange(1, 1, 1, header.length)
@@ -68,13 +68,13 @@ function handleRsvp(data) {
   ]);
 }
 
-// ── 스냅 처리 → Drive 업로드 + "하객 연락처" 시트에 기록 ──
+// ── 스냅 → Drive 업로드 + 스냅 제출 명단 시트 기록 ──
 function handleSnap(data) {
-  const ss = SpreadsheetApp.openById(SHEET_ID);
-  let sheet = ss.getSheetByName('하객 연락처');
+  const ss = SpreadsheetApp.openById(SNAP_SHEET_ID);
+  let sheet = ss.getSheets()[0]; // 첫 번째 시트 사용
 
-  if (!sheet) {
-    sheet = ss.insertSheet('하객 연락처');
+  // 헤더가 없으면 추가
+  if (sheet.getLastRow() === 0) {
     const header = ['타임스탬프', '성함', '연락처', '파일 수', 'Drive 폴더 링크'];
     sheet.appendRow(header);
     sheet.getRange(1, 1, 1, header.length)
@@ -83,12 +83,12 @@ function handleSnap(data) {
     sheet.setFrozenRows(1);
   }
 
-  // 하객 이름_날짜 폴더 생성
+  // 하객 이름_날짜 서브폴더 생성 (예: 홍길동_0905)
   const rootFolder  = DriveApp.getFolderById(DRIVE_FOLDER_ID);
   const dateStr     = Utilities.formatDate(new Date(), 'Asia/Seoul', 'MMdd');
   const guestFolder = rootFolder.createFolder(data.name + '_' + dateStr);
 
-  // 파일 저장 — 파일명: 성함_1.jpg, 성함_2.mp4 ...
+  // 파일 저장 — 파일명: 성함_1.jpg, 성함_2.mp4 …
   let savedCount = 0;
   if (data.files && data.files.length) {
     data.files.forEach(function(f) {
@@ -97,7 +97,7 @@ function handleSnap(data) {
         const blob  = Utilities.newBlob(bytes, f.mimeType, f.savedName);
         guestFolder.createFile(blob);
         savedCount++;
-      } catch(err) { /* 파일 하나 실패 시 계속 진행 */ }
+      } catch(err) { /* 파일 하나 실패해도 계속 진행 */ }
     });
   }
 
