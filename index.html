@@ -518,6 +518,41 @@
   }
   .nav-btn.tmap .nav-btn-icon { background: rgba(255,58,47,.12); }
 
+  /* ── Floor guide (층별 안내) ── */
+  .floor-guide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 10px 14px;
+    background: rgba(180,146,90,.05);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+  .floor-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    color: var(--mid);
+    letter-spacing: .03em;
+    flex: 1;
+    justify-content: center;
+  }
+  .floor-item strong {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: .06em;
+  }
+  .floor-pipe {
+    width: 1px;
+    height: 22px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
   .badge {
     display: inline-block;
     padding: 2px 9px;
@@ -1506,23 +1541,23 @@
 
         <!-- 내비 앱 바로가기 버튼 -->
         <div class="nav-btns">
-          <!-- 네이버지도 -->
+          <!-- 네이버지도: place ID로 목적지 직접 지정 -->
           <a class="nav-btn naver"
-             href="https://map.naver.com/v5/directions/-/-/-/car?c=14142200.3580135,4512360.6481886,15,0,0,0,dh&destination=14142200.3580135,4512360.6481886&destinationName=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C"
+             href="https://map.naver.com/v5/entry/place/11620271"
              target="_blank" rel="noopener">
             <span class="nav-btn-icon">🗺</span>
             <span class="ko-text">네이버지도</span>
             <span class="en-text">Naver Map</span>
           </a>
-          <!-- 카카오맵 -->
+          <!-- 카카오맵: 목적지명+좌표로 바로 지정 -->
           <a class="nav-btn kakao"
-             href="https://map.kakao.com/link/to/롯데호텔월드,37.511089,127.098152"
+             href="https://map.kakao.com/link/to/%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C,37.511089,127.098152"
              target="_blank" rel="noopener">
             <span class="nav-btn-icon">🗺</span>
             <span class="ko-text">카카오맵</span>
             <span class="en-text">Kakao Map</span>
           </a>
-          <!-- 티맵 (앱 설치 시 앱으로, 미설치 시 웹으로) -->
+          <!-- 티맵: 앱 설치 시 앱으로, 미설치 시 웹으로 fallback -->
           <a class="nav-btn tmap"
              href="tmap://route?goalname=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C&goalx=127.098152&goaly=37.511089"
              onclick="openTmap(event)">
@@ -1554,6 +1589,21 @@
           If full: Dept. Store / Adventure / Mart<br>
           ※ Public transit strongly recommended
         </p>
+
+        <!-- 층별 안내 -->
+        <div class="floor-guide">
+          <span class="floor-item">
+            <span class="ko-text">신부대기실</span>
+            <span class="en-text">Bridal Suite</span>
+            <strong>2F</strong>
+          </span>
+          <span class="floor-pipe" aria-hidden="true"></span>
+          <span class="floor-item">
+            <span class="ko-text">크리스탈볼룸</span>
+            <span class="en-text">Crystal Ballroom</span>
+            <strong>3F</strong>
+          </span>
+        </div>
       </div>
     </div>
 
