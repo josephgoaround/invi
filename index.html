@@ -467,6 +467,57 @@
     line-height: 1.9;
   }
 
+  /* ── Nav app buttons (자가용 섹션) ── */
+  .nav-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 12px;
+  }
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .04em;
+    text-decoration: none;
+    transition: opacity .18s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-btn:active { opacity: .72; transform: scale(.97); }
+  .nav-btn-icon {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  /* 네이버지도 — green */
+  .nav-btn.naver {
+    background: rgba(3,199,90,.08);
+    color: #008C3A;
+    border: 1px solid rgba(3,199,90,.2);
+  }
+  .nav-btn.naver .nav-btn-icon { background: rgba(3,199,90,.15); }
+  /* 카카오맵 — yellow */
+  .nav-btn.kakao {
+    background: rgba(254,229,0,.12);
+    color: #8A6600;
+    border: 1px solid rgba(254,229,0,.4);
+  }
+  .nav-btn.kakao .nav-btn-icon { background: rgba(254,229,0,.3); }
+  /* 티맵 — red */
+  .nav-btn.tmap {
+    background: rgba(255,58,47,.07);
+    color: #CC2B1F;
+    border: 1px solid rgba(255,58,47,.18);
+  }
+  .nav-btn.tmap .nav-btn-icon { background: rgba(255,58,47,.12); }
+
   .badge {
     display: inline-block;
     padding: 2px 9px;
@@ -831,6 +882,103 @@
   ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(180,146,90,.22); border-radius: 99px; }
+
+  /* ════════════════════════════════════════════
+     ACCOUNT (마음 전하기)
+  ════════════════════════════════════════════ */
+  .acct-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .acct-tab-btn {
+    padding: 13px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--mid);
+    cursor: pointer;
+    transition: border-color .2s, background .2s, color .2s;
+    -webkit-tap-highlight-color: transparent;
+    letter-spacing: .04em;
+  }
+  .acct-tab-btn.active {
+    border-color: var(--gold);
+    background: rgba(180,146,90,.06);
+    color: var(--char);
+    font-weight: 400;
+  }
+  .acct-panel { display: none; }
+  .acct-panel.active { display: flex; flex-direction: column; gap: 10px; }
+  .acct-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 18px 18px 16px;
+  }
+  .acct-relation {
+    font-size: 10px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .acct-holder {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--char);
+    letter-spacing: .04em;
+    margin-bottom: 12px;
+  }
+  .acct-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ivory);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .acct-bank {
+    font-size: 11px;
+    color: var(--light);
+    letter-spacing: .05em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .acct-num {
+    font-size: 13.5px;
+    color: var(--mid);
+    letter-spacing: .04em;
+    flex: 1;
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  }
+  .acct-copy-btn {
+    flex-shrink: 0;
+    padding: 5px 13px;
+    background: none;
+    border: 1px solid rgba(180,146,90,.35);
+    border-radius: 999px;
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+    font-size: 11.5px;
+    letter-spacing: .06em;
+    color: var(--gold);
+    cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+    min-width: 44px;
+    text-align: center;
+  }
+  .acct-copy-btn:active { opacity: .6; }
+  .acct-copy-btn.copied {
+    background: rgba(180,146,90,.12);
+    border-color: var(--gold);
+    color: var(--char);
+  }
 
   /* ════════════════════════════════════════════
      RSVP MODAL
@@ -1355,6 +1503,34 @@
           ※ We recommend departing early<br>
           &emsp;to allow for traffic on the day
         </p>
+
+        <!-- 내비 앱 바로가기 버튼 -->
+        <div class="nav-btns">
+          <!-- 네이버지도 -->
+          <a class="nav-btn naver"
+             href="https://map.naver.com/v5/directions/-/-/-/car?c=14142200.3580135,4512360.6481886,15,0,0,0,dh&destination=14142200.3580135,4512360.6481886&destinationName=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C"
+             target="_blank" rel="noopener">
+            <span class="nav-btn-icon">🗺</span>
+            <span class="ko-text">네이버지도</span>
+            <span class="en-text">Naver Map</span>
+          </a>
+          <!-- 카카오맵 -->
+          <a class="nav-btn kakao"
+             href="https://map.kakao.com/link/to/롯데호텔월드,37.511089,127.098152"
+             target="_blank" rel="noopener">
+            <span class="nav-btn-icon">🗺</span>
+            <span class="ko-text">카카오맵</span>
+            <span class="en-text">Kakao Map</span>
+          </a>
+          <!-- 티맵 (앱 설치 시 앱으로, 미설치 시 웹으로) -->
+          <a class="nav-btn tmap"
+             href="tmap://route?goalname=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C&goalx=127.098152&goaly=37.511089"
+             onclick="openTmap(event)">
+            <span class="nav-btn-icon">🗺</span>
+            <span class="ko-text">티맵</span>
+            <span class="en-text">T-map</span>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -1420,6 +1596,132 @@
       <path d="M5 12h14M12 5l7 7-7 7"/>
     </svg>
   </a>
+</section>
+
+<!-- ══════════════════════════════════════════
+     ACCOUNT (마음 전하기)
+══════════════════════════════════════════ -->
+<section class="reveal">
+  <span class="eyebrow">
+    <span class="ko-text">마음 전하기</span>
+    <span class="en-text">Gift</span>
+  </span>
+  <h2 class="section-title">
+    <span class="ko-text">축하의 마음을<br>전해주세요</span>
+    <span class="en-text">Send Your<br>Warmest Wishes</span>
+  </h2>
+
+  <!-- 탭 -->
+  <div class="acct-tabs" role="tablist">
+    <button class="acct-tab-btn active" role="tab" aria-selected="true"
+            onclick="switchAcctTab('groom', this)">
+      <span class="ko-text">신랑측</span>
+      <span class="en-text">Groom's Family</span>
+    </button>
+    <button class="acct-tab-btn" role="tab" aria-selected="false"
+            onclick="switchAcctTab('bride', this)">
+      <span class="ko-text">신부측</span>
+      <span class="en-text">Bride's Family</span>
+    </button>
+  </div>
+
+  <!-- 신랑측 계좌 -->
+  <div class="acct-panel active" id="acctGroom" role="tabpanel">
+    <div class="acct-card">
+      <p class="acct-relation">
+        <span class="ko-text">신랑</span>
+        <span class="en-text">Groom</span>
+      </p>
+      <p class="acct-holder">강영석</p>
+      <div class="acct-row">
+        <span class="acct-bank">신한은행</span>
+        <span class="acct-num">110-123-456789</span>
+        <button class="acct-copy-btn" onclick="copyAcct('110-123-456789', this)">
+          <span class="ko-text">복사</span>
+          <span class="en-text">Copy</span>
+        </button>
+      </div>
+    </div>
+    <div class="acct-card">
+      <p class="acct-relation">
+        <span class="ko-text">신랑 아버지</span>
+        <span class="en-text">Groom's Father</span>
+      </p>
+      <p class="acct-holder">강O현</p>
+      <div class="acct-row">
+        <span class="acct-bank">국민은행</span>
+        <span class="acct-num">123-45-6789012</span>
+        <button class="acct-copy-btn" onclick="copyAcct('123-45-6789012', this)">
+          <span class="ko-text">복사</span>
+          <span class="en-text">Copy</span>
+        </button>
+      </div>
+    </div>
+    <div class="acct-card">
+      <p class="acct-relation">
+        <span class="ko-text">신랑 어머니</span>
+        <span class="en-text">Groom's Mother</span>
+      </p>
+      <p class="acct-holder">이O순</p>
+      <div class="acct-row">
+        <span class="acct-bank">하나은행</span>
+        <span class="acct-num">123-456789-01234</span>
+        <button class="acct-copy-btn" onclick="copyAcct('123-456789-01234', this)">
+          <span class="ko-text">복사</span>
+          <span class="en-text">Copy</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 신부측 계좌 -->
+  <div class="acct-panel" id="acctBride" role="tabpanel">
+    <div class="acct-card">
+      <p class="acct-relation">
+        <span class="ko-text">신부</span>
+        <span class="en-text">Bride</span>
+      </p>
+      <p class="acct-holder">권지은</p>
+      <div class="acct-row">
+        <span class="acct-bank">카카오뱅크</span>
+        <span class="acct-num">3333-12-3456789</span>
+        <button class="acct-copy-btn" onclick="copyAcct('3333-12-3456789', this)">
+          <span class="ko-text">복사</span>
+          <span class="en-text">Copy</span>
+        </button>
+      </div>
+    </div>
+    <div class="acct-card">
+      <p class="acct-relation">
+        <span class="ko-text">신부 아버지</span>
+        <span class="en-text">Bride's Father</span>
+      </p>
+      <p class="acct-holder">권O철</p>
+      <div class="acct-row">
+        <span class="acct-bank">우리은행</span>
+        <span class="acct-num">1002-123-456789</span>
+        <button class="acct-copy-btn" onclick="copyAcct('1002-123-456789', this)">
+          <span class="ko-text">복사</span>
+          <span class="en-text">Copy</span>
+        </button>
+      </div>
+    </div>
+    <div class="acct-card">
+      <p class="acct-relation">
+        <span class="ko-text">신부 어머니</span>
+        <span class="en-text">Bride's Mother</span>
+      </p>
+      <p class="acct-holder">김O미</p>
+      <div class="acct-row">
+        <span class="acct-bank">농협은행</span>
+        <span class="acct-num">301-1234-5678-01</span>
+        <button class="acct-copy-btn" onclick="copyAcct('301-1234-5678-01', this)">
+          <span class="ko-text">복사</span>
+          <span class="en-text">Copy</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ══════════════════════════════════════════
@@ -1505,13 +1807,13 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGJwlleNBAdqOC
 const RSVP_KEY = 'rsvpDone_kye2026';
 let rsvpAttendValue = null;
 
-// 페이지 로드 시 RSVP 미완료면 0.8초 후 팝업
+// 페이지 로드 시 RSVP 미완료면 4초 후 팝업 (내용을 먼저 확인할 시간 확보)
 window.addEventListener('DOMContentLoaded', () => {
   if (!localStorage.getItem(RSVP_KEY)) {
     setTimeout(() => {
       const overlay = document.getElementById('rsvpOverlay');
       overlay.style.display = 'flex';
-    }, 800);
+    }, 4000);
   }
 });
 
@@ -1612,6 +1914,52 @@ function showToast(msg, ms) {
 }
 
 /* ── 4. GUEST SNAP EVENT — moved to snap.html ── */
+
+/* ── 4a. TMAP FALLBACK ── */
+function openTmap(e) {
+  e.preventDefault();
+  const appUrl = 'tmap://route?goalname=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C&goalx=127.098152&goaly=37.511089';
+  const webUrl = 'https://tmap.life/4d2f0b'; // 롯데호텔 월드 티맵 웹 링크
+  const fallback = 'https://www.tmap.co.kr/tmap2/mobile/tmap.jsp?scheme=tmap&host=route&goalname=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C&goalx=127.098152&goaly=37.511089';
+
+  // 앱 실행 시도 후 500ms 내 포커스 유지되면 미설치로 판단해 웹으로 이동
+  const start = Date.now();
+  window.location.href = appUrl;
+  setTimeout(() => {
+    if (Date.now() - start < 1500) {
+      window.location.href = fallback;
+    }
+  }, 500);
+}
+
+/* ── 5. ACCOUNT (마음 전하기) ── */
+function switchAcctTab(side, btn) {
+  document.querySelectorAll('.acct-tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
+  });
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
+
+  document.querySelectorAll('.acct-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(side === 'groom' ? 'acctGroom' : 'acctBride').classList.add('active');
+}
+
+function copyAcct(number, btn) {
+  const lang = document.documentElement.dataset.lang;
+  navigator.clipboard.writeText(number).then(() => {
+    showToast(lang === 'en' ? 'Account number copied!' : '계좌번호가 복사되었습니다');
+    const origHTML = btn.innerHTML;
+    btn.innerHTML = '✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = origHTML;
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    showToast(lang === 'en' ? 'Copy failed. Please try again.' : '복사에 실패했습니다');
+  });
+}
 
 /* ── 6. GUESTBOOK (방명록) ── */
 const GB_KEY = 'guestbook_kye2026';
