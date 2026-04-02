@@ -767,13 +767,6 @@
     text-align: center;
     padding: 72px 28px;
   }
-  .rsvp-cta-desc {
-    font-size: 14px;
-    color: var(--mid);
-    line-height: 2;
-    letter-spacing: .02em;
-    margin-bottom: 32px;
-  }
   .rsvp-open-btn {
     display: inline-flex;
     align-items: center;
@@ -1884,16 +1877,17 @@
      RSVP CTA
 ══════════════════════════════════════════ -->
 <section class="rsvp-cta reveal">
-  <span class="eyebrow">RSVP</span>
-  <p class="rsvp-cta-desc ko-block">
-    저희 예식은 동시 진행으로 운영됩니다.<br>
-    편안한 자리 준비를 위해 참석 여부를<br>
-    미리 알려주시면 더없이 감사하겠습니다.
+  <span class="eyebrow">
+    <span class="ko-text">참석 안내</span>
+    <span class="en-text">RSVP</span>
+  </span>
+  <p class="rsvp-sub" style="margin-bottom:16px">
+    <span class="ko-text">2026년 9월 5일 토요일 낮 12시 30분<br>롯데호텔월드 3F 크리스탈볼룸</span>
+    <span class="en-text">Saturday, September 5, 2026 · 12:30 PM<br>3F Crystal Ballroom, Lotte Hotel World</span>
   </p>
-  <p class="rsvp-cta-desc en-block">
-    Our ceremony runs simultaneously.<br>
-    Kindly let us know if you are able to attend<br>
-    so we may prepare a comfortable seat for you.
+  <p class="rsvp-notice" style="margin-bottom:32px">
+    <span class="ko-text">귀한 걸음 하시는 모든 분을 정성껏 모실 수 있도록,<br>참석 여부를 미리 여쭙고자 합니다.<br>답변을 남겨주시면 보다 편안한 자리를 준비하겠습니다.</span>
+    <span class="en-text">To prepare a comfortable experience for everyone,<br>we kindly ask that you let us know<br>if you will be able to join us on our special day.<br>Your RSVP is deeply appreciated.</span>
   </p>
   <button class="rsvp-open-btn" onclick="openRsvp()">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
