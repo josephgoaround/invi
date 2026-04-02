@@ -917,6 +917,50 @@
     overflow-wrap: break-word;
   }
   [data-lang="en"] .gb-item-msg { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; font-size: 15px; }
+  .gb-del-btn {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--light);
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+    font-size: 10.5px;
+    letter-spacing: .04em;
+    cursor: pointer;
+    padding: 2px 7px;
+    border-radius: 4px;
+    transition: color .2s, border-color .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .gb-del-btn:hover { color: var(--rose); border-color: rgba(192,144,128,.35); }
+  .gb-pin-wrap {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    flex-wrap: wrap;
+  }
+  .gb-pin-label {
+    font-size: 11.5px;
+    color: var(--light);
+    letter-spacing: .04em;
+    flex: 0 0 100%;
+  }
+  .gb-pin-input {
+    width: 90px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: .25em;
+    background: var(--ivory);
+    color: var(--char);
+    outline: none;
+  }
+  .gb-pin-input:focus { border-color: var(--gold); }
+  .gb-pin-ok  { padding: 7px 16px; background: var(--rose);  color: #fff; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; }
+  .gb-pin-cancel { padding: 7px 14px; background: none; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; color: var(--mid); cursor: pointer; }
   .gb-empty {
     text-align: center;
     font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
@@ -1859,6 +1903,15 @@
       <input type="text" id="gbName" class="f-input" placeholder="홍길동" autocomplete="name" />
     </div>
     <div class="form-field">
+      <label class="f-label" for="gbPin">
+        <span class="ko-text">삭제 비밀번호 * <small style="font-weight:300;color:var(--light)">(숫자 4자리)</small></span>
+        <span class="en-text">Delete PIN * <small style="font-weight:300;color:var(--light)">(4 digits)</small></span>
+      </label>
+      <input type="password" id="gbPin" class="f-input" maxlength="4"
+             placeholder="●  ●  ●  ●" inputmode="numeric" pattern="[0-9]{4}" autocomplete="off"
+             style="letter-spacing:.25em;text-align:center;font-size:18px" />
+    </div>
+    <div class="form-field">
       <label class="f-label" for="gbMsg">
         <span class="ko-text">메시지 *</span>
         <span class="en-text">Message *</span>
@@ -2088,7 +2141,7 @@ function copyAcct(number, btn) {
 }
 
 /* ── 6. GUESTBOOK (방명록) ── */
-const GB_KEY = 'guestbook_kye2026';
+const GB_KEY = 'guestbook_kye2026_v2'; // v2: 기존 댓글 초기화 + PIN 기능
 let comments = [];
 
 try {
@@ -2100,24 +2153,38 @@ renderComments();
 function renderComments() {
   const list  = document.getElementById('gbList');
   const empty = document.getElementById('gbEmpty');
-  // 기존 댓글 아이템 제거
   list.querySelectorAll('.gb-item').forEach(el => el.remove());
 
   if (!comments.length) { empty.style.display = ''; return; }
   empty.style.display = 'none';
 
-  // 최신순 표시
+  const lang = currentLang;
   [...comments].reverse().forEach(c => {
     const item = document.createElement('div');
     item.className = 'gb-item';
     const d = new Date(c.timestamp);
     const dateStr = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    const delLabel  = lang === 'ko' ? '삭제' : 'Delete';
+    const pinLabel  = lang === 'ko' ? '비밀번호 입력' : 'Enter PIN';
+    const okLabel   = lang === 'ko' ? '확인' : 'OK';
+    const cancelLbl = lang === 'ko' ? '취소' : 'Cancel';
+    item.dataset.id = c.id;
     item.innerHTML = `
       <div class="gb-item-header">
         <span class="gb-item-name">${escHtml(c.name)}</span>
-        <span class="gb-item-date">${dateStr}</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="gb-item-date">${dateStr}</span>
+          <button class="gb-del-btn" onclick="showPinPrompt(this)">${delLabel}</button>
+        </div>
       </div>
-      <p class="gb-item-msg">${escHtml(c.message).replace(/\n/g,'<br>')}</p>`;
+      <p class="gb-item-msg">${escHtml(c.message).replace(/\n/g,'<br>')}</p>
+      <div class="gb-pin-wrap">
+        <span class="gb-pin-label">${pinLabel}</span>
+        <input class="gb-pin-input" type="password" maxlength="4" inputmode="numeric"
+               placeholder="●●●●" autocomplete="off" />
+        <button class="gb-pin-ok"     onclick="confirmDelete(this)">${okLabel}</button>
+        <button class="gb-pin-cancel" onclick="hidePinPrompt(this)">${cancelLbl}</button>
+      </div>`;
     list.appendChild(item);
   });
 }
@@ -2126,34 +2193,82 @@ function escHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-async function submitComment() {
-  const name = (document.getElementById('gbName').value || '').trim();
-  const msg  = (document.getElementById('gbMsg').value  || '').trim();
-  const lang = currentLang;
+function showPinPrompt(btn) {
+  const wrap = btn.closest('.gb-item').querySelector('.gb-pin-wrap');
+  wrap.style.display = 'flex';
+  wrap.querySelector('.gb-pin-input').focus();
+}
 
-  if (!name) { showToast(lang==='ko'?'성함을 입력해 주세요':'Please enter your name'); document.getElementById('gbName').focus(); return; }
-  if (!msg)  { showToast(lang==='ko'?'메시지를 입력해 주세요':'Please enter a message'); document.getElementById('gbMsg').focus(); return; }
+function hidePinPrompt(btn) {
+  const wrap = btn.closest('.gb-pin-wrap');
+  wrap.querySelector('.gb-pin-input').value = '';
+  wrap.style.display = 'none';
+}
 
-  const btn = document.getElementById('gbSubmitBtn');
-  btn.disabled = true;
+async function confirmDelete(btn) {
+  const item    = btn.closest('.gb-item');
+  const id      = item.dataset.id;
+  const wrap    = item.querySelector('.gb-pin-wrap');
+  const entered = wrap.querySelector('.gb-pin-input').value.trim();
+  const lang    = currentLang;
+  const comment = comments.find(c => c.id === id);
+  if (!comment) return;
 
-  const entry = { name, message: msg, timestamp: new Date().toISOString() };
+  if (entered !== comment.pin) {
+    showToast(lang==='ko'?'비밀번호가 일치하지 않습니다':'Incorrect PIN');
+    wrap.querySelector('.gb-pin-input').value = '';
+    wrap.querySelector('.gb-pin-input').focus();
+    return;
+  }
 
-  // Google Sheets 전송
+  comments = comments.filter(c => c.id !== id);
+  try { localStorage.setItem(GB_KEY, JSON.stringify(comments)); } catch(e) {}
+
   if (APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
     try {
       await fetch(APPS_SCRIPT_URL, {
         method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ type: 'comment', ...entry })
+        body: JSON.stringify({ type: 'comment', action: 'delete', id })
       });
-    } catch(e) { /* silent */ }
+    } catch(e) {}
+  }
+
+  renderComments();
+  showToast(lang==='ko'?'댓글이 삭제되었습니다':'Comment deleted');
+}
+
+async function submitComment() {
+  const name = (document.getElementById('gbName').value || '').trim();
+  const pin  = (document.getElementById('gbPin').value  || '').trim();
+  const msg  = (document.getElementById('gbMsg').value  || '').trim();
+  const lang = currentLang;
+
+  if (!name) { showToast(lang==='ko'?'성함을 입력해 주세요':'Please enter your name'); document.getElementById('gbName').focus(); return; }
+  if (!/^\d{4}$/.test(pin)) { showToast(lang==='ko'?'삭제 비밀번호를 숫자 4자리로 입력해 주세요':'Please enter a 4-digit PIN'); document.getElementById('gbPin').focus(); return; }
+  if (!msg)  { showToast(lang==='ko'?'메시지를 입력해 주세요':'Please enter a message'); document.getElementById('gbMsg').focus(); return; }
+
+  const btn = document.getElementById('gbSubmitBtn');
+  btn.disabled = true;
+
+  const id    = Date.now().toString(36) + Math.random().toString(36).slice(2);
+  const entry = { id, name, pin, message: msg, timestamp: new Date().toISOString() };
+
+  if (APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ type: 'comment', action: 'post', id, name, message: msg, timestamp: entry.timestamp })
+      });
+    } catch(e) {}
   }
 
   comments.push(entry);
   try { localStorage.setItem(GB_KEY, JSON.stringify(comments)); } catch(e) {}
 
   document.getElementById('gbName').value = '';
+  document.getElementById('gbPin').value  = '';
   document.getElementById('gbMsg').value  = '';
   renderComments();
   showToast(lang==='ko'?'메시지가 등록되었습니다 ✦':'Message posted ✦');

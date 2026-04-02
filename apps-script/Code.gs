@@ -71,14 +71,28 @@ function handleRsvp(data) {
   ]);
 }
 
-// ── 방명록 댓글 → RSVP 시트의 "방명록" 탭에 기록 ──────────
+// ── 방명록 댓글 → RSVP 시트의 "방명록" 탭에 기록 / 삭제 ──
 function handleComment(data) {
   const ss = SpreadsheetApp.openById(RSVP_SHEET_ID);
   let sheet = ss.getSheetByName('방명록');
 
+  // ── 삭제 요청 ──
+  if (data.action === 'delete') {
+    if (!sheet) return;
+    const values = sheet.getDataRange().getValues();
+    for (let i = values.length - 1; i >= 1; i--) {
+      if (values[i][0] === data.id) {
+        sheet.deleteRow(i + 1);
+        break;
+      }
+    }
+    return;
+  }
+
+  // ── 등록 요청 ──
   if (!sheet) {
     sheet = ss.insertSheet('방명록');
-    const header = ['타임스탬프', '성함', '메시지'];
+    const header = ['ID', '타임스탬프', '성함', '메시지'];
     sheet.appendRow(header);
     sheet.getRange(1, 1, 1, header.length)
       .setFontWeight('bold')
@@ -87,6 +101,7 @@ function handleComment(data) {
   }
 
   sheet.appendRow([
+    data.id,
     Utilities.formatDate(new Date(data.timestamp), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
     data.name,
     data.message
