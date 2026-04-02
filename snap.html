@@ -543,7 +543,10 @@ async function submitSnap() {
   const progressFill = document.getElementById('progressFill');
   progressWrap.style.display = 'block';
 
-  // base64 인코딩 — 파일명: 성함_1.jpg
+  // base64 인코딩 — 파일명 규칙: 성함_MMDD-HHmm_N.ext (예: 홍길동_0905-1230_1.jpg)
+  const _now  = new Date();
+  const _pad  = n => String(n).padStart(2, '0');
+  const _tag  = `${_pad(_now.getMonth()+1)}${_pad(_now.getDate())}-${_pad(_now.getHours())}${_pad(_now.getMinutes())}`;
   const filesData = [];
   for (let i = 0; i < pendingFiles.length; i++) {
     const f = pendingFiles[i];
@@ -552,7 +555,7 @@ async function submitSnap() {
       const ext = f.name.includes('.')
         ? f.name.split('.').pop().toLowerCase()
         : f.type.startsWith('video/') ? 'mp4' : 'jpg';
-      filesData.push({ base64, mimeType: f.type, ext, savedName: `${nameVal}_${i + 1}.${ext}` });
+      filesData.push({ base64, mimeType: f.type, ext, savedName: `${nameVal}_${_tag}_${i + 1}.${ext}` });
       // 진행률 업데이트
       progressFill.style.width = `${Math.round((i + 1) / pendingFiles.length * 70)}%`;
     } catch(e) { /* skip */ }

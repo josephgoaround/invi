@@ -11,9 +11,10 @@
  */
 
 // ── 설정값 ────────────────────────────────────────────
-const RSVP_SHEET_ID   = '1jcLL_HM00aGnfyOL1FxdXTy31dae5ezOxqxEg3FV7_U'; // 본식 RSVP
-const SNAP_SHEET_ID   = '1JpCAUW23zn1a_ZNiJrENMMtrHIhmt9tepHxJRc9jhAY'; // 스냅 제출 명단
-const DRIVE_FOLDER_ID = '1pkuh2kDPZWCKxT62I_i5EXuzyURt4k3g';              // 하객 스냅 사진 폴더
+const RSVP_SHEET_ID    = '1jcLL_HM00aGnfyOL1FxdXTy31dae5ezOxqxEg3FV7_U'; // 본식 RSVP
+const COMMENT_SHEET_ID = '1jTZjlu9QQq69lSIV9TcgAU9q2yTUghnT3liXW9NS0LE'; // 축하 메시지
+const SNAP_SHEET_ID    = '1JpCAUW23zn1a_ZNiJrENMMtrHIhmt9tepHxJRc9jhAY'; // 스냅 제출 명단
+const DRIVE_FOLDER_ID  = '1pkuh2kDPZWCKxT62I_i5EXuzyURt4k3g';             // 하객 스냅 사진 폴더
 // ─────────────────────────────────────────────────────
 
 function doGet() {
@@ -71,14 +72,13 @@ function handleRsvp(data) {
   ]);
 }
 
-// ── 방명록 댓글 → RSVP 시트의 "방명록" 탭에 기록 / 삭제 ──
+// ── 축하 메시지 → 별도 시트에 기록 / 삭제 ──────────────
 function handleComment(data) {
-  const ss = SpreadsheetApp.openById(RSVP_SHEET_ID);
-  let sheet = ss.getSheetByName('방명록');
+  const ss    = SpreadsheetApp.openById(COMMENT_SHEET_ID);
+  let   sheet = ss.getSheets()[0]; // 첫 번째 시트 사용
 
   // ── 삭제 요청 ──
   if (data.action === 'delete') {
-    if (!sheet) return;
     const values = sheet.getDataRange().getValues();
     for (let i = values.length - 1; i >= 1; i--) {
       if (values[i][0] === data.id) {
@@ -90,8 +90,7 @@ function handleComment(data) {
   }
 
   // ── 등록 요청 ──
-  if (!sheet) {
-    sheet = ss.insertSheet('방명록');
+  if (sheet.getLastRow() === 0) {
     const header = ['ID', '타임스탬프', '성함', '메시지'];
     sheet.appendRow(header);
     sheet.getRange(1, 1, 1, header.length)
@@ -108,14 +107,14 @@ function handleComment(data) {
   ]);
 }
 
-// ── 스냅 → Drive 업로드 + 스냅 제출 명단 시트 기록 ──
+// ── 스냅 → Drive 루트 폴더에 직접 업로드 + 제출 명단 기록 ──
+// 파일명 규칙: 성함_MMDD-HHmm_N.ext  (예: 홍길동_0905-1230_1.jpg)
 function handleSnap(data) {
   const ss = SpreadsheetApp.openById(SNAP_SHEET_ID);
-  let sheet = ss.getSheets()[0]; // 첫 번째 시트 사용
+  let sheet = ss.getSheets()[0];
 
-  // 헤더가 없으면 추가
   if (sheet.getLastRow() === 0) {
-    const header = ['타임스탬프', '성함', '연락처', '파일 수', 'Drive 폴더 링크'];
+    const header = ['타임스탬프', '성함', '연락처', '파일 수', '저장 파일명'];
     sheet.appendRow(header);
     sheet.getRange(1, 1, 1, header.length)
       .setFontWeight('bold')
@@ -123,20 +122,16 @@ function handleSnap(data) {
     sheet.setFrozenRows(1);
   }
 
-  // 하객 이름_날짜 서브폴더 생성 (예: 홍길동_0905)
-  const rootFolder  = DriveApp.getFolderById(DRIVE_FOLDER_ID);
-  const dateStr     = Utilities.formatDate(new Date(), 'Asia/Seoul', 'MMdd');
-  const guestFolder = rootFolder.createFolder(data.name + '_' + dateStr);
+  const rootFolder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
+  const savedNames = [];
 
-  // 파일 저장 — 파일명: 성함_1.jpg, 성함_2.mp4 …
-  let savedCount = 0;
   if (data.files && data.files.length) {
     data.files.forEach(function(f) {
       try {
         const bytes = Utilities.base64Decode(f.base64);
         const blob  = Utilities.newBlob(bytes, f.mimeType, f.savedName);
-        guestFolder.createFile(blob);
-        savedCount++;
+        rootFolder.createFile(blob);
+        savedNames.push(f.savedName);
       } catch(err) { /* 파일 하나 실패해도 계속 진행 */ }
     });
   }
@@ -145,7 +140,7 @@ function handleSnap(data) {
     Utilities.formatDate(new Date(data.timestamp), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
     data.name,
     data.contact,
-    savedCount,
-    guestFolder.getUrl()
+    savedNames.length,
+    savedNames.join(' / ')
   ]);
 }
