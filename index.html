@@ -1075,6 +1075,19 @@
     letter-spacing: .03em;
   }
   [data-lang="en"] .rsvp-sub { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; font-size: 14px; }
+  .rsvp-notice {
+    font-size: 12.5px;
+    color: var(--mid);
+    text-align: center;
+    line-height: 2;
+    margin-bottom: 24px;
+    letter-spacing: .02em;
+    padding: 14px 16px;
+    background: rgba(180,146,90,.06);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  [data-lang="en"] .rsvp-notice { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; font-size: 13px; }
   .rsvp-radio-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1154,13 +1167,13 @@
       <span class="ko-text">참석 안내</span>
       <span class="en-text">RSVP</span>
     </span>
-    <h2 class="rsvp-title">
-      <span class="ko-text">함께해 주시겠어요?</span>
-      <span class="en-text">Will you join us?</span>
-    </h2>
     <p class="rsvp-sub">
       <span class="ko-text">2026년 9월 5일 토요일 낮 12시 30분<br>롯데호텔월드 3F 크리스탈볼룸</span>
       <span class="en-text">Saturday, September 5, 2026 · 12:30 PM<br>3F Crystal Ballroom, Lotte Hotel World</span>
+    </p>
+    <p class="rsvp-notice">
+      <span class="ko-text">저희 예식은 동시 진행으로 운영되오니,<br>보다 편안하고 원활한 자리 준비를 위해<br>참석 여부를 미리 알려주시면 더없이 감사하겠습니다.</span>
+      <span class="en-text">As our ceremony runs simultaneously,<br>we kindly ask that you let us know<br>whether you are able to attend, so we may<br>prepare a comfortable experience for all guests.</span>
     </p>
 
     <!-- Form -->
@@ -1172,6 +1185,15 @@
         </label>
         <input type="text" id="rsvpName" class="f-input"
                placeholder="홍길동" autocomplete="name" />
+      </div>
+
+      <div class="form-field">
+        <label class="f-label" for="rsvpRelation">
+          <span class="ko-text">관계 *</span>
+          <span class="en-text">Relation *</span>
+        </label>
+        <input type="text" id="rsvpRelation" class="f-input"
+               placeholder="예) 신랑 친구, 신부 직장 동료" autocomplete="off" />
       </div>
 
       <div class="form-field">
@@ -1230,8 +1252,8 @@
     <!-- Thank you state -->
     <div class="snap-thanks" id="rsvpThanks" style="display:none" aria-live="polite">
       <div class="thanks-sym">✦ &nbsp; ✦ &nbsp; ✦</div>
-      <p class="ko-block">소중한 답변 감사합니다.<br>당일에 뵙겠습니다.</p>
-      <p class="en-block">Thank you for your RSVP.<br>We look forward to seeing you.</p>
+      <p class="ko-block">소중한 답변 감사합니다.</p>
+      <p class="en-block">Thank you for your RSVP.</p>
       <button class="snap-submit-btn" style="margin-top:20px" onclick="closeRsvp()">
         <span class="ko-text">확인</span>
         <span class="en-text">Close</span>
@@ -1440,11 +1462,6 @@
     <span class="ko-text">오시는 길</span>
     <span class="en-text">Getting Here</span>
   </span>
-  <h2 class="section-title">
-    <span class="ko-block">롯데호텔월드<br>3F 크리스탈볼룸</span>
-    <span class="en-block">Lotte Hotel World<br>3F Crystal Ballroom</span>
-  </h2>
-
   <!-- Map embed -->
   <div class="map-wrap">
     <iframe
@@ -1528,7 +1545,7 @@
       </div>
     </div>
 
-    <!-- Car -->
+    <!-- Car + Parking (merged) -->
     <div class="t-card">
       <div class="t-icon car" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1537,20 +1554,28 @@
       </div>
       <div class="t-body">
         <h4>
-          <span class="ko-text">자가용</span>
-          <span class="en-text">By Car</span>
+          <span class="ko-text">자가용 · 주차</span>
+          <span class="en-text">By Car &amp; Parking</span>
         </h4>
         <p class="ko-block">
           내비게이션: <strong>롯데호텔월드</strong><br>
-          서울 송파구 올림픽로 240<br>
-          ※ 예식 당일 교통 혼잡이 예상되니<br>
-          &emsp;여유 있게 출발해 주시기 바랍니다
+          서울 송파구 올림픽로 240<br><br>
+          호텔 입구 진입 후 <strong>지하 H구역</strong> 이용<br>
+          H구역 만차 시 백화점 · 어드벤처 ·<br>
+          마트 방향 입차 후 주차 가능<br>
+          무료주차 최대 4시간 적용<br><br>
+          ※ 식장 인근 교통이 매우 혼잡하오니<br>
+          &emsp;대중교통 이용을 적극 권장합니다.
         </p>
         <p class="en-block">
           Search: <strong>Lotte Hotel World</strong><br>
-          240 Olympic-ro, Songpa-gu, Seoul<br>
-          ※ We recommend departing early<br>
-          &emsp;to allow for traffic on the day
+          240 Olympic-ro, Songpa-gu, Seoul<br><br>
+          Enter the hotel entrance →<br>
+          <strong>Underground Zone H</strong> (nearest)<br>
+          If full: Dept. Store / Adventure / Mart<br>
+          Complimentary parking up to 4 hours<br><br>
+          ※ Heavy traffic is expected near the venue.<br>
+          &emsp;Public transit is strongly recommended.
         </p>
 
         <!-- 내비 앱 바로가기 버튼 (국문: 네이버, 카카오, 티맵 // 영문: 구글맵) -->
@@ -1589,34 +1614,6 @@
             </a>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Parking -->
-    <div class="t-card">
-      <div class="t-icon park" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 17V8h4a3 3 0 0 1 0 6H9"/>
-        </svg>
-      </div>
-      <div class="t-body">
-        <h4>
-          <span class="ko-text">주차 안내</span>
-          <span class="en-text">Parking</span>
-        </h4>
-        <p class="ko-block">
-          호텔 입구 진입 후 <strong>지하 H구역</strong> 이용<br>
-          H구역 만차 시 백화점 · 어드벤처 ·<br>
-          마트 방향 입차 후 주차 가능<br>
-          ※ 대중교통 이용을 권장드립니다
-        </p>
-        <p class="en-block">
-          Enter the hotel entrance →<br>
-          <strong>Underground Zone H</strong> (nearest)<br>
-          If full: Dept. Store / Adventure / Mart<br>
-          ※ Public transit strongly recommended
-        </p>
-
       </div>
     </div>
 
@@ -1910,13 +1907,15 @@ function closeRsvp() {
 }
 
 async function submitRsvp() {
-  const name    = (document.getElementById('rsvpName').value    || '').trim();
-  const contact = (document.getElementById('rsvpContact').value || '').trim();
-  const party   = document.getElementById('rsvpParty').value;
-  const msg     = (document.getElementById('rsvpMsg').value     || '').trim();
-  const lang    = currentLang;
+  const name     = (document.getElementById('rsvpName').value     || '').trim();
+  const relation = (document.getElementById('rsvpRelation').value || '').trim();
+  const contact  = (document.getElementById('rsvpContact').value  || '').trim();
+  const party    = document.getElementById('rsvpParty').value;
+  const msg      = (document.getElementById('rsvpMsg').value      || '').trim();
+  const lang     = currentLang;
 
   if (!name)              { showToast(lang==='ko'?'성함을 입력해 주세요':'Please enter your name'); return; }
+  if (!relation)          { showToast(lang==='ko'?'관계를 입력해 주세요':'Please enter your relation'); return; }
   if (!contact)           { showToast(lang==='ko'?'연락처를 입력해 주세요':'Please enter your contact'); return; }
   if (!rsvpAttendValue)   { showToast(lang==='ko'?'참석 여부를 선택해 주세요':'Please select attendance'); return; }
   if (rsvpAttendValue==='yes' && !party) { showToast(lang==='ko'?'참석 인원을 입력해 주세요':'Please enter party size'); return; }
@@ -1926,7 +1925,7 @@ async function submitRsvp() {
 
   const data = {
     type: 'rsvp',
-    name, contact,
+    name, relation, contact,
     attending: rsvpAttendValue,
     partySize: rsvpAttendValue === 'yes' ? (party || '1') : '-',
     message: msg,

@@ -52,7 +52,7 @@ function handleRsvp(data) {
 
   // 헤더가 없으면 추가
   if (sheet.getLastRow() === 0) {
-    const header = ['타임스탬프', '성함', '연락처', '참석여부', '인원수', '메시지'];
+    const header = ['타임스탬프', '성함', '관계', '연락처', '참석여부', '인원수', '메시지'];
     sheet.appendRow(header);
     sheet.getRange(1, 1, 1, header.length)
       .setFontWeight('bold')
@@ -63,6 +63,7 @@ function handleRsvp(data) {
   sheet.appendRow([
     Utilities.formatDate(new Date(data.timestamp), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
     data.name,
+    data.relation  || '',
     data.contact,
     data.attending === 'yes' ? '✓ 참석' : '✕ 불참',
     data.partySize || '-',
