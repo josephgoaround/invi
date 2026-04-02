@@ -762,6 +762,38 @@
   /* ════════════════════════════════════════════
      FOOTER
   ════════════════════════════════════════════ */
+  /* RSVP CTA 섹션 */
+  .rsvp-cta {
+    text-align: center;
+    padding: 72px 28px;
+  }
+  .rsvp-cta-desc {
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 2;
+    letter-spacing: .02em;
+    margin-bottom: 32px;
+  }
+  .rsvp-open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 16px 48px;
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: .12em;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .rsvp-open-btn:active { transform: scale(.97); }
+  .rsvp-open-btn:hover  { background: var(--gold-lt); }
+
   footer {
     padding: 60px 28px;
     padding-bottom: max(60px, calc(env(safe-area-inset-bottom, 0px) + 40px));
@@ -1222,12 +1254,12 @@
         </div>
       </div>
 
-      <div class="form-field" id="rsvpPartyField" style="display:none">
+      <div class="form-field" id="rsvpPartyField">
         <label class="f-label" for="rsvpParty">
-          <span class="ko-text">참석 인원 *</span>
-          <span class="en-text">Party Size *</span>
+          <span class="ko-text">참석 인원 * <small style="font-weight:300;color:var(--light)">(불참 시 0)</small></span>
+          <span class="en-text">Party Size * <small style="font-weight:300;color:var(--light)">(0 if not attending)</small></span>
         </label>
-        <input type="number" id="rsvpParty" class="f-input" min="1" max="20" placeholder="1" />
+        <input type="number" id="rsvpParty" class="f-input" min="0" max="20" placeholder="0" />
       </div>
 
       <div class="form-field">
@@ -1849,6 +1881,33 @@
 </section>
 
 <!-- ══════════════════════════════════════════
+     RSVP CTA
+══════════════════════════════════════════ -->
+<section class="rsvp-cta reveal">
+  <span class="eyebrow">RSVP</span>
+  <p class="rsvp-cta-desc ko-block">
+    저희 예식은 동시 진행으로 운영됩니다.<br>
+    편안한 자리 준비를 위해 참석 여부를<br>
+    미리 알려주시면 더없이 감사하겠습니다.
+  </p>
+  <p class="rsvp-cta-desc en-block">
+    Our ceremony runs simultaneously.<br>
+    Kindly let us know if you are able to attend<br>
+    so we may prepare a comfortable seat for you.
+  </p>
+  <button class="rsvp-open-btn" onclick="openRsvp()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round"
+         stroke-linejoin="round" aria-hidden="true">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+    <span class="ko-text">참석 여부 알리기</span>
+    <span class="en-text">Send RSVP</span>
+  </button>
+</section>
+
+<!-- ══════════════════════════════════════════
      FOOTER
 ══════════════════════════════════════════ -->
 <footer class="reveal">
@@ -1885,18 +1944,22 @@ let rsvpAttendValue = null;
 // 페이지 로드 시 RSVP 미완료면 4초 후 팝업 (내용을 먼저 확인할 시간 확보)
 window.addEventListener('DOMContentLoaded', () => {
   if (!localStorage.getItem(RSVP_KEY)) {
-    setTimeout(() => {
-      const overlay = document.getElementById('rsvpOverlay');
-      overlay.style.display = 'flex';
-    }, 4000);
+    setTimeout(() => openRsvp(), 4000);
   }
 });
+
+function openRsvp() {
+  const overlay = document.getElementById('rsvpOverlay');
+  // 폼 초기화 (재오픈 시 완료 상태 숨김)
+  document.getElementById('rsvpFormWrap').style.display = 'block';
+  document.getElementById('rsvpThanks').style.display   = 'none';
+  overlay.style.display = 'flex';
+}
 
 function selectAttend(val) {
   rsvpAttendValue = val;
   document.getElementById('lblAttendYes').classList.toggle('selected', val === 'yes');
   document.getElementById('lblAttendNo').classList.toggle('selected', val === 'no');
-  document.getElementById('rsvpPartyField').style.display = val === 'yes' ? 'block' : 'none';
   if (val === 'yes') document.getElementById('rsvpParty').focus();
 }
 
@@ -1918,7 +1981,10 @@ async function submitRsvp() {
   if (!relation)          { showToast(lang==='ko'?'관계를 입력해 주세요':'Please enter your relation'); return; }
   if (!contact)           { showToast(lang==='ko'?'연락처를 입력해 주세요':'Please enter your contact'); return; }
   if (!rsvpAttendValue)   { showToast(lang==='ko'?'참석 여부를 선택해 주세요':'Please select attendance'); return; }
-  if (rsvpAttendValue==='yes' && !party) { showToast(lang==='ko'?'참석 인원을 입력해 주세요':'Please enter party size'); return; }
+  if (rsvpAttendValue==='yes' && (!party || Number(party) < 1)) {
+    showToast(lang==='ko'?'참석 인원을 입력해 주세요 (1명 이상)':'Please enter party size (at least 1)');
+    return;
+  }
 
   const btn = document.getElementById('rsvpSubmitBtn');
   btn.disabled = true;
@@ -1927,7 +1993,7 @@ async function submitRsvp() {
     type: 'rsvp',
     name, relation, contact,
     attending: rsvpAttendValue,
-    partySize: rsvpAttendValue === 'yes' ? (party || '1') : '-',
+    partySize: party !== '' ? party : '0',
     message: msg,
     timestamp: new Date().toISOString()
   };
