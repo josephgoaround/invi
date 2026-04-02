@@ -1553,32 +1553,41 @@
           &emsp;to allow for traffic on the day
         </p>
 
-        <!-- 내비 앱 바로가기 버튼 -->
-        <div class="nav-btns">
-          <!-- 네이버지도: '롯데호텔월드' 검색결과로 바로 연결 -->
-          <a class="nav-btn naver"
-             href="https://map.naver.com/v5/search/%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C"
-             target="_blank" rel="noopener">
-            <span class="nav-btn-icon">🗺</span>
-            <span class="ko-text">네이버지도</span>
-            <span class="en-text">Naver Map</span>
-          </a>
-          <!-- 카카오맵: 목적지명+좌표로 바로 지정 -->
-          <a class="nav-btn kakao"
-             href="https://map.kakao.com/link/to/%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C,37.511089,127.098152"
-             target="_blank" rel="noopener">
-            <span class="nav-btn-icon">🗺</span>
-            <span class="ko-text">카카오맵</span>
-            <span class="en-text">Kakao Map</span>
-          </a>
-          <!-- 티맵: 앱 설치 시 앱으로, 미설치 시 웹으로 fallback -->
-          <a class="nav-btn tmap"
-             href="tmap://route?goalname=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C&goalx=127.098152&goaly=37.511089"
-             onclick="openTmap(event)">
-            <span class="nav-btn-icon">🗺</span>
-            <span class="ko-text">티맵</span>
-            <span class="en-text">T-map</span>
-          </a>
+        <!-- 내비 앱 바로가기 버튼 (국문: 네이버, 카카오, 티맵 // 영문: 구글맵) -->
+        <div class="ko-block">
+          <div class="nav-btns">
+            <!-- 네이버지도: '롯데호텔월드' 검색결과로 바로 연결 -->
+            <a class="nav-btn naver"
+               href="https://map.naver.com/v5/search/%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C"
+               target="_blank" rel="noopener">
+              <span class="nav-btn-icon">🗺</span>
+              <span class="ko-text">네이버지도</span>
+            </a>
+            <!-- 카카오맵: 목적지명+좌표로 바로 지정 -->
+            <a class="nav-btn kakao"
+               href="https://map.kakao.com/link/to/%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C,37.511089,127.098152"
+               target="_blank" rel="noopener">
+              <span class="nav-btn-icon">🗺</span>
+              <span class="ko-text">카카오맵</span>
+            </a>
+            <!-- 티맵: 웹 링크 클릭 시 새 탭에서 열리며 Tmap 앱 실행 또는 웹으로 연결 -->
+            <a class="nav-btn tmap"
+               href="https://www.tmap.co.kr/tmap2/mobile/tmap.jsp?scheme=tmap&host=route&goalname=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C&goalx=127.098152&goaly=37.511089"
+               target="_blank" rel="noopener">
+              <span class="nav-btn-icon">🗺</span>
+              <span class="ko-text">티맵</span>
+            </a>
+          </div>
+        </div>
+        <div class="en-block">
+          <div class="nav-btns">
+            <a class="nav-btn" style="border-color:#e0e0e0; color:#333;"
+               href="https://www.google.com/maps/place/Lotte+Hotel+World"
+               target="_blank" rel="noopener">
+              <span class="nav-btn-icon" style="background:#f1f3f4;">🗺</span>
+              <span class="en-text">Google Maps</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -1984,22 +1993,7 @@ function showToast(msg, ms) {
 
 /* ── 4. GUEST SNAP EVENT — moved to snap.html ── */
 
-/* ── 4a. TMAP FALLBACK ── */
-function openTmap(e) {
-  e.preventDefault();
-  const appUrl = 'tmap://route?goalname=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C&goalx=127.098152&goaly=37.511089';
-  const webUrl = 'https://tmap.life/4d2f0b'; // 롯데호텔 월드 티맵 웹 링크
-  const fallback = 'https://www.tmap.co.kr/tmap2/mobile/tmap.jsp?scheme=tmap&host=route&goalname=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C&goalx=127.098152&goaly=37.511089';
-
-  // 앱 실행 시도 후 500ms 내 포커스 유지되면 미설치로 판단해 웹으로 이동
-  const start = Date.now();
-  window.location.href = appUrl;
-  setTimeout(() => {
-    if (Date.now() - start < 1500) {
-      window.location.href = fallback;
-    }
-  }, 500);
-}
+/* ── 4a. TMAP FALLBACK (Removed, handled by href target=_blank) ── */
 
 /* ── 5. ACCOUNT (마음 전하기) ── */
 function switchAcctTab(side, btn) {
