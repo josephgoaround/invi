@@ -1937,6 +1937,10 @@ let rsvpAttendValue = null;
 
 // 페이지 로드 시 RSVP 미완료면 4초 후 팝업 (내용을 먼저 확인할 시간 확보)
 window.addEventListener('DOMContentLoaded', () => {
+  // 새로고침 시 항상 최상단으로 이동
+  history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+
   if (!localStorage.getItem(RSVP_KEY)) {
     setTimeout(() => openRsvp(), 4000);
   }
