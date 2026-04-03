@@ -317,51 +317,6 @@
   .invite-names .name-row { margin-bottom: 4px; }
 
   /* ════════════════════════════════════════════
-     DETAIL CARDS
-  ════════════════════════════════════════════ */
-  .detail-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .d-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    padding: 22px 16px;
-    text-align: center;
-  }
-  .d-card.wide { grid-column: 1 / -1; }
-  .d-card .d-label {
-    display: block;
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    font-size: 9.5px;
-    letter-spacing: .32em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 12px;
-  }
-  .d-card .d-main {
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    font-size: 24px;
-    font-weight: 300;
-    color: var(--char);
-    line-height: 1.35;
-  }
-  .d-card .d-sub {
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    font-size: 11px;
-    color: var(--light);
-    margin-top: 8px;
-    line-height: 1.75;
-    font-weight: 300;
-  }
-  [data-lang="en"] .d-card .d-sub {
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    font-size: 13px;
-  }
-
-  /* ════════════════════════════════════════════
      GALLERY
   ════════════════════════════════════════════ */
   .gallery-grid {
@@ -1452,47 +1407,6 @@
         <span class="name-highlight">Ji Eun</span>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     WEDDING DETAILS
-══════════════════════════════════════════ -->
-<section class="reveal">
-  <span class="eyebrow">Details</span>
-
-  <div class="detail-grid">
-
-    <div class="d-card">
-      <span class="d-label">Date</span>
-      <div class="d-main">2026<br>09 · 05</div>
-      <div class="d-sub">
-        <span class="ko-text">토요일</span>
-        <span class="en-text">Saturday</span>
-      </div>
-    </div>
-
-    <div class="d-card">
-      <span class="d-label">Time</span>
-      <div class="d-main">12 : 30</div>
-      <div class="d-sub">
-        <span class="ko-text">낮 12시 30분<br>점심 예식</span>
-        <span class="en-text">12:30 PM<br>Luncheon</span>
-      </div>
-    </div>
-
-    <div class="d-card wide">
-      <span class="d-label">Venue</span>
-      <div class="d-main">
-        <span class="ko-text" style="font-size:19px; display:block">롯데호텔월드<br>3F 크리스탈볼룸</span>
-        <span class="en-text" style="font-size:19px; display:block">Lotte Hotel World<br>3F Crystal Ballroom</span>
-      </div>
-      <div class="d-sub">
-        <span class="ko-text">서울 송파구 올림픽로 240</span>
-        <span class="en-text">240 Olympic-ro, Songpa-gu, Seoul</span>
-      </div>
-    </div>
-
   </div>
 </section>
 
