@@ -108,7 +108,7 @@ function handleComment(data) {
 }
 
 // ── 스냅 → Drive 루트 폴더에 직접 업로드 + 제출 명단 기록 ──
-// 파일명 규칙: 성함_MMDD-HHmm_N.ext  (예: 홍길동_0905-1230_1.jpg)
+// 파일명 규칙: 성함_HHmmss_N.ext  (예: 홍길동_143022_1.jpg) — 서버 시간(Asia/Seoul) 기준
 function handleSnap(data) {
   const ss = SpreadsheetApp.openById(SNAP_SHEET_ID);
   let sheet = ss.getSheets()[0];
@@ -123,15 +123,20 @@ function handleSnap(data) {
   }
 
   const rootFolder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
+  const hhmmss    = Utilities.formatDate(new Date(), 'Asia/Seoul', 'HHmmss');
   const savedNames = [];
+  let idx = 1;
 
   if (data.files && data.files.length) {
     data.files.forEach(function(f) {
       try {
-        const bytes = Utilities.base64Decode(f.base64);
-        const blob  = Utilities.newBlob(bytes, f.mimeType, f.savedName);
+        const ext      = f.ext || (f.mimeType && f.mimeType.startsWith('video/') ? 'mp4' : 'jpg');
+        const fileName = data.name + '_' + hhmmss + '_' + idx + '.' + ext;
+        const bytes    = Utilities.base64Decode(f.base64);
+        const blob     = Utilities.newBlob(bytes, f.mimeType, fileName);
         rootFolder.createFile(blob);
-        savedNames.push(f.savedName);
+        savedNames.push(fileName);
+        idx++;
       } catch(err) { /* 파일 하나 실패해도 계속 진행 */ }
     });
   }
