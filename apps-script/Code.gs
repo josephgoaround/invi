@@ -8,7 +8,50 @@
  *     - 실행 계정: 나(Me)
  *     - 액세스: 모든 사용자(Anyone)
  *  4. 배포 URL을 index.html 의 APPS_SCRIPT_URL 에 입력
+ *
+ * ▶ 시트 헤더 초기화 방법:
+ *  Apps Script 편집기에서 setupAllSheets 함수를 선택 후 ▶ 실행
+ *  → 3개 시트의 헤더가 모두 올바른 순서로 자동 설정됩니다.
  */
+
+// ── 시트 헤더 일괄 초기화 (편집기에서 수동 실행) ──────
+// Apps Script 편집기 상단 함수 선택창에서 'setupAllSheets' 선택 후 ▶ 실행
+function setupAllSheets() {
+  // 1. RSVP 시트
+  var rsvpSheet  = SpreadsheetApp.openById(RSVP_SHEET_ID).getSheets()[0];
+  var rsvpHeader = ['타임스탬프', '성함', '관계', '연락처', '참석여부', '인원수', '메시지'];
+  applyHeader(rsvpSheet, rsvpHeader);
+
+  // 2. 축하 메시지 시트
+  var cmtSheet  = SpreadsheetApp.openById(COMMENT_SHEET_ID).getSheets()[0];
+  var cmtHeader = ['ID', '타임스탬프', '성함', '메시지'];
+  applyHeader(cmtSheet, cmtHeader);
+
+  // 3. 스냅 제출 명단 시트
+  var snapSheet  = SpreadsheetApp.openById(SNAP_SHEET_ID).getSheets()[0];
+  var snapHeader = ['타임스탬프', '성함', '연락처', '파일 수', '저장 파일명'];
+  applyHeader(snapSheet, snapHeader);
+
+  Logger.log('✅ 모든 시트 헤더 설정 완료');
+}
+
+// 헤더를 강제로 1행에 덮어쓰는 내부 함수 (setupAllSheets 전용)
+function applyHeader(sheet, header) {
+  // 1행이 없으면 빈 행 추가
+  if (sheet.getLastRow() === 0) sheet.appendRow(header);
+
+  // 1행 전체를 헤더로 덮어쓰기
+  var range = sheet.getRange(1, 1, 1, header.length);
+  range.setValues([header]);
+  range.setFontWeight('bold').setBackground('#F7F4EE');
+  sheet.setFrozenRows(1);
+
+  // 헤더보다 넓은 기존 컬럼이 있으면 초과분 클리어
+  var lastCol = sheet.getLastColumn();
+  if (lastCol > header.length) {
+    sheet.getRange(1, header.length + 1, 1, lastCol - header.length).clearContent();
+  }
+}
 
 // ── 설정값 ────────────────────────────────────────────
 const RSVP_SHEET_ID    = '1jcLL_HM00aGnfyOL1FxdXTy31dae5ezOxqxEg3FV7_U'; // 본식 RSVP
@@ -27,13 +70,9 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
 
-    if (data.type === 'rsvp') {
-      handleRsvp(data);
-    } else if (data.type === 'snap') {
-      handleSnap(data);
-    } else if (data.type === 'comment') {
-      handleComment(data);
-    }
+    if      (data.type === 'rsvp')    handleRsvp(data);
+    else if (data.type === 'snap')    handleSnap(data);
+    else if (data.type === 'comment') handleComment(data);
 
     return ContentService
       .createTextOutput(JSON.stringify({ success: true }))
@@ -46,20 +85,40 @@ function doPost(e) {
   }
 }
 
-// ── RSVP → 본식 RSVP 시트 기록 ──────────────────────
-function handleRsvp(data) {
-  const ss = SpreadsheetApp.openById(RSVP_SHEET_ID);
-  let sheet = ss.getSheets()[0]; // 첫 번째 시트 사용
-
-  // 헤더가 없으면 추가
+// ── 헤더 보장 함수 ────────────────────────────────────
+// 시트가 비어있으면 헤더를 새로 추가하고,
+// 기존 헤더가 다르면 자동으로 교정합니다.
+function ensureHeader(sheet, header) {
   if (sheet.getLastRow() === 0) {
-    const header = ['타임스탬프', '성함', '관계', '연락처', '참석여부', '인원수', '메시지'];
     sheet.appendRow(header);
     sheet.getRange(1, 1, 1, header.length)
       .setFontWeight('bold')
       .setBackground('#F7F4EE');
     sheet.setFrozenRows(1);
+    return;
   }
+
+  // 기존 헤더와 비교
+  const existing = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), header.length))
+                        .getValues()[0]
+                        .slice(0, header.length);
+  const needsUpdate = header.some(function(col, i) { return existing[i] !== col; });
+
+  if (needsUpdate) {
+    const range = sheet.getRange(1, 1, 1, header.length);
+    range.setValues([header]);
+    range.setFontWeight('bold').setBackground('#F7F4EE');
+    sheet.setFrozenRows(1);
+  }
+}
+
+// ── RSVP → 본식 RSVP 시트 기록 ──────────────────────
+// 컬럼 순서: 타임스탬프 | 성함 | 관계 | 연락처 | 참석여부 | 인원수 | 메시지
+function handleRsvp(data) {
+  const sheet  = SpreadsheetApp.openById(RSVP_SHEET_ID).getSheets()[0];
+  const HEADER = ['타임스탬프', '성함', '관계', '연락처', '참석여부', '인원수', '메시지'];
+
+  ensureHeader(sheet, HEADER);
 
   sheet.appendRow([
     Utilities.formatDate(new Date(data.timestamp), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
@@ -73,9 +132,10 @@ function handleRsvp(data) {
 }
 
 // ── 축하 메시지 → 별도 시트에 기록 / 삭제 ──────────────
+// 컬럼 순서: ID | 타임스탬프 | 성함 | 메시지
 function handleComment(data) {
-  const ss    = SpreadsheetApp.openById(COMMENT_SHEET_ID);
-  let   sheet = ss.getSheets()[0]; // 첫 번째 시트 사용
+  const sheet  = SpreadsheetApp.openById(COMMENT_SHEET_ID).getSheets()[0];
+  const HEADER = ['ID', '타임스탬프', '성함', '메시지'];
 
   // ── 삭제 요청 ──
   if (data.action === 'delete') {
@@ -90,14 +150,7 @@ function handleComment(data) {
   }
 
   // ── 등록 요청 ──
-  if (sheet.getLastRow() === 0) {
-    const header = ['ID', '타임스탬프', '성함', '메시지'];
-    sheet.appendRow(header);
-    sheet.getRange(1, 1, 1, header.length)
-      .setFontWeight('bold')
-      .setBackground('#F7F4EE');
-    sheet.setFrozenRows(1);
-  }
+  ensureHeader(sheet, HEADER);
 
   sheet.appendRow([
     data.id,
@@ -107,23 +160,17 @@ function handleComment(data) {
   ]);
 }
 
-// ── 스냅 → Drive 루트 폴더에 직접 업로드 + 제출 명단 기록 ──
-// 파일명 규칙: 성함_HHmmss_N.ext  (예: 홍길동_143022_1.jpg) — 서버 시간(Asia/Seoul) 기준
+// ── 스냅 → Drive 폴더에 업로드 + 제출 명단 기록 ──────
+// 파일명 규칙: 성함_HHmmss_N.ext  (예: 홍길동_143022_1.jpg)
+// 컬럼 순서: 타임스탬프 | 성함 | 연락처 | 파일 수 | 저장 파일명
 function handleSnap(data) {
-  const ss = SpreadsheetApp.openById(SNAP_SHEET_ID);
-  let sheet = ss.getSheets()[0];
+  const sheet  = SpreadsheetApp.openById(SNAP_SHEET_ID).getSheets()[0];
+  const HEADER = ['타임스탬프', '성함', '연락처', '파일 수', '저장 파일명'];
 
-  if (sheet.getLastRow() === 0) {
-    const header = ['타임스탬프', '성함', '연락처', '파일 수', '저장 파일명'];
-    sheet.appendRow(header);
-    sheet.getRange(1, 1, 1, header.length)
-      .setFontWeight('bold')
-      .setBackground('#F7F4EE');
-    sheet.setFrozenRows(1);
-  }
+  ensureHeader(sheet, HEADER);
 
   const rootFolder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
-  const hhmmss    = Utilities.formatDate(new Date(), 'Asia/Seoul', 'HHmmss');
+  const hhmmss     = Utilities.formatDate(new Date(), 'Asia/Seoul', 'HHmmss');
   const savedNames = [];
   let idx = 1;
 
@@ -137,7 +184,7 @@ function handleSnap(data) {
         rootFolder.createFile(blob);
         savedNames.push(fileName);
         idx++;
-      } catch(err) { /* 파일 하나 실패해도 계속 진행 */ }
+      } catch (err) { /* 파일 하나 실패해도 계속 진행 */ }
     });
   }
 
