@@ -1103,6 +1103,97 @@
     border: 1px solid var(--border);
   }
   [data-lang="en"] .rsvp-notice { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; font-size: 13px; }
+
+  /* ── WEDDING COUNTDOWN ── */
+  .wedding-countdown {
+    margin-top: 28px;
+    padding: 24px 20px 20px;
+    background: rgba(180,146,90,.06);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .countdown-label {
+    font-size: 11px;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .countdown-units {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 52px;
+  }
+  .countdown-num {
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--char);
+    line-height: 1;
+    letter-spacing: .02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown-name {
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: var(--light);
+    margin-top: 5px;
+    text-transform: uppercase;
+  }
+  .countdown-sep {
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold);
+    opacity: .5;
+    margin-bottom: 18px;
+  }
+  .countdown-date-lbl {
+    margin-top: 16px;
+    font-size: 11.5px;
+    color: var(--mid);
+    letter-spacing: .08em;
+  }
+  .countdown-unlock-hint {
+    margin-top: 12px;
+    font-size: 11.5px;
+    color: var(--light);
+    letter-spacing: .04em;
+  }
+  /* 당일 활성화 상태 */
+  .wedding-countdown.is-open {
+    cursor: pointer;
+    border-color: var(--gold);
+    background: rgba(180,146,90,.12);
+    transition: background .2s, border-color .2s;
+  }
+  .wedding-countdown.is-open:active {
+    background: rgba(180,146,90,.2);
+  }
+  .wedding-countdown.is-open .countdown-unlock-hint {
+    color: var(--gold);
+    font-weight: 400;
+  }
+  /* 당일 전에는 클릭 불가 커서 */
+  .wedding-countdown:not(.is-open) {
+    cursor: default;
+  }
+
+  .rsvp-deadline {
+    font-size: 12px;
+    color: var(--gold);
+    text-align: center;
+    letter-spacing: .08em;
+    margin-top: -16px;
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
   .rsvp-radio-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1185,6 +1276,10 @@
     <p class="rsvp-notice">
       <span class="ko-text">귀한 걸음 하시는 모든 분을 정성껏 모실 수 있도록,<br>참석 여부를 미리 여쭙고자 합니다.<br>답변을 남겨주시면 보다 편안한 자리를 준비하겠습니다.</span>
       <span class="en-text">To prepare a comfortable experience for everyone,<br>we kindly ask that you let us know<br>if you will be able to join us on our special day.<br>Your RSVP is deeply appreciated.</span>
+    </p>
+    <p class="rsvp-deadline">
+      <span class="ko-text">✦ &nbsp;회신 마감 : 8월 2일 (월) 오후까지&nbsp; ✦</span>
+      <span class="en-text">✦ &nbsp;RSVP by : Monday, August 2nd (afternoon)&nbsp; ✦</span>
     </p>
 
     <!-- Form -->
@@ -1633,14 +1728,42 @@
     </p>
   </div>
 
-  <a href="snap.html" class="snap-link-btn">
-    <span class="ko-text">사진 · 동영상 제출하기</span>
-    <span class="en-text">Submit Photos &amp; Videos</span>
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M5 12h14M12 5l7 7-7 7"/>
-    </svg>
-  </a>
+  <div class="wedding-countdown" id="weddingCountdown" onclick="snapGo()" role="button" tabindex="0"
+       onkeydown="if(event.key==='Enter'||event.key===' ')snapGo()">
+    <p class="countdown-label" id="cdLabel">
+      <span class="ko-text">결혼식까지</span>
+      <span class="en-text">Days Until the Wedding</span>
+    </p>
+    <div class="countdown-units" id="cdUnits">
+      <div class="countdown-unit">
+        <span class="countdown-num" id="cdDays">--</span>
+        <span class="countdown-name"><span class="ko-text">일</span><span class="en-text">days</span></span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-num" id="cdHours">--</span>
+        <span class="countdown-name"><span class="ko-text">시간</span><span class="en-text">hrs</span></span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-num" id="cdMins">--</span>
+        <span class="countdown-name"><span class="ko-text">분</span><span class="en-text">min</span></span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-num" id="cdSecs">--</span>
+        <span class="countdown-name"><span class="ko-text">초</span><span class="en-text">sec</span></span>
+      </div>
+    </div>
+    <p class="countdown-date-lbl">
+      <span class="ko-text">2026년 9월 5일 (토) 낮 12:30</span>
+      <span class="en-text">September 5, 2026 · 12:30 PM</span>
+    </p>
+    <p class="countdown-unlock-hint" id="cdHint">
+      <span class="ko-text">📷 &nbsp;당일 사진 제출 페이지가 열립니다</span>
+      <span class="en-text">📷 &nbsp;Photo submission opens on the day</span>
+    </p>
+  </div>
 </section>
 
 <!-- ══════════════════════════════════════════
@@ -1892,7 +2015,7 @@ window.addEventListener('DOMContentLoaded', () => {
   window.scrollTo(0, 0);
 
   if (!localStorage.getItem(RSVP_KEY)) {
-    setTimeout(() => openRsvp(), 4000);
+    setTimeout(() => openRsvp(), 5000);
   }
 });
 
@@ -2170,6 +2293,66 @@ async function submitComment() {
   renderComments();
   showToast(lang==='ko'?'메시지가 등록되었습니다 ✦':'Message posted ✦');
   btn.disabled = false;
+}
+
+/* ── WEDDING COUNTDOWN ── */
+(function() {
+  const weddingDate = new Date('2026-09-05T12:30:00+09:00');
+  const weddingDay  = new Date('2026-09-05T00:00:00+09:00'); // 당일 00:00 KST
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function isWeddingDay() {
+    const now = new Date();
+    // 한국 기준 9월 5일이면 활성화
+    const kst = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+    return kst >= weddingDay;
+  }
+
+  function tick() {
+    const now  = new Date();
+    const diff = weddingDate - now;
+    const box  = document.getElementById('weddingCountdown');
+
+    if (isWeddingDay()) {
+      // 당일: 카운트다운 숨기고 제출 버튼으로 전환
+      box.classList.add('is-open');
+      document.getElementById('cdLabel').innerHTML =
+        '<span class="ko-text">✦ &nbsp;지금 사진을 제출하세요&nbsp; ✦</span>' +
+        '<span class="en-text">✦ &nbsp;Submit your photos now&nbsp; ✦</span>';
+      document.getElementById('cdUnits').style.display = 'none';
+      const hint = document.getElementById('cdHint');
+      if (hint) {
+        hint.innerHTML =
+          '<span class="ko-text">📷 &nbsp;탭하여 제출 페이지로 이동</span>' +
+          '<span class="en-text">📷 &nbsp;Tap to go to the submission page</span>';
+      }
+      clearInterval(timer);
+      return;
+    }
+
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000)  / 60000);
+    const secs  = Math.floor((diff % 60000)    / 1000);
+
+    document.getElementById('cdDays').textContent  = days;
+    document.getElementById('cdHours').textContent = pad(hours);
+    document.getElementById('cdMins').textContent  = pad(mins);
+    document.getElementById('cdSecs').textContent  = pad(secs);
+  }
+
+  var timer = setInterval(tick, 1000);
+  tick();
+})();
+
+function snapGo() {
+  // 당일에만 이동
+  const weddingDay = new Date('2026-09-05T00:00:00+09:00');
+  const kst = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+  if (kst >= weddingDay) {
+    window.location.href = 'snap.html';
+  }
 }
 </script>
 </body>
