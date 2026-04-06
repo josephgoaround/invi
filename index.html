@@ -2240,7 +2240,7 @@ async function loadGallery() {
     grid.innerHTML = '';
     json.images.forEach(function(img, i) {
       const thumbSrc = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w600';
-      const fullSrc  = 'https://drive.google.com/uc?export=view&id=' + img.id;
+      const fullSrc  = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w1600';
       const cell = document.createElement('div');
       cell.className = 'g-cell' + (i === 0 ? ' lg' : '');
       cell.onclick = function() { openLightbox(fullSrc); };
