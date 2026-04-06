@@ -70,10 +70,12 @@ function doGet(e) {
       var folder = DriveApp.getFolderById(GALLERY_FOLDER_ID);
       var files  = folder.getFiles();
       var images = [];
-      var imageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
       while (files.hasNext()) {
         var f = files.next();
-        if (imageTypes.indexOf(f.getMimeType()) !== -1) {
+        var mime = f.getMimeType() || '';
+        var name = (f.getName() || '').toLowerCase();
+        // MIME이 image/를 포함하거나, 파일명이 흔한 이미지 확장자로 끝나는 경우 허용
+        if (mime.indexOf('image/') !== -1 || name.match(/\.(jpg|jpeg|png|gif|webp|heic|heif)$/)) {
           images.push({ id: f.getId(), name: f.getName() });
         }
       }
