@@ -30,18 +30,18 @@
     }
 
     :root {
-      --bg: #FDFBF7;
-      --ivory: #F3EFE6;
-      --cream: #EAE4D7;
-      --gold: #C0A47B;
-      --gold-lt: #DBC5A1;
-      --rose: #162238;
+      --bg: #F9F7F3;
+      --ivory: #F0EAE1;
+      --cream: #E5DDD1;
+      --gold: #9F835A;
+      --gold-lt: #C2AE92;
+      --rose: #8C786E;
       --sage: #1A212E;
-      --char: #2A2522;
-      --mid: #6B625D;
+      --char: #3D332D;
+      --mid: #7A6F68;
       --light: #A39B96;
-      --border: rgba(192, 164, 123, .25);
-      --card-bg: rgba(253, 251, 247, .98);
+      --border: rgba(159, 131, 90, .25);
+      --card-bg: rgba(252, 249, 245, .98);
       --radius-card: 4px;
     }
 
@@ -155,29 +155,32 @@
 
     .eyebrow {
       display: block;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-      font-size: 10px;
-      letter-spacing: .4em;
+      font-family: 'Cormorant Garamond', 'Noto Sans KR', sans-serif;
+      font-size: 11.5px;
+      font-weight: 500;
+      letter-spacing: .35em;
       text-transform: uppercase;
       color: var(--gold);
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .section-title {
-      font-family: 'Cormorant Garamond', 'Playfair Display', 'Noto Sans KR', sans-serif;
-      font-size: 34px;
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 26px;
       font-weight: 400;
       text-align: center;
       color: var(--char);
-      line-height: 1.35;
-      letter-spacing: .04em;
-      margin-bottom: 32px;
+      line-height: 1.4;
+      letter-spacing: .15em;
+      margin-bottom: 36px;
     }
 
     [data-lang="en"] .section-title {
+      font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-size: 38px;
+      font-size: 32px;
+      letter-spacing: .06em;
     }
 
     /* ════════════════════════════════════════════
@@ -227,25 +230,25 @@
     /* Korean names */
     .hero-names-ko {
       font-family: 'Nanum Myeongjo', serif;
-      font-size: 24px;
+      font-size: 25px;
       font-weight: 400;
       line-height: 1.4;
       text-align: center;
       color: var(--char);
-      letter-spacing: .4em;
-      margin-left: .4em;
+      letter-spacing: .5em;
+      margin-left: .5em;
       /* offset for letter spacing centering */
     }
 
     /* English names */
     .hero-names-en {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 400;
       line-height: 1.3;
       text-align: center;
       color: var(--char);
-      letter-spacing: .05em;
+      letter-spacing: .08em;
       display: none;
     }
 
@@ -283,14 +286,15 @@
 
     .hero-detail {
       text-align: center;
-      line-height: 1.9;
-      font-size: 12.5px;
-      color: var(--mid);
-      letter-spacing: .06em;
+      font-family: 'Nanum Myeongjo', serif;
+      line-height: 2.0;
+      font-size: 13.5px;
+      color: var(--char);
+      letter-spacing: .08em;
     }
 
     [data-lang="en"] .hero-detail {
-      font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+      font-family: 'Cormorant Garamond', serif;
       font-size: 16px;
       letter-spacing: .03em;
     }
@@ -334,51 +338,53 @@
   ════════════════════════════════════════════ */
     .poem {
       font-family: 'Nanum Myeongjo', serif;
-      font-size: 15px;
-      line-height: 2.6;
+      font-size: 14.5px;
+      line-height: 2.3;
       color: var(--char);
       text-align: center;
-      letter-spacing: .04em;
+      letter-spacing: .06em;
       word-break: keep-all;
     }
 
     [data-lang="en"] .poem {
-      font-family: 'Cormorant Garamond', 'Playfair Display', serif;
-      font-size: 18px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
       font-style: italic;
-      line-height: 2.3;
-      letter-spacing: .02em;
+      line-height: 2.2;
+      letter-spacing: .03em;
     }
 
     .poem .stanza+.stanza {
-      margin-top: 32px;
+      margin-top: 36px;
     }
 
     .invite-names {
-      margin-top: 56px;
+      font-family: 'Nanum Myeongjo', serif;
+      margin-top: 60px;
       text-align: center;
       font-size: 14px;
       color: var(--mid);
-      line-height: 2.4;
+      line-height: 2.6;
       border-top: 1px solid var(--border);
-      padding-top: 40px;
+      padding-top: 44px;
+      letter-spacing: .02em;
     }
 
     [data-lang="en"] .invite-names {
-      font-family: 'Cormorant Garamond', 'Playfair Display', serif;
-      font-size: 18px;
-      line-height: 2.2;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      line-height: 2.3;
     }
 
     .invite-names .name-highlight {
-      font-weight: 400;
+      font-weight: 700;
       color: var(--char);
-      font-size: 17px;
+      font-size: 16px;
+      letter-spacing: .1em;
     }
 
     [data-lang="en"] .invite-names .name-highlight {
-      font-family: 'Cormorant Garamond', 'Playfair Display', serif;
-      font-size: 20px;
+      font-size: 19px;
       font-style: italic;
     }
 
@@ -761,25 +767,28 @@
     }
 
     .snap-hero h3 {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-      font-size: 28px;
-      font-weight: 300;
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 26px;
+      font-weight: 400;
       color: #fff;
       position: relative;
       margin-bottom: 12px;
+      letter-spacing: .05em;
     }
 
     .snap-hero h3 em {
+      font-family: 'Cormorant Garamond', serif;
       font-style: italic;
       color: var(--gold-lt);
     }
 
     .snap-hero p {
-      font-size: 12.5px;
-      color: rgba(255, 255, 255, .5);
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, .6);
       line-height: 2.1;
       position: relative;
-      letter-spacing: .03em;
+      letter-spacing: .05em;
       word-break: keep-all;
     }
 
@@ -1430,10 +1439,11 @@
     }
 
     .acct-holder {
-      font-size: 16px;
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 16.5px;
       font-weight: 400;
       color: var(--char);
-      letter-spacing: .04em;
+      letter-spacing: .08em;
       margin-bottom: 12px;
     }
 
