@@ -40,6 +40,7 @@
     html {
       scroll-behavior: smooth;
       -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     body {
@@ -50,7 +51,11 @@
       max-width: 480px;
       margin: 0 auto;
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+      /* Font smoothing: 'auto' works best on Windows Chrome */
+      -webkit-font-smoothing: auto;
+      -moz-osx-font-smoothing: auto;
+      text-rendering: optimizeLegibility;
+      font-optical-sizing: auto;
       word-break: keep-all;
       overflow-wrap: break-word;
     }
