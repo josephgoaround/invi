@@ -10,10 +10,10 @@
   <meta name="theme-color" content="#F7F4EE" />
   <title>강영석 ♥ 권지은</title>
 
-  <!-- ── Fonts: Korean sans + English serif ── -->
+  <!-- ── Fonts: Korean sans + English serif + Cursive ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
     /* ════════════════════════════════════════════
@@ -1785,31 +1785,46 @@
       transition: opacity 0.6s ease;
     }
 
-    .spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid rgba(180, 146, 90, 0.2);
-      border-top: 3px solid var(--gold);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 16px;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .preloader-text {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-      font-size: 13px;
+    .preloader-cursive {
+      font-family: 'Great Vibes', cursive;
+      font-size: 52px;
       color: var(--gold);
-      letter-spacing: .15em;
+      position: relative;
+      display: inline-block;
+      padding-right: 4px;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .preloader-clip {
+      display: inline-block;
+      clip-path: inset(0 100% 0 0);
+      animation: cursiveReveal 2s ease forwards;
+    }
+
+    .preloader-cursor {
+      position: absolute;
+      top: 15%;
+      bottom: 25%;
+      width: 2px;
+      background-color: rgba(180, 146, 90, 0.8);
+      left: 0;
+      animation: cursiveCursor 2s ease forwards, cursorBlink 0.6s step-end infinite 2s;
+    }
+
+    @keyframes cursiveReveal {
+      0% { clip-path: inset(0 100% 0 0); }
+      100% { clip-path: inset(0 -5% 0 0); }
+    }
+
+    @keyframes cursiveCursor {
+      0% { left: 0; }
+      100% { left: 100%; }
+    }
+
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
   </style>
 </head>
@@ -1818,8 +1833,10 @@
 
   <!-- PRELOADER -->
   <div id="preloader">
-    <div class="spinner"></div>
-    <div class="preloader-text">Loading</div>
+    <div class="preloader-cursive">
+      <span class="preloader-clip">Getting Married</span>
+      <div class="preloader-cursor"></div>
+    </div>
   </div>
 
   <!-- ══════════════════════════════════════════
