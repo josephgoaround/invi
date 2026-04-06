@@ -19,7 +19,7 @@
 function setupAllSheets() {
   // 1. RSVP 시트
   var rsvpSheet  = SpreadsheetApp.openById(RSVP_SHEET_ID).getSheets()[0];
-  var rsvpHeader = ['타임스탬프', '성함', '관계', '연락처', '참석여부', '인원수', '메시지'];
+  var rsvpHeader = ['타임스탬프', '성함', '관계', '연락처', '참석여부', '인원수', '메시지', 'Remark'];
   applyHeader(rsvpSheet, rsvpHeader);
 
   // 2. 축하 메시지 시트
@@ -112,24 +112,72 @@ function ensureHeader(sheet, header) {
   }
 }
 
-// ── RSVP → 본식 RSVP 시트 기록 ──────────────────────
-// 컬럼 순서: 타임스탬프 | 성함 | 관계 | 연락처 | 참석여부 | 인원수 | 메시지
+// ── RSVP → 본식 RSVP 시트 기록 (upsert: 성함+연락처 동일 시 최신 내용으로 수정) ──
+// 컬럼 순서: 타임스탬프 | 성함 | 관계 | 연락처 | 참석여부 | 인원수 | 메시지 | Remark
 function handleRsvp(data) {
   const sheet  = SpreadsheetApp.openById(RSVP_SHEET_ID).getSheets()[0];
-  const HEADER = ['타임스탬프', '성함', '관계', '연락처', '참석여부', '인원수', '메시지'];
+  const HEADER = ['타임스탬프', '성함', '관계', '연락처', '참석여부', '인원수', '메시지', 'Remark'];
 
   ensureHeader(sheet, HEADER);
 
+  const newAttend  = data.attending === 'yes' ? '✓ 참석' : '✕ 불참';
+  const newTs      = Utilities.formatDate(new Date(data.timestamp), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss');
+  const lastRow    = sheet.getLastRow();
+
+  // 성함 + 연락처가 동일한 기존 행 탐색 (헤더 제외, 역순으로 최근 행 우선)
+  if (lastRow > 1) {
+    const allValues = sheet.getRange(2, 1, lastRow - 1, 8).getValues();
+    for (var i = allValues.length - 1; i >= 0; i--) {
+      var row = allValues[i];
+      if (row[1] === data.name && row[3] === data.contact) {
+        // 기존 행 발견 → 업데이트
+        var existingAttend  = row[4];   // 기존 참석여부
+        var existingRemark  = row[7] ? String(row[7]) : '';
+
+        // 변경횟수 파싱
+        var changeCount = 0;
+        var cntMatch = existingRemark.match(/변경횟수 (\d+)회/);
+        if (cntMatch) changeCount = parseInt(cntMatch[1]);
+        changeCount++;
+
+        // Remark 생성: "이전에 '참석'으로 답변 → 변경 (변경횟수 n회)"
+        var prevLabel = existingAttend === '✓ 참석' ? '참석' : '불참';
+        var newRemark = '\'' + prevLabel + '\'에서 변경 (변경횟수 ' + changeCount + '회)';
+        // 기존 로그가 있으면 누적
+        if (existingRemark) {
+          // 이전 remark에서 "(변경횟수 n회)" 패턴 제거 후 앞쪽에 신규 항목 추가
+          newRemark = newRemark + ' | ' + existingRemark.replace(/ \(변경횟수 \d+회\)/, '');
+        }
+
+        var targetRow = i + 2; // 시트는 1-indexed, 헤더 행 포함
+        sheet.getRange(targetRow, 1, 1, 8).setValues([[
+          newTs,
+          data.name,
+          data.relation  || '',
+          data.contact,
+          newAttend,
+          data.partySize || '-',
+          data.message   || '',
+          newRemark
+        ]]);
+        return;
+      }
+    }
+  }
+
+  // 신규 제출: 행 추가
   sheet.appendRow([
-    Utilities.formatDate(new Date(data.timestamp), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
+    newTs,
     data.name,
     data.relation  || '',
     data.contact,
-    data.attending === 'yes' ? '✓ 참석' : '✕ 불참',
+    newAttend,
     data.partySize || '-',
-    data.message   || ''
+    data.message   || '',
+    ''
   ]);
 }
+
 
 // ── 축하 메시지 → 별도 시트에 기록 / 삭제 ──────────────
 // 컬럼 순서: ID | 타임스탬프 | 성함 | 메시지
@@ -170,7 +218,7 @@ function handleSnap(data) {
   ensureHeader(sheet, HEADER);
 
   const rootFolder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
-  const hhmmss     = Utilities.formatDate(new Date(), 'Asia/Seoul', 'HHmmss');
+  const tag        = Utilities.formatDate(new Date(), 'Asia/Seoul', 'MMdd-HHmmss');
   const savedNames = [];
   let idx = 1;
 
@@ -178,7 +226,7 @@ function handleSnap(data) {
     data.files.forEach(function(f) {
       try {
         const ext      = f.ext || (f.mimeType && f.mimeType.startsWith('video/') ? 'mp4' : 'jpg');
-        const fileName = data.name + '_' + hhmmss + '_' + idx + '.' + ext;
+        const fileName = data.name + '_' + tag + '_' + idx + '.' + ext;
         const bytes    = Utilities.base64Decode(f.base64);
         const blob     = Utilities.newBlob(bytes, f.mimeType, fileName);
         rootFolder.createFile(blob);

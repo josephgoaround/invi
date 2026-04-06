@@ -1,2 +1,4 @@
-_old_reference_*
-_old_reference_*
+.DS_Store
+
+# Old reference files (not for deployment)
+invi/_old_reference_*
