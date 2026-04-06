@@ -9,6 +9,15 @@
   <meta name="theme-color" content="#1C1814" />
   <title>하객 스냅 이벤트 · 강영석 ♥ 권지은</title>
 
+  <!-- Windows font-weight fix: detect early to avoid FOUC -->
+  <script>
+    (function () {
+      if (/Win/.test(navigator.platform) || /Windows/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('win');
+      }
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -58,6 +67,22 @@
       font-optical-sizing: auto;
       word-break: keep-all;
       overflow-wrap: break-word;
+    }
+
+    /* ── WINDOWS FONT-WEIGHT OVERRIDE ──
+       font-weight:300 blurs on Windows ClearType/DirectWrite. */
+    html.win body,
+    html.win .hero-title,
+    html.win .hero-sub,
+    html.win .eyebrow,
+    html.win .f-input,
+    html.win .f-label,
+    html.win .privacy-check-label,
+    html.win .upload-zone p,
+    html.win .back-link,
+    html.win .prize-badge,
+    html.win .snap-thanks p {
+      font-weight: 400;
     }
 
     /* KO / EN */

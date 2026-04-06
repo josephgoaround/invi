@@ -10,6 +10,15 @@
   <meta name="theme-color" content="#F7F4EE" />
   <title>강영석 ♥ 권지은</title>
 
+  <!-- Windows font-weight fix: detect early to avoid FOUC -->
+  <script>
+    (function () {
+      if (/Win/.test(navigator.platform) || /Windows/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('win');
+      }
+    })();
+  </script>
+
   <!-- ── Fonts: Korean sans + English serif + Cursive + Myeongjo ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -68,6 +77,29 @@
       font-optical-sizing: auto;
       word-break: keep-all;
       overflow-wrap: break-word;
+    }
+
+    /* ── WINDOWS FONT-WEIGHT OVERRIDE ──
+       font-weight:300 blurs on Windows ClearType/DirectWrite.
+       Bump every 300 to 400 when running on Windows. */
+    html.win body,
+    html.win .lang-btn,
+    html.win .rsvp-fixed-btn,
+    html.win .poem,
+    html.win .hero-detail,
+    html.win .hero-scroll .scroll-lbl,
+    html.win .t-body p,
+    html.win .invite-names,
+    html.win .gallery-note,
+    html.win .snap-hero p,
+    html.win .addr-bar .addr-txt p,
+    html.win .addr-bar .addr-txt small,
+    html.win .eyebrow,
+    html.win .section-title,
+    html.win .hero-names-ko,
+    html.win .hero-names-en,
+    html.win .hero-amp {
+      font-weight: 400;
     }
 
     /* ── KO / EN VISIBILITY ── */
