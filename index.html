@@ -1771,10 +1771,48 @@
         display: none;
       }
     }
+
+    /* ── PRELOADER ── */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: var(--ivory);
+      z-index: 100000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease;
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(180,146,90, 0.2);
+      border-top: 3px solid var(--gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .preloader-text {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: .15em;
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- PRELOADER -->
+  <div id="preloader">
+    <div class="spinner"></div>
+    <div class="preloader-text">Loading</div>
+  </div>
 
   <!-- ══════════════════════════════════════════
      RSVP MODAL
@@ -2560,6 +2598,35 @@
   <script>
     'use strict';
 
+    /* ── PRELOADER ── */
+    let isWindowLoaded = false;
+    let isGalleryLoaded = false;
+    let preloaderHidden = false;
+
+    function attemptHidePreloader() {
+      if (preloaderHidden) return;
+      if (isWindowLoaded && isGalleryLoaded) {
+        preloaderHidden = true;
+        const pl = document.getElementById('preloader');
+        if (pl) {
+           pl.style.opacity = '0';
+           setTimeout(() => { pl.style.display = 'none'; }, 600);
+        }
+      }
+    }
+
+    window.addEventListener('load', () => {
+      isWindowLoaded = true;
+      attemptHidePreloader();
+    });
+
+    // Safety fallback: hide preloader after 6s regardless
+    setTimeout(() => {
+      isWindowLoaded = true;
+      isGalleryLoaded = true;
+      attemptHidePreloader();
+    }, 6000);
+
     /* ── 0. CONFIG ── */
     // Google Apps Script 배포 후 URL을 아래에 입력하세요
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYSbC2rgAD8aYeeSQJdMtdO11A1ZevKXDNYDsu6LcUuPJT8XPpPCbfPdRvHVFDnnEb/exec';
@@ -2743,10 +2810,14 @@
         const json = await res.json();
         if (!json.ok || !json.images || !json.images.length) {
           grid.innerHTML = '<p class="gallery-note" style="grid-column:1/-1;text-align:center;padding:24px 0;color:var(--light);">✦ &nbsp;사진을 준비 중입니다&nbsp; ✦</p>';
+          isGalleryLoaded = true;
+          attemptHidePreloader();
           return;
         }
         grid.innerHTML = '';
         galleryImages = [];
+        let loadedCount = 0;
+        const totalCount = json.images.length;
         json.images.forEach(function (img, i) {
           const thumbSrc = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w600';
           const fullSrc = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w1600';
@@ -2755,6 +2826,13 @@
           cell.className = 'g-cell' + (i === 0 ? ' lg' : '');
           cell.onclick = function () { openLightbox(i); };
           const im = document.createElement('img');
+          im.onload = im.onerror = function() {
+            loadedCount++;
+            if (loadedCount === totalCount) {
+              isGalleryLoaded = true;
+              attemptHidePreloader();
+            }
+          };
           im.src = thumbSrc;
           im.alt = img.name || ('사진 ' + (i + 1));
           im.loading = 'lazy';
@@ -2764,6 +2842,8 @@
         });
       } catch (e) {
         grid.innerHTML = '<p class="gallery-note" style="grid-column:1/-1;text-align:center;padding:24px 0;color:var(--light);">✦ &nbsp;사진을 준비 중입니다&nbsp; ✦</p>';
+        isGalleryLoaded = true;
+        attemptHidePreloader();
       }
     }
 
