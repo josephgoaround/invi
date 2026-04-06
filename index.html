@@ -1989,7 +1989,10 @@
   <section class="hero">
 
     <!-- Top Text -->
-    <div class="hero-top-text">The New Beginning</div>
+    <div class="hero-top-text">
+      <span class="ko-text" style="font-family: 'Noto Sans KR', sans-serif; letter-spacing: .15em; font-size: 14.5px;">결혼합니다</span>
+      <span class="en-text">The Marriage Of</span>
+    </div>
 
     <!-- Arch Image Mask -->
     <div class="hero-arch">
@@ -1997,7 +2000,7 @@
         임시 주인공 사진입니다. 
         실제 사진 URL로 src 속성을 교체하시면 됩니다. 
       -->
-      <img src="https://drive.google.com/uc?export=view&id=1l_QTgnFInkAgGnaB5H70fqXVkE3U35D_" alt="Hero Photo" loading="eager" />
+      <img src="https://drive.google.com/thumbnail?id=1l_QTgnFInkAgGnaB5H70fqXVkE3U35D_&sz=w800" alt="Hero Photo" loading="eager" />
     </div>
 
     <!-- Korean names -->
@@ -2409,7 +2412,7 @@
 
     <!-- 탭 -->
     <div class="acct-tabs" role="tablist">
-      <button class="acct-tab-btn active" role="tab" aria-selected="true" onclick="switchAcctTab('groom', this)">
+      <button class="acct-tab-btn" role="tab" aria-selected="false" onclick="switchAcctTab('groom', this)">
         <span class="ko-text">신랑측</span>
         <span class="en-text">Groom's Family</span>
       </button>
@@ -2420,7 +2423,7 @@
     </div>
 
     <!-- 신랑측 계좌 -->
-    <div class="acct-panel active" id="acctGroom" role="tabpanel">
+    <div class="acct-panel" id="acctGroom" role="tabpanel">
       <div class="acct-card">
         <p class="acct-relation">
           <span class="ko-text">신랑</span>
@@ -2916,15 +2919,19 @@
 
     /* ── 5. ACCOUNT (마음 전하기) ── */
     function switchAcctTab(side, btn) {
+      const isActive = btn.classList.contains('active');
+
       document.querySelectorAll('.acct-tab-btn').forEach(b => {
         b.classList.remove('active');
         b.setAttribute('aria-selected', 'false');
       });
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-
       document.querySelectorAll('.acct-panel').forEach(p => p.classList.remove('active'));
-      document.getElementById(side === 'groom' ? 'acctGroom' : 'acctBride').classList.add('active');
+
+      if (!isActive) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById(side === 'groom' ? 'acctGroom' : 'acctBride').classList.add('active');
+      }
     }
 
     function copyAcct(number, btn) {
