@@ -2052,7 +2052,7 @@
     </div>
     <p class="gallery-note" id="galleryStatus" style="display:none">
       <span class="ko-text">사진을 불러오는 중입니다…</span>
-      <span class="en-text">Loading photos\u2026</span>
+      <span class="en-text">Loading photos</span>
     </p>
   </section>
 
@@ -2277,7 +2277,7 @@
       <p class="en-block">
         Every photograph tells a different story.<br>
         Each image you share becomes a memory<br>
-        we will hold close, always ✦<br><br>
+        we will hold close, always.<br><br>
         Selected photos will receive a small gift of appreciation.
       </p>
     </div>
@@ -2354,9 +2354,9 @@
         </p>
         <p class="acct-holder">강영석</p>
         <div class="acct-row">
-          <span class="acct-bank">신한은행</span>
-          <span class="acct-num">110-123-456789</span>
-          <button class="acct-copy-btn" onclick="copyAcct('110-123-456789', this)">
+          <span class="acct-bank">국민은행</span>
+          <span class="acct-num">578202-04-005944</span>
+          <button class="acct-copy-btn" onclick="copyAcct('578202-04-005944', this)">
             <span class="ko-text">복사</span>
             <span class="en-text">Copy</span>
           </button>
@@ -2367,7 +2367,7 @@
           <span class="ko-text">신랑 아버지</span>
           <span class="en-text">Groom's Father</span>
         </p>
-        <p class="acct-holder">강O현</p>
+        <p class="acct-holder">강중용</p>
         <div class="acct-row">
           <span class="acct-bank">국민은행</span>
           <span class="acct-num">123-45-6789012</span>
@@ -2382,9 +2382,9 @@
           <span class="ko-text">신랑 어머니</span>
           <span class="en-text">Groom's Mother</span>
         </p>
-        <p class="acct-holder">이O순</p>
+        <p class="acct-holder">송영숙</p>
         <div class="acct-row">
-          <span class="acct-bank">하나은행</span>
+          <span class="acct-bank">국민은행</span>
           <span class="acct-num">123-456789-01234</span>
           <button class="acct-copy-btn" onclick="copyAcct('123-456789-01234', this)">
             <span class="ko-text">복사</span>
@@ -2416,7 +2416,7 @@
           <span class="ko-text">신부 아버지</span>
           <span class="en-text">Bride's Father</span>
         </p>
-        <p class="acct-holder">권O철</p>
+        <p class="acct-holder">권경현</p>
         <div class="acct-row">
           <span class="acct-bank">우리은행</span>
           <span class="acct-num">1002-123-456789</span>
@@ -2431,7 +2431,7 @@
           <span class="ko-text">신부 어머니</span>
           <span class="en-text">Bride's Mother</span>
         </p>
-        <p class="acct-holder">김O미</p>
+        <p class="acct-holder">안혜숙</p>
         <div class="acct-row">
           <span class="acct-bank">농협은행</span>
           <span class="acct-num">301-1234-5678-01</span>
@@ -2559,19 +2559,19 @@
     const RSVP_KEY = 'rsvpDone_kye2026';
     let rsvpAttendValue = null;
 
-    // 스크롤 시작 후 4초 뒤 RSVP 팝업 (첫 방문 시만)
+    // 스크롤 시작 후 10초 뒤 RSVP 팝업 (첫 방문 시만)
     window.addEventListener('DOMContentLoaded', () => {
       // 새로고침 시 항상 최상단으로 이동
       history.scrollRestoration = 'manual';
       window.scrollTo(0, 0);
 
-      // 스크롤 시작 후 4초 뒤 RSVP 팝업 (이전 제출 여부 무관)
+      // 스크롤 시작 후 10초 뒤 RSVP 팝업 (이전 제출 여부 무관)
       let rsvpTriggered = false;
       window.addEventListener('scroll', function onFirstScroll() {
         if (rsvpTriggered) return;
         rsvpTriggered = true;
         window.removeEventListener('scroll', onFirstScroll);
-        setTimeout(() => openRsvp(), 4000);
+        setTimeout(() => openRsvp(), 10000);
       }, { passive: true });
 
       // 갤러리 로드
