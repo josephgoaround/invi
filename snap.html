@@ -178,7 +178,46 @@
   }
   .f-input:focus { border-color: var(--gold); }
   .f-input::placeholder { color: var(--light); }
+  .f-input.input-error { border-color: #E05252 !important; }
+  .field-error-msg {
+    display: none;
+    font-size: 11px;
+    color: #E05252;
+    margin-top: 5px;
+    letter-spacing: .03em;
+  }
+  .field-error-msg.show { display: block; }
   [data-lang="en"] .f-input { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; font-size: 15px; }
+
+  /* Privacy checkbox */
+  .privacy-check-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: rgba(180,146,90,.05);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    margin-bottom: 14px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .privacy-check-wrap input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+  .privacy-check-label {
+    font-size: 11.5px;
+    color: var(--mid);
+    line-height: 1.75;
+    letter-spacing: .02em;
+    cursor: pointer;
+  }
+  [data-lang="en"] .privacy-check-label { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; font-size: 13px; }
 
   .form-field { margin-bottom: 14px; }
 
@@ -391,7 +430,9 @@
         </span>
       </label>
       <input type="tel" id="snapContact" class="f-input"
-             placeholder="010-0000-0000" autocomplete="tel" />
+             placeholder="010-0000-0000" autocomplete="tel"
+             oninput="fmtPhone(this)" />
+      <span class="field-error-msg ko-block" id="snapContactErr">연락처를 확인해주세요 (010-####-####)</span>
     </div>
 
     <!-- Upload zone -->
@@ -424,6 +465,15 @@
         <div class="upload-progress-fill" id="progressFill"></div>
       </div>
     </div>
+
+    <!-- 개인정보 동의 -->
+    <label class="privacy-check-wrap" for="snapPrivacy">
+      <input type="checkbox" id="snapPrivacy" />
+      <span class="privacy-check-label">
+        <span class="ko-block">개인정보(성함, 연락처)가 하객 스냅 이벤트 목적으로만 수집·이용되며,<br>행사 종료 후 삭제됨에 동의합니다. *</span>
+        <span class="en-block">I agree that my personal information (name, phone) will be used solely for the guest snap event and deleted after the event. *</span>
+      </span>
+    </label>
 
     <button class="submit-btn" id="snapSubmitBtn" onclick="submitSnap()">
       <span class="ko-text">제출하기</span>
@@ -513,25 +563,46 @@ function updateFileIndicator() {
   }
 }
 
+/* Phone auto-format */
+function fmtPhone(el) {
+  let v = el.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length >= 7)      v = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7);
+  else if (v.length >= 4) v = v.slice(0,3) + '-' + v.slice(3);
+  el.value = v;
+  el.classList.remove('input-error');
+  const err = document.getElementById('snapContactErr');
+  if (err) err.classList.remove('show');
+}
+
 /* Submit */
 async function submitSnap() {
   const nameVal    = (document.getElementById('snapName').value    || '').trim();
   const contactVal = (document.getElementById('snapContact').value || '').trim();
   const lang       = currentLang;
+  const contactEl  = document.getElementById('snapContact');
+  const contactErr = document.getElementById('snapContactErr');
 
   if (!nameVal) {
     showToast(lang === 'ko' ? '성함을 입력해 주세요' : 'Please enter your name');
     document.getElementById('snapName').focus();
     return;
   }
-  // 한국어는 연락처 필수, 영문은 선택
-  if (lang === 'ko' && !contactVal) {
-    showToast('연락처를 입력해 주세요');
-    document.getElementById('snapContact').focus();
-    return;
+  // 한국어: 010-####-#### 형식 검증 / 영문: 선택
+  if (lang === 'ko') {
+    const phoneOk = /^010-\d{4}-\d{4}$/.test(contactVal);
+    contactEl.classList.toggle('input-error', !phoneOk);
+    if (contactErr) contactErr.classList.toggle('show', !phoneOk);
+    if (!phoneOk) { contactEl.focus(); return; }
+  } else {
+    contactEl.classList.remove('input-error');
+    if (contactErr) contactErr.classList.remove('show');
   }
   if (!pendingFiles.length) {
     showToast(lang === 'ko' ? '파일을 선택해 주세요' : 'Please select files');
+    return;
+  }
+  if (!document.getElementById('snapPrivacy').checked) {
+    showToast(lang === 'ko' ? '개인정보 수집 동의가 필요합니다' : 'Please agree to the privacy policy');
     return;
   }
 

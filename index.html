@@ -597,7 +597,46 @@
   }
   .f-input:focus { border-color: var(--gold); }
   .f-input::placeholder { color: var(--light); }
+  .f-input.input-error { border-color: #E05252 !important; }
+  .field-error-msg {
+    display: none;
+    font-size: 11px;
+    color: #E05252;
+    margin-top: 5px;
+    letter-spacing: .03em;
+  }
+  .field-error-msg.show { display: block; }
   [data-lang="en"] .f-input { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; font-size: 15px; }
+
+  /* Privacy checkbox */
+  .privacy-check-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: rgba(180,146,90,.05);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    margin-bottom: 14px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .privacy-check-wrap input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+  .privacy-check-label {
+    font-size: 11.5px;
+    color: var(--mid);
+    line-height: 1.75;
+    letter-spacing: .02em;
+    cursor: pointer;
+  }
+  [data-lang="en"] .privacy-check-label { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; font-size: 13px; }
 
   .upload-zone {
     border: 1.5px dashed rgba(180,146,90,.38);
@@ -1313,7 +1352,9 @@
           <span class="en-text">Phone *</span>
         </label>
         <input type="tel" id="rsvpContact" class="f-input"
-               placeholder="010-0000-0000" autocomplete="tel" />
+               placeholder="010-0000-0000" autocomplete="tel"
+               oninput="fmtPhone(this)" />
+        <span class="field-error-msg ko-block" id="rsvpContactErr">연락처를 확인해주세요 (010-####-####)</span>
       </div>
 
       <div class="form-field">
@@ -1349,6 +1390,15 @@
         <textarea id="rsvpMsg" class="f-input" rows="3"
           placeholder="두 사람에게 전하고 싶은 말을 남겨주세요" style="resize:none;line-height:1.8"></textarea>
       </div>
+
+      <!-- 개인정보 동의 -->
+      <label class="privacy-check-wrap" for="rsvpPrivacy">
+        <input type="checkbox" id="rsvpPrivacy" />
+        <span class="privacy-check-label">
+          <span class="ko-block">개인정보(성함, 연락처)가 결혼식 준비 목적으로만 수집·이용되며,<br>행사 종료 후 삭제됨에 동의합니다. *</span>
+          <span class="en-block">I agree that my personal information (name, phone) will be collected solely for wedding preparation and deleted after the event. *</span>
+        </span>
+      </label>
 
       <button class="snap-submit-btn" id="rsvpSubmitBtn" onclick="submitRsvp()">
         <span class="ko-text">전달하기</span>
@@ -1683,7 +1733,7 @@
         <div class="en-block">
           <div class="nav-btns">
             <a class="nav-btn" style="border-color:#e0e0e0; color:#333;"
-               href="https://www.google.com/maps/place/Lotte+Hotel+World"
+               href="https://maps.app.goo.gl/HiFgM5Cd32p7yBQF8"
                target="_blank" rel="noopener">
               <span class="nav-btn-icon" style="background:#f1f3f4;">🗺</span>
               <span class="en-text">Google Maps</span>
@@ -2063,13 +2113,31 @@ async function submitRsvp() {
   const party    = document.getElementById('rsvpParty').value;
   const msg      = (document.getElementById('rsvpMsg').value      || '').trim();
   const lang     = currentLang;
+  const contactEl  = document.getElementById('rsvpContact');
+  const contactErr = document.getElementById('rsvpContactErr');
 
-  if (!name)              { showToast(lang==='ko'?'성함을 입력해 주세요':'Please enter your name'); return; }
-  if (!relation)          { showToast(lang==='ko'?'관계를 입력해 주세요':'Please enter your relation'); return; }
-  if (!contact)           { showToast(lang==='ko'?'연락처를 입력해 주세요':'Please enter your contact'); return; }
-  if (!rsvpAttendValue)   { showToast(lang==='ko'?'참석 여부를 선택해 주세요':'Please select attendance'); return; }
+  if (!name)    { showToast(lang==='ko'?'성함을 입력해 주세요':'Please enter your name'); return; }
+  if (!relation){ showToast(lang==='ko'?'관계를 입력해 주세요':'Please enter your relation'); return; }
+
+  // 한국어: 010-####-#### 형식 검증
+  if (lang === 'ko') {
+    const phoneOk = /^010-\d{4}-\d{4}$/.test(contact);
+    contactEl.classList.toggle('input-error', !phoneOk);
+    if (contactErr) contactErr.classList.toggle('show', !phoneOk);
+    if (!phoneOk) { contactEl.focus(); return; }
+  } else {
+    contactEl.classList.remove('input-error');
+    if (contactErr) contactErr.classList.remove('show');
+    if (!contact) { showToast('Please enter your contact'); return; }
+  }
+
+  if (!rsvpAttendValue) { showToast(lang==='ko'?'참석 여부를 선택해 주세요':'Please select attendance'); return; }
   if (rsvpAttendValue==='yes' && (!party || Number(party) < 1)) {
     showToast(lang==='ko'?'참석 인원을 입력해 주세요 (1명 이상)':'Please enter party size (at least 1)');
+    return;
+  }
+  if (!document.getElementById('rsvpPrivacy').checked) {
+    showToast(lang==='ko'?'개인정보 수집 동의가 필요합니다':'Please agree to the privacy policy');
     return;
   }
 
@@ -2106,6 +2174,19 @@ async function submitRsvp() {
 const htmlEl = document.documentElement;
 const langBtn = document.getElementById('langBtn');
 let currentLang = 'ko';
+
+/* \u2500\u2500 PHONE AUTO-FORMAT (010-####-####) \u2500\u2500 */
+function fmtPhone(el) {
+  let v = el.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length >= 7)      v = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7);
+  else if (v.length >= 4) v = v.slice(0,3) + '-' + v.slice(3);
+  el.value = v;
+  // 입력 중 오류 표시 해제
+  el.classList.remove('input-error');
+  const err = el.id === 'rsvpContact' ? document.getElementById('rsvpContactErr')
+                                      : document.getElementById('snapContactErr');
+  if (err) err.classList.remove('show');
+}
 
 function toggleLang() {
   currentLang = currentLang === 'ko' ? 'en' : 'ko';
