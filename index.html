@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Great+Vibes&family=Nanum+Myeongjo:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Gowun+Batang:wght@400;700&family=Great+Vibes&family=Noto+Sans+KR:wght@300;400;500&display=swap"
     rel="stylesheet" />
 
   <style>
@@ -79,9 +79,11 @@
       overflow-wrap: break-word;
     }
 
-    /* ── WINDOWS FONT-WEIGHT OVERRIDE ──
-       font-weight:300 blurs on Windows ClearType/DirectWrite.
-       Bump every 300 to 400 when running on Windows. */
+    /* ── WINDOWS RENDERING FIX ──
+       1) Nanum Myeongjo (명조 serif)의 가느다란 획이 Windows ClearType에서 흐릿하게 보여 Noto Sans KR로 교체
+       2) font-weight:300 → 400 (Light 굵기도 Windows에서 흐림) */
+
+    /* font-weight 300 → 400 */
     html.win body,
     html.win .lang-btn,
     html.win .rsvp-fixed-btn,
@@ -202,7 +204,7 @@
     }
 
     .section-title {
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Gowun Batang', serif;
       font-size: 26px;
       font-weight: 400;
       text-align: center;
@@ -265,7 +267,7 @@
 
     /* Korean names */
     .hero-names-ko {
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Gowun Batang', serif;
       font-size: 25px;
       font-weight: 400;
       line-height: 1.4;
@@ -322,7 +324,7 @@
 
     .hero-detail {
       text-align: center;
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Gowun Batang', serif;
       line-height: 2.0;
       font-size: 13.5px;
       color: var(--char);
@@ -373,7 +375,7 @@
      INVITATION TEXT
   ════════════════════════════════════════════ */
     .poem {
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Gowun Batang', serif;
       font-size: 14.5px;
       line-height: 2.3;
       color: var(--char);
@@ -395,7 +397,7 @@
     }
 
     .invite-names {
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Gowun Batang', serif;
       margin-top: 60px;
       text-align: center;
       font-size: 14px;
@@ -803,7 +805,7 @@
     }
 
     .snap-hero h3 {
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Gowun Batang', serif;
       font-size: 26px;
       font-weight: 400;
       color: #fff;
@@ -819,7 +821,7 @@
     }
 
     .snap-hero p {
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Gowun Batang', serif;
       font-size: 13.5px;
       color: rgba(255, 255, 255, .6);
       line-height: 2.1;
@@ -1475,7 +1477,7 @@
     }
 
     .acct-holder {
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Gowun Batang', serif;
       font-size: 16.5px;
       font-weight: 400;
       color: var(--char);
