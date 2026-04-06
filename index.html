@@ -454,6 +454,10 @@
       object-fit: cover;
       display: block;
       transition: transform .4s ease;
+      pointer-events: none;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .g-cell:hover img {
@@ -2190,7 +2194,7 @@
     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:9999;align-items:center;justify-content:center;flex-direction:column;"
     onclick="closeLightbox()">
     <img id="lbImg" src="" alt=""
-      style="max-width:100vw;max-height:88svh;object-fit:contain;border-radius:6px;box-shadow:0 8px 48px rgba(0,0,0,.6);transition:transform 0.2s ease-out;" />
+      style="max-width:100vw;max-height:88svh;object-fit:contain;border-radius:6px;box-shadow:0 8px 48px rgba(0,0,0,.6);transition:transform 0.2s ease-out;pointer-events:none;-webkit-user-drag:none;user-select:none;-webkit-user-select:none;" />
 
     <!-- Prev / Next Overlays -->
     <div
@@ -2857,6 +2861,13 @@
     }
 
     /* \u2500\u2500 GALLERY \u2500\u2500 */
+    /* Image download protection */
+    document.addEventListener('contextmenu', function (e) {
+      if (e.target.tagName === 'IMG' || e.target.closest('#galleryGrid, #galleryLightbox')) {
+        e.preventDefault();
+      }
+    });
+
     let galleryImages = [];
     let currentLightboxIdx = 0;
 
@@ -2936,6 +2947,7 @@
           im.alt = img.name || ('사진 ' + (i + 1));
           im.loading = 'lazy';
           im.decoding = 'async';
+          im.draggable = false;
           cell.appendChild(im);
           grid.appendChild(cell);
         });
