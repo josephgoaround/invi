@@ -68,12 +68,17 @@
   [data-lang="en"] span.en-text { display: inline; }
 
 
-  /* ── LANGUAGE TOGGLE BUTTON ── */
-  .lang-btn {
+  /* ── FIXED TOP BUTTONS ── */
+  .top-btns {
     position: fixed;
     top: 18px;
     right: 18px;
     z-index: 200;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .lang-btn, .rsvp-fixed-btn {
     background: rgba(247,244,238,.9);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -90,7 +95,7 @@
     -webkit-tap-highlight-color: transparent;
     user-select: none;
   }
-  .lang-btn:active { transform: scale(.96); }
+  .lang-btn:active, .rsvp-fixed-btn:active { transform: scale(.96); }
 
   /* ════════════════════════════════════════════
      SECTION BASE
@@ -1065,7 +1070,7 @@
     max-height: 92svh;
     overflow-y: auto;
     position: relative;
-    animation: rsvpSlideUp .4s cubic-bezier(.22,.61,.36,1);
+    animation: rsvpSlideUp .8s cubic-bezier(.22,.61,.36,1);
   }
   @keyframes rsvpSlideUp {
     from { transform: translateY(100%); }
@@ -1369,9 +1374,15 @@
 </div>
 
 <!-- ══════════════════════════════════════════
-     LANGUAGE TOGGLE
+     TOP FIXED BUTTONS (RSVP + LANGUAGE)
 ══════════════════════════════════════════ -->
-<button class="lang-btn" id="langBtn" aria-label="Switch language" onclick="toggleLang()">EN</button>
+<div class="top-btns">
+  <button class="rsvp-fixed-btn" id="rsvpFixedBtn" onclick="openRsvp()">
+    <span class="ko-text">참석 여부</span>
+    <span class="en-text">RSVP</span>
+  </button>
+  <button class="lang-btn" id="langBtn" aria-label="Switch language" onclick="toggleLang()">EN</button>
+</div>
 
 <!-- ══════════════════════════════════════════
      HERO
@@ -2014,15 +2025,14 @@ window.addEventListener('DOMContentLoaded', () => {
   history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
 
-  if (!localStorage.getItem(RSVP_KEY)) {
-    let rsvpTriggered = false;
-    window.addEventListener('scroll', function onFirstScroll() {
-      if (rsvpTriggered) return;
-      rsvpTriggered = true;
-      window.removeEventListener('scroll', onFirstScroll);
-      setTimeout(() => openRsvp(), 4000);
-    }, { passive: true });
-  }
+  // 스크롤 시작 후 4초 뒤 RSVP 팝업 (이전 제출 여부 무관)
+  let rsvpTriggered = false;
+  window.addEventListener('scroll', function onFirstScroll() {
+    if (rsvpTriggered) return;
+    rsvpTriggered = true;
+    window.removeEventListener('scroll', onFirstScroll);
+    setTimeout(() => openRsvp(), 4000);
+  }, { passive: true });
 });
 
 function openRsvp() {
