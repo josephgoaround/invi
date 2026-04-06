@@ -1627,7 +1627,7 @@
     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
     </svg>
-    <div class="addr-txt">
+    <div class="addr-txt" style="flex:1;">
       <p class="ko-block" style="margin-bottom: 6px;">서울 송파구 올림픽로 240</p>
       <p class="en-block" style="margin-bottom: 6px;">240 Olympic-ro, Songpa-gu, Seoul</p>
       <div style="font-family: 'Noto Sans KR', sans-serif; font-size: 15.5px; font-weight: 500; color: #B4925A; line-height: 1.6; letter-spacing: 0.02em;">
@@ -1635,6 +1635,10 @@
         <span class="en-block">Lotte Hotel World<br>Bridal Suite 2F &nbsp;|&nbsp; Crystal Ballroom 3F</span>
       </div>
     </div>
+    <button class="acct-copy-btn" style="flex-shrink:0; margin-left:auto; white-space:nowrap; padding:6px 10px; font-size:11px;" onclick="copyAddr('서울 송파구 올림픽로 240', this)">
+      <span class="ko-text">주소 복사</span>
+      <span class="en-text">Copy</span>
+    </button>
   </div>
 
   <!-- Transport cards -->
@@ -2312,6 +2316,22 @@ function copyAcct(number, btn) {
     }, 2000);
   }).catch(() => {
     showToast(lang === 'en' ? 'Copy failed. Please try again.' : '복사에 실패했습니다');
+  });
+}
+
+function copyAddr(val, btn) {
+  const lang = document.documentElement.dataset.lang;
+  navigator.clipboard.writeText(val).then(() => {
+    showToast(lang === 'en' ? 'Address copied!' : '주소가 복사되었습니다');
+    const origHTML = btn.innerHTML;
+    btn.innerHTML = '✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = origHTML;
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    showToast(lang === 'en' ? 'Copy failed.' : '복사에 실패했습니다');
   });
 }
 
