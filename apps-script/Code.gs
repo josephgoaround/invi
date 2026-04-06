@@ -58,9 +58,39 @@ const RSVP_SHEET_ID    = '1jcLL_HM00aGnfyOL1FxdXTy31dae5ezOxqxEg3FV7_U'; // 본�
 const COMMENT_SHEET_ID = '1jTZjlu9QQq69lSIV9TcgAU9q2yTUghnT3liXW9NS0LE'; // 축하 메시지
 const SNAP_SHEET_ID    = '1JpCAUW23zn1a_ZNiJrENMMtrHIhmt9tepHxJRc9jhAY'; // 스냅 제출 명단
 const DRIVE_FOLDER_ID  = '1pkuh2kDPZWCKxT62I_i5EXuzyURt4k3g';             // 하객 스냅 사진 폴더
+const GALLERY_FOLDER_ID = '1iWRsz2wizN_6Ofe_Lh4ROuKrrUoTh4n8';            // 갤러리 (우리의 이야기)
 // ─────────────────────────────────────────────────────
 
-function doGet() {
+// ── GET: ?action=gallery → 갤러리 이미지 ID 목록 반환 ──
+function doGet(e) {
+  var action = e && e.parameter && e.parameter.action;
+
+  if (action === 'gallery') {
+    try {
+      var folder = DriveApp.getFolderById(GALLERY_FOLDER_ID);
+      var files  = folder.getFiles();
+      var images = [];
+      var imageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+      while (files.hasNext()) {
+        var f = files.next();
+        if (imageTypes.indexOf(f.getMimeType()) !== -1) {
+          images.push({ id: f.getId(), name: f.getName() });
+        }
+      }
+      // 파일명 기준 정렬
+      images.sort(function(a, b) { return a.name.localeCompare(b.name); });
+      var output = ContentService
+        .createTextOutput(JSON.stringify({ ok: true, images: images }))
+        .setMimeType(ContentService.MimeType.JSON);
+      return output;
+    } catch(err) {
+      return ContentService
+        .createTextOutput(JSON.stringify({ ok: false, error: err.toString() }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+
+  // 기본 응답
   return ContentService
     .createTextOutput('Wedding API is running ✦')
     .setMimeType(ContentService.MimeType.TEXT);
