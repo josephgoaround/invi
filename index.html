@@ -2058,12 +2058,21 @@
 
   <!-- Lightbox -->
   <div id="galleryLightbox"
-    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;"
+    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:9999;align-items:center;justify-content:center;flex-direction:column;"
     onclick="closeLightbox()">
     <img id="lbImg" src="" alt=""
-      style="max-width:94vw;max-height:88svh;object-fit:contain;border-radius:6px;box-shadow:0 8px 48px rgba(0,0,0,.6);" />
+      style="max-width:100vw;max-height:88svh;object-fit:contain;border-radius:6px;box-shadow:0 8px 48px rgba(0,0,0,.6);transition:transform 0.2s ease-out;" />
+
+    <!-- Prev / Next Overlays -->
+    <div style="position:absolute;top:0;bottom:0;left:0;width:30%;display:flex;align-items:center;justify-content:flex-start;padding-left:16px;cursor:pointer;-webkit-tap-highlight-color:transparent;" onclick="prevLightbox(event)">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </div>
+    <div style="position:absolute;top:0;bottom:0;right:0;width:30%;display:flex;align-items:center;justify-content:flex-end;padding-right:16px;cursor:pointer;-webkit-tap-highlight-color:transparent;" onclick="nextLightbox(event)">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+
     <button onclick="closeLightbox()"
-      style="position:fixed;top:18px;right:18px;background:rgba(247,244,238,.15);border:1px solid rgba(247,244,238,.3);color:#f7f4ee;font-size:20px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#x2715;</button>
+      style="position:fixed;top:18px;right:18px;background:rgba(247,244,238,.15);border:1px solid rgba(247,244,238,.3);color:#f7f4ee;font-size:20px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10000;-webkit-tap-highlight-color:transparent;">&#x2715;</button>
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -2682,17 +2691,49 @@
     }
 
     /* \u2500\u2500 GALLERY \u2500\u2500 */
-    function openLightbox(src) {
+    let galleryImages = [];
+    let currentLightboxIdx = 0;
+
+    function openLightbox(idx) {
+      if (idx < 0 || idx >= galleryImages.length) return;
+      currentLightboxIdx = idx;
       const lb = document.getElementById('galleryLightbox');
-      document.getElementById('lbImg').src = src;
+      document.getElementById('lbImg').src = galleryImages[idx];
+      document.getElementById('lbImg').style.transform = 'translateX(0)';
       lb.style.display = 'flex';
       document.body.style.overflow = 'hidden';
+    }
+    function prevLightbox(e) {
+      if (e) e.stopPropagation();
+      if (galleryImages.length === 0) return;
+      openLightbox((currentLightboxIdx - 1 + galleryImages.length) % galleryImages.length);
+    }
+    function nextLightbox(e) {
+      if (e) e.stopPropagation();
+      if (galleryImages.length === 0) return;
+      openLightbox((currentLightboxIdx + 1) % galleryImages.length);
     }
     function closeLightbox() {
       document.getElementById('galleryLightbox').style.display = 'none';
       document.getElementById('lbImg').src = '';
       document.body.style.overflow = '';
     }
+
+    // Swipe Support for Lightbox
+    let touchStartX = 0;
+    let touchEndX = 0;
+    document.addEventListener('DOMContentLoaded', () => {
+      const lbEl = document.getElementById('galleryLightbox');
+      if (lbEl) {
+        lbEl.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        lbEl.addEventListener('touchend', e => { 
+          touchEndX = e.changedTouches[0].screenX; 
+          const swipeDist = touchEndX - touchStartX;
+          if (swipeDist < -40) nextLightbox(); // Swipe left -> Next
+          if (swipeDist > 40) prevLightbox();  // Swipe right -> Prev
+        }, { passive: true });
+      }
+    });
 
     async function loadGallery() {
       const grid = document.getElementById('galleryGrid');
@@ -2705,12 +2746,14 @@
           return;
         }
         grid.innerHTML = '';
+        galleryImages = [];
         json.images.forEach(function (img, i) {
           const thumbSrc = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w600';
           const fullSrc = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w1600';
+          galleryImages.push(fullSrc);
           const cell = document.createElement('div');
           cell.className = 'g-cell' + (i === 0 ? ' lg' : '');
-          cell.onclick = function () { openLightbox(fullSrc); };
+          cell.onclick = function () { openLightbox(i); };
           const im = document.createElement('img');
           im.src = thumbSrc;
           im.alt = img.name || ('사진 ' + (i + 1));
