@@ -1578,7 +1578,7 @@
 <section class="reveal" id="gallerySection">
   <span class="eyebrow">Gallery</span>
   <h2 class="section-title">
-    <span class="ko-text">\uc6b0\ub9ac\uc758 \uc774\uc57c\uae30</span>
+    <span class="ko-text">우리의 이야기</span>
     <span class="en-text">Our Story</span>
   </h2>
 
@@ -1591,7 +1591,7 @@
     <div class="g-skeleton"></div>
   </div>
   <p class="gallery-note" id="galleryStatus" style="display:none">
-    <span class="ko-text">\uc0ac\uc9c4\uc744 \ubd88\ub7ec\uc624\ub294 \uc911\uc785\ub2c8\ub2e4\u2026</span>
+    <span class="ko-text">사진을 불러오는 중입니다…</span>
     <span class="en-text">Loading photos\u2026</span>
   </p>
 </section>
@@ -2234,7 +2234,7 @@ async function loadGallery() {
     const res  = await fetch(APPS_SCRIPT_URL.replace('/exec', '/exec') + '?action=gallery');
     const json = await res.json();
     if (!json.ok || !json.images || !json.images.length) {
-      grid.innerHTML = '<p class="gallery-note" style="grid-column:1/-1;text-align:center;padding:24px 0;color:var(--light);">✦ &nbsp;\uc0ac\uc9c4\uc744 \uc900\ube44 \uc911\uc785\ub2c8\ub2e4&nbsp; ✦</p>';
+      grid.innerHTML = '<p class="gallery-note" style="grid-column:1/-1;text-align:center;padding:24px 0;color:var(--light);">✦ &nbsp;사진을 준비 중입니다&nbsp; ✦</p>';
       return;
     }
     grid.innerHTML = '';
@@ -2246,14 +2246,14 @@ async function loadGallery() {
       cell.onclick = function() { openLightbox(fullSrc); };
       const im = document.createElement('img');
       im.src     = thumbSrc;
-      im.alt     = img.name || ('\uc0ac\uc9c4 ' + (i + 1));
+      im.alt     = img.name || ('사진 ' + (i + 1));
       im.loading = 'lazy';
       im.decoding = 'async';
       cell.appendChild(im);
       grid.appendChild(cell);
     });
   } catch(e) {
-    grid.innerHTML = '<p class="gallery-note" style="grid-column:1/-1;text-align:center;padding:24px 0;color:var(--light);">✦ &nbsp;\uc0ac\uc9c4\uc744 \uc900\ube44 \uc911\uc785\ub2c8\ub2e4&nbsp; ✦</p>';
+    grid.innerHTML = '<p class="gallery-note" style="grid-column:1/-1;text-align:center;padding:24px 0;color:var(--light);">✦ &nbsp;사진을 준비 중입니다&nbsp; ✦</p>';
   }
 }
 
