@@ -125,7 +125,7 @@
 
   .section-title {
     font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    font-size: 30px;
+    font-size: 36px;
     font-weight: 300;
     text-align: center;
     color: var(--char);
@@ -1473,7 +1473,10 @@
     <circle cx="80" cy="20" r="0.9" fill="#B4925A" opacity=".25"/>
   </svg>
 
-  <p class="hero-meta">September 2026 · Seoul</p>
+  <p class="hero-meta">
+    <span class="ko-text" style="font-family: 'Noto Sans KR', sans-serif; letter-spacing: .15em; font-size: 14.5px;">결혼합니다</span>
+    <span class="en-text">The Marriage Of</span>
+  </p>
 
   <!-- Korean names -->
   <div class="hero-names-ko" aria-label="강영석과 권지은">
@@ -1577,10 +1580,7 @@
 \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 -->
 <section class="reveal" id="gallerySection">
   <span class="eyebrow">Gallery</span>
-  <h2 class="section-title">
-    <span class="ko-text">우리의 이야기</span>
-    <span class="en-text">Our Story</span>
-  </h2>
+    <!-- Removed "Our Story" section title per user request -->
 
   <!-- Loading skeletons -->
   <div class="gallery-grid" id="galleryGrid" aria-label="\uac24\ub7ec\ub9ac">
@@ -1628,10 +1628,12 @@
       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
     </svg>
     <div class="addr-txt">
-      <p class="ko-block">서울 송파구 올림픽로 240</p>
-      <p class="en-block">240 Olympic-ro, Songpa-gu, Seoul</p>
-      <small class="ko-block">롯데호텔월드 3F 크리스탈볼룸</small>
-      <small class="en-block">3F Crystal Ballroom, Lotte Hotel World</small>
+      <p class="ko-block" style="margin-bottom: 6px;">서울 송파구 올림픽로 240</p>
+      <p class="en-block" style="margin-bottom: 6px;">240 Olympic-ro, Songpa-gu, Seoul</p>
+      <div style="font-family: 'Noto Sans KR', sans-serif; font-size: 15.5px; font-weight: 500; color: #B4925A; line-height: 1.6; letter-spacing: 0.02em;">
+        <span class="ko-block">롯데호텔월드<br>신부대기실 2F &nbsp;|&nbsp; 크리스탈볼룸 3F</span>
+        <span class="en-block">Lotte Hotel World<br>Bridal Suite 2F &nbsp;|&nbsp; Crystal Ballroom 3F</span>
+      </div>
     </div>
   </div>
 
@@ -1768,20 +1770,7 @@
 
   </div>
 
-  <!-- 층별 안내 -->
-  <div class="floor-guide" style="margin-top:16px">
-    <span class="floor-item">
-      <span class="ko-text">신부대기실</span>
-      <span class="en-text">Bridal Suite</span>
-      <strong>2F</strong>
-    </span>
-    <span class="floor-pipe" aria-hidden="true"></span>
-    <span class="floor-item">
-      <span class="ko-text">크리스탈볼룸</span>
-      <span class="en-text">Crystal Ballroom</span>
-      <strong>3F</strong>
-    </span>
-  </div>
+  <!-- (Floor guide removed and relocated to the address section above) -->
 </section>
 
 <!-- ══════════════════════════════════════════
