@@ -454,6 +454,11 @@
       object-fit: cover;
       display: block;
       transition: transform .4s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
+      pointer-events: none;
     }
 
     .g-cell:hover img {
@@ -2188,9 +2193,9 @@
   <!-- Lightbox -->
   <div id="galleryLightbox"
     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:9999;align-items:center;justify-content:center;flex-direction:column;"
-    onclick="closeLightbox()">
+    onclick="closeLightbox()" oncontextmenu="return false;">
     <img id="lbImg" src="" alt=""
-      style="max-width:100vw;max-height:88svh;object-fit:contain;border-radius:6px;box-shadow:0 8px 48px rgba(0,0,0,.6);transition:transform 0.2s ease-out;" />
+      style="max-width:100vw;max-height:88svh;object-fit:contain;border-radius:6px;box-shadow:0 8px 48px rgba(0,0,0,.6);transition:transform 0.2s ease-out;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none;pointer-events:none;" />
 
     <!-- Prev / Next Overlays -->
     <div
@@ -2900,6 +2905,29 @@
         }, { passive: true });
       }
     });
+
+    /* ── PHOTO DOWNLOAD PROTECTION ── */
+    (function () {
+      // Block right-click context menu on all images
+      document.addEventListener('contextmenu', function (e) {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+          return false;
+        }
+      });
+      // Block drag-and-drop on all images
+      document.addEventListener('dragstart', function (e) {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+        }
+      });
+      // Block Ctrl+S / Cmd+S (Save Page)
+      document.addEventListener('keydown', function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+          e.preventDefault();
+        }
+      });
+    })();
 
     async function loadGallery() {
       const grid = document.getElementById('galleryGrid');
