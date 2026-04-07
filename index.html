@@ -9,6 +9,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="theme-color" content="#F7F4EE" />
   <title>강영석 ♥ 권지은</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♥</text></svg>" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♥</text></svg>" />
 
   <!-- Windows font-weight fix: detect early to avoid FOUC -->
   <script>
@@ -2543,7 +2545,7 @@
 
     <!-- 탭 -->
     <div class="acct-tabs" role="tablist">
-      <button class="acct-tab-btn" role="tab" aria-selected="false" onclick="switchAcctTab('groom', this)">
+      <button class="acct-tab-btn active" role="tab" aria-selected="true" onclick="switchAcctTab('groom', this)">
         <span class="ko-text">신랑측</span>
         <span class="en-text">Groom's Family</span>
       </button>
@@ -2554,7 +2556,7 @@
     </div>
 
     <!-- 신랑측 계좌 -->
-    <div class="acct-panel" id="acctGroom" role="tabpanel">
+    <div class="acct-panel active" id="acctGroom" role="tabpanel">
       <div class="acct-card">
         <p class="acct-relation">
           <span class="ko-text">신랑</span>
@@ -2912,7 +2914,7 @@
 
     async function loadGallery() {
       const grid = document.getElementById('galleryGrid');
-      if (!grid) return;
+      if (!grid) { isGalleryLoaded = true; attemptHidePreloader(); return; }
       try {
         const res = await fetch(APPS_SCRIPT_URL.replace('/exec', '/exec') + '?action=gallery');
         const json = await res.json();
