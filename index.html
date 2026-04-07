@@ -91,7 +91,9 @@
     html.win .hero-detail,
     html.win .hero-scroll .scroll-lbl,
     html.win .t-body p,
-    html.win .invite-names,
+    html.win .couple-parents,
+    html.win .couple-role,
+    html.win .couple-name,
     html.win .gallery-note,
     html.win .snap-hero p,
     html.win .addr-bar .addr-txt p,
@@ -397,37 +399,86 @@
     }
 
     .invite-names {
-      font-family: 'Gowun Batang', serif;
       margin-top: 60px;
-      text-align: center;
-      font-size: 14px;
-      color: var(--mid);
-      line-height: 2.6;
       border-top: 1px solid var(--border);
       padding-top: 44px;
+    }
+
+    .couple-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .couple-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .couple-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 14px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .couple-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      pointer-events: none;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .couple-parents {
+      font-family: 'Gowun Batang', serif;
+      font-size: 12px;
+      color: var(--light);
+      line-height: 1.9;
       letter-spacing: .02em;
     }
 
-    [data-lang="en"] .invite-names {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 17px;
-      line-height: 2.3;
+    .couple-role {
+      font-family: 'Gowun Batang', serif;
+      font-size: 12px;
+      color: var(--mid);
+      margin-top: 2px;
+      letter-spacing: .04em;
     }
 
-    .invite-names .name-highlight {
+    .couple-name {
+      font-family: 'Gowun Batang', serif;
       font-weight: 700;
-      color: var(--char);
       font-size: 16px;
-      letter-spacing: .1em;
+      color: var(--char);
+      letter-spacing: .12em;
+      margin-top: 5px;
     }
 
-    [data-lang="en"] .invite-names .name-highlight {
-      font-size: 19px;
+    [data-lang="en"] .couple-parents {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      line-height: 1.8;
       font-style: italic;
     }
 
-    .invite-names .name-row {
-      margin-bottom: 4px;
+    [data-lang="en"] .couple-role {
+      display: none;
+    }
+
+    [data-lang="en"] .couple-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
     }
 
     /* ════════════════════════════════════════════
@@ -2145,25 +2196,42 @@
 
     </div>
 
-    <!-- Parent names + couple names -->
+    <!-- Couple profiles -->
     <div class="invite-names">
-      <div class="ko-block">
-        <div class="name-row">
-          강 중용 · 송 영숙의 장남 <span class="name-highlight">영석</span>
+      <div class="couple-grid">
+
+        <!-- 신랑 (Left) -->
+        <div class="couple-card">
+          <div class="couple-photo">
+            <!-- 신랑 독사진: <img src="..." alt="신랑 영석"> -->
+          </div>
+          <div class="ko-block">
+            <p class="couple-parents">강 중용 · 송 영숙의</p>
+            <p class="couple-role">장남</p>
+            <p class="couple-name">영석</p>
+          </div>
+          <div class="en-block">
+            <p class="couple-parents">Son of Joong-Yong Kang<br>&amp; Young-Sook Song</p>
+            <p class="couple-name">Young Seok</p>
+          </div>
         </div>
-        <div class="name-row">
-          권 경현 · 안 혜숙의 장녀 <span class="name-highlight">지은</span>
+
+        <!-- 신부 (Right) -->
+        <div class="couple-card">
+          <div class="couple-photo">
+            <!-- 신부 독사진: <img src="..." alt="신부 지은"> -->
+          </div>
+          <div class="ko-block">
+            <p class="couple-parents">권 경현 · 안 혜숙의</p>
+            <p class="couple-role">장녀</p>
+            <p class="couple-name">지은</p>
+          </div>
+          <div class="en-block">
+            <p class="couple-parents">Daughter of Kyeong-Hyeon Kwon<br>&amp; Hye-Sook Ahn</p>
+            <p class="couple-name">Ji Eun</p>
+          </div>
         </div>
-      </div>
-      <div class="en-block">
-        <div class="name-row">
-          The first son of Joong-Yong Kang &amp; Young-Sook Song<br>
-          <span class="name-highlight">Young Seok (Joseph)</span>
-        </div>
-        <div class="name-row" style="margin-top:18px">
-          The first daughter of Kyeong-Hyeon Kwon &amp; Hye-Sook Ahn<br>
-          <span class="name-highlight">Ji Eun</span>
-        </div>
+
       </div>
     </div>
   </section>
