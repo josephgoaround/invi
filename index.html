@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Gowun+Batang:wght@400;700&family=Great+Vibes&family=Noto+Sans+KR:wght@300;400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+KR:wght@300;400;600;700&family=Great+Vibes&display=swap"
     rel="stylesheet" />
 
   <style>
@@ -41,19 +41,20 @@
     }
 
     :root {
-      --bg: #FDFCF9;
-      --ivory: #F7F2EA;
-      --cream: #EDE5D8;
-      --gold: #A8895E;
-      --gold-lt: #C8B49A;
-      --rose: #8C786E;
-      --sage: #1A212E;
-      --char: #3A302B;
-      --mid: #857870;
-      --light: #B0A8A4;
-      --border: rgba(168, 137, 94, .18);
-      --card-bg: rgba(255, 253, 250, .98);
-      --radius-card: 6px;
+      --bg:          #FAF7F2;
+      --ivory:       #F3EDE1;
+      --cream:       #EBE2D4;
+      --gold:        #B8965A;
+      --gold-lt:     #D4B483;
+      --rose:        #8C786E;
+      --char:        #1C1712;
+      --mid:         #6B6057;
+      --light:       #A89B8E;
+      --border:      rgba(184, 150, 90, .16);
+      --card-bg:     #FFFFFF;
+      --radius-card: 20px;
+      --radius-sm:   12px;
+      --shadow-card: 0 2px 24px rgba(28, 23, 18, .07);
     }
 
     html {
@@ -65,16 +66,13 @@
     body {
       background: var(--bg);
       color: var(--char);
-      /* Korean font stack — system fallbacks for offline */
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', '맑은 고딕', 'Malgun Gothic', sans-serif;
+      font-family: 'Noto Serif KR', 'Apple SD Gothic Neo', Georgia, serif;
       font-weight: 300;
       max-width: 480px;
       margin: 0 auto;
       overflow-x: hidden;
-      /* Font smoothing: 'auto' works best on Windows Chrome;
-         mac/iOS will still use subpixel rendering naturally */
-      -webkit-font-smoothing: auto;
-      -moz-osx-font-smoothing: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
       font-optical-sizing: auto;
       word-break: keep-all;
@@ -162,7 +160,7 @@
       border: 1px solid var(--border);
       border-radius: 999px;
       padding: 9px 18px;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13px;
       font-weight: 400;
       letter-spacing: .15em;
@@ -195,9 +193,8 @@
       right: 18px;
       z-index: 300;
       background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.1), 0 2px 8px rgba(0,0,0,.06);
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(28,23,18,.14), 0 2px 8px rgba(28,23,18,.06);
       padding: 10px 6px;
       min-width: 190px;
       display: none;
@@ -211,7 +208,7 @@
       to   { opacity:1; transform: scale(1)   translateY(0);    }
     }
     .cal-popup-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'EB Garamond', Georgia, serif;
       font-size: 10.5px;
       letter-spacing: .25em;
       text-transform: uppercase;
@@ -226,7 +223,7 @@
       gap: 10px;
       padding: 11px 14px;
       border-radius: 9px;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13px;
       font-weight: 400;
       color: var(--char);
@@ -261,7 +258,7 @@
      SECTION BASE
   ════════════════════════════════════════════ */
     section {
-      padding: 80px 28px;
+      padding: 96px 28px;
       position: relative;
     }
 
@@ -269,40 +266,47 @@
       content: '';
       position: absolute;
       top: 0;
-      left: 40px;
-      right: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
       height: 1px;
-      background: linear-gradient(to right, transparent, var(--border), transparent);
+      background: var(--border);
     }
 
     .eyebrow {
       display: block;
-      font-family: 'Cormorant Garamond', 'Noto Sans KR', sans-serif;
-      font-size: 11.5px;
-      font-weight: 500;
-      letter-spacing: .35em;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: .48em;
       text-transform: uppercase;
       color: var(--gold);
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+    }
+
+    [data-lang="ko"] .eyebrow {
+      font-family: 'Noto Serif KR', serif;
+      letter-spacing: .32em;
     }
 
     .section-title {
-      font-family: 'Gowun Batang', serif;
-      font-size: 26px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 30px;
       font-weight: 400;
       text-align: center;
       color: var(--char);
-      line-height: 1.4;
-      letter-spacing: .15em;
-      margin-bottom: 36px;
+      line-height: 1.5;
+      letter-spacing: .08em;
+      margin-bottom: 40px;
     }
 
     [data-lang="en"] .section-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'EB Garamond', Georgia, serif;
       font-style: italic;
-      font-size: 32px;
-      letter-spacing: .06em;
+      font-size: 40px;
+      letter-spacing: .04em;
+      line-height: 1.25;
     }
 
     /* ════════════════════════════════════════════
@@ -401,7 +405,7 @@
     .hero-detail    { animation: heroFadeUp  1s   ease both; animation-delay:1.15s;}
 
     .hero-top-text {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'EB Garamond', Georgia, serif;
       font-size: 13px;
       letter-spacing: 0.3em;
       color: var(--char);
@@ -433,26 +437,25 @@
 
     /* Korean names */
     .hero-names-ko {
-      font-family: 'Gowun Batang', serif;
-      font-size: 25px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 28px;
       font-weight: 400;
       line-height: 1.4;
       text-align: center;
       color: var(--char);
-      letter-spacing: .5em;
-      margin-left: .5em;
-      /* offset for letter spacing centering */
+      letter-spacing: .45em;
+      margin-left: .45em;
     }
 
     /* English names */
     .hero-names-en {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 30px;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 40px;
       font-weight: 400;
-      line-height: 1.3;
+      line-height: 1.2;
       text-align: center;
       color: var(--char);
-      letter-spacing: .08em;
+      letter-spacing: .06em;
       display: none;
     }
 
@@ -466,7 +469,7 @@
 
     .hero-amp {
       display: block;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 30px;
       font-style: italic;
       font-weight: 300;
@@ -490,7 +493,7 @@
 
     .hero-detail {
       text-align: center;
-      font-family: 'Gowun Batang', serif;
+      font-family: 'Noto Serif KR', serif;
       line-height: 2.0;
       font-size: 13.5px;
       color: var(--char);
@@ -498,7 +501,7 @@
     }
 
     [data-lang="en"] .hero-detail {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'EB Garamond', Georgia, serif;
       font-size: 16px;
       letter-spacing: .03em;
     }
@@ -516,7 +519,7 @@
     }
 
     .hero-scroll .scroll-lbl {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 8.5px;
       letter-spacing: .35em;
       text-transform: uppercase;
@@ -541,9 +544,9 @@
      INVITATION TEXT
   ════════════════════════════════════════════ */
     .poem {
-      font-family: 'Gowun Batang', serif;
-      font-size: 14.5px;
-      line-height: 2.3;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 15.5px;
+      line-height: 2.4;
       color: var(--char);
       text-align: center;
       letter-spacing: .06em;
@@ -551,15 +554,15 @@
     }
 
     [data-lang="en"] .poem {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 17px;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 19px;
       font-style: italic;
       line-height: 2.2;
       letter-spacing: .03em;
     }
 
     .poem .stanza+.stanza {
-      margin-top: 36px;
+      margin-top: 40px;
     }
 
     .invite-names {
@@ -584,9 +587,9 @@
     .couple-photo {
       width: 100%;
       aspect-ratio: 3/4;
-      border-radius: 14px;
+      border-radius: 20px;
       background: var(--cream);
-      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
       margin-bottom: 14px;
       overflow: hidden;
     }
@@ -604,7 +607,7 @@
     }
 
     .couple-parents {
-      font-family: 'Gowun Batang', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 12px;
       color: var(--light);
       line-height: 1.9;
@@ -612,7 +615,7 @@
     }
 
     .couple-role {
-      font-family: 'Gowun Batang', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 12px;
       color: var(--mid);
       margin-top: 2px;
@@ -620,7 +623,7 @@
     }
 
     .couple-name {
-      font-family: 'Gowun Batang', serif;
+      font-family: 'Noto Serif KR', serif;
       font-weight: 700;
       font-size: 16px;
       color: var(--char);
@@ -629,7 +632,7 @@
     }
 
     [data-lang="en"] .couple-parents {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'EB Garamond', Georgia, serif;
       font-size: 13px;
       line-height: 1.8;
       font-style: italic;
@@ -640,7 +643,7 @@
     }
 
     [data-lang="en"] .couple-name {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'EB Garamond', Georgia, serif;
       font-size: 18px;
       font-style: italic;
     }
@@ -711,7 +714,7 @@
     .gallery-note {
       margin-top: 18px;
       text-align: center;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 12px;
       letter-spacing: .1em;
       color: var(--light);
@@ -723,9 +726,9 @@
     .map-wrap {
       width: 100%;
       aspect-ratio: 4/3;
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
-      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
       background: var(--cream);
       margin-bottom: 16px;
     }
@@ -742,10 +745,10 @@
       align-items: center;
       gap: 14px;
       background: var(--card-bg);
-      border: 1px solid var(--border);
       border-radius: var(--radius-card);
-      padding: 16px 18px;
-      margin-bottom: 24px;
+      padding: 20px 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-card);
     }
 
     .addr-bar svg {
@@ -767,12 +770,12 @@
     }
 
     [data-lang="en"] .addr-bar .addr-txt p {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 15px;
     }
 
     [data-lang="en"] .addr-bar .addr-txt small {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13px;
     }
 
@@ -788,9 +791,9 @@
       gap: 16px;
       align-items: flex-start;
       background: var(--card-bg);
-      border: 1px solid var(--border);
       border-radius: var(--radius-card);
-      padding: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow-card);
     }
 
     .t-icon {
@@ -837,13 +840,13 @@
     }
 
     [data-lang="en"] .t-body h4 {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 17px;
       font-weight: 400;
     }
 
     .t-body p {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 12px;
       color: var(--mid);
       line-height: 2;
@@ -851,7 +854,7 @@
     }
 
     [data-lang="en"] .t-body p {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 14.5px;
       line-height: 1.9;
     }
@@ -870,7 +873,7 @@
       gap: 8px;
       padding: 9px 14px;
       border-radius: 10px;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 12px;
       font-weight: 400;
       letter-spacing: .04em;
@@ -971,7 +974,7 @@
       padding: 2px 9px;
       border-radius: 99px;
       font-size: 10.5px;
-      font-family: 'Noto Sans KR', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-weight: 400;
       margin-right: 3px;
     }
@@ -1024,7 +1027,7 @@
     }
 
     .snap-hero h3 {
-      font-family: 'Gowun Batang', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 26px;
       font-weight: 400;
       color: #fff;
@@ -1034,13 +1037,13 @@
     }
 
     .snap-hero h3 em {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'EB Garamond', Georgia, serif;
       font-style: italic;
       color: var(--gold-lt);
     }
 
     .snap-hero p {
-      font-family: 'Gowun Batang', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13.5px;
       color: rgba(255, 255, 255, .6);
       line-height: 2.1;
@@ -1050,7 +1053,7 @@
     }
 
     [data-lang="en"] .snap-hero p {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 15px;
       font-style: italic;
       letter-spacing: .01em;
@@ -1074,7 +1077,7 @@
     }
 
     [data-lang="en"] .f-label {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13px;
     }
 
@@ -1084,7 +1087,7 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-card);
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 14px;
       color: var(--char);
       font-weight: 300;
@@ -1119,7 +1122,7 @@
     }
 
     [data-lang="en"] .f-input {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 15px;
     }
 
@@ -1155,7 +1158,7 @@
     }
 
     [data-lang="en"] .privacy-check-label {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13px;
     }
 
@@ -1195,12 +1198,12 @@
     }
 
     [data-lang="en"] .upload-zone p {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 15px;
     }
 
     [data-lang="en"] .upload-zone small {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13px;
     }
 
@@ -1217,29 +1220,30 @@
     }
 
     [data-lang="en"] .file-chosen {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 14px;
     }
 
     .snap-submit-btn {
       width: 100%;
-      padding: 16px;
+      padding: 18px;
       background: var(--char);
-      color: #fff;
+      color: var(--bg);
       border: none;
-      border-radius: var(--radius-card);
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-      font-size: 16px;
-      letter-spacing: .1em;
+      border-radius: 16px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 15px;
+      letter-spacing: .10em;
       cursor: pointer;
-      transition: background .2s, transform .15s;
+      transition: background .2s, transform .15s, box-shadow .2s;
       -webkit-tap-highlight-color: transparent;
       margin-top: 4px;
+      box-shadow: 0 4px 16px rgba(28, 23, 18, .15);
     }
 
     .snap-submit-btn:active {
       transform: scale(.98);
-      background: #333;
+      background: #2C2520;
     }
 
     .snap-submit-btn:disabled {
@@ -1274,7 +1278,7 @@
     }
 
     [data-lang="en"] .snap-thanks p {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 16px;
       font-style: italic;
     }
@@ -1284,7 +1288,7 @@
       border: 1px solid rgba(180, 146, 90, .3);
       border-radius: 999px;
       padding: 9px 22px;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13px;
       letter-spacing: .1em;
       color: var(--mid);
@@ -1314,7 +1318,7 @@
     }
 
     [data-lang="en"] .snap-board-hd {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 12px;
     }
 
@@ -1353,18 +1357,19 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: var(--gold);
-      color: #fff;
+      background: var(--char);
+      color: var(--bg);
       border: none;
       border-radius: 999px;
-      padding: 16px 48px;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-      font-size: 15px;
+      padding: 18px 52px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 14.5px;
       font-weight: 400;
       letter-spacing: .12em;
       cursor: pointer;
-      transition: background .2s, transform .15s;
+      transition: background .2s, transform .15s, box-shadow .2s;
       -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 6px 24px rgba(28, 23, 18, .18);
     }
 
     .rsvp-open-btn:active {
@@ -1372,7 +1377,7 @@
     }
 
     .rsvp-open-btn:hover {
-      background: var(--gold-lt);
+      background: var(--mid);
     }
 
     footer {
@@ -1389,7 +1394,7 @@
     }
 
     .footer-quote {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 15.5px;
       font-style: italic;
       color: var(--mid);
@@ -1398,7 +1403,7 @@
     }
 
     .footer-stamp {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 11px;
       letter-spacing: .18em;
       color: var(--light);
@@ -1410,8 +1415,8 @@
   ════════════════════════════════════════════ */
     .reveal {
       opacity: 0;
-      transform: translateY(26px);
-      transition: opacity .72s ease, transform .72s ease;
+      transform: translateY(32px);
+      transition: opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1);
       will-change: opacity, transform;
     }
 
@@ -1432,7 +1437,7 @@
       color: #fff;
       padding: 12px 24px;
       border-radius: 999px;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13px;
       letter-spacing: .05em;
       opacity: 0;
@@ -1464,7 +1469,7 @@
       background: var(--char);
       color: #fff;
       border-radius: var(--radius-card);
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 16px;
       letter-spacing: .1em;
       text-decoration: none;
@@ -1489,9 +1494,9 @@
 
     .gb-item {
       background: var(--card-bg);
-      border: 1px solid var(--border);
       border-radius: var(--radius-card);
-      padding: 16px 18px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow-card);
     }
 
     .gb-item-header {
@@ -1509,7 +1514,7 @@
     }
 
     .gb-item-date {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 11px;
       color: var(--light);
       letter-spacing: .05em;
@@ -1524,7 +1529,7 @@
     }
 
     [data-lang="en"] .gb-item-msg {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 15px;
     }
 
@@ -1532,7 +1537,7 @@
       background: none;
       border: 1px solid transparent;
       color: var(--light);
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 10.5px;
       letter-spacing: .04em;
       cursor: pointer;
@@ -1603,7 +1608,7 @@
 
     .gb-empty {
       text-align: center;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 14px;
       color: var(--light);
       padding: 32px 0;
@@ -1612,13 +1617,13 @@
 
     .gb-form {
       background: var(--card-bg);
-      border: 1px solid var(--border);
       border-radius: var(--radius-card);
-      padding: 20px 18px;
+      padding: 24px 20px;
+      box-shadow: var(--shadow-card);
     }
 
     .gb-form-title {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 14px;
       letter-spacing: .12em;
       color: var(--gold);
@@ -1653,7 +1658,7 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-card);
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 14px;
       font-weight: 300;
       color: var(--mid);
@@ -1682,9 +1687,9 @@
 
     .acct-card {
       background: var(--card-bg);
-      border: 1px solid var(--border);
       border-radius: var(--radius-card);
-      padding: 18px 18px 16px;
+      padding: 20px 20px 18px;
+      box-shadow: var(--shadow-card);
     }
 
     .acct-relation {
@@ -1696,7 +1701,7 @@
     }
 
     .acct-holder {
-      font-family: 'Gowun Batang', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 16.5px;
       font-weight: 400;
       color: var(--char);
@@ -1726,7 +1731,7 @@
       color: var(--mid);
       letter-spacing: .04em;
       flex: 1;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
     }
 
     .acct-copy-btn {
@@ -1735,7 +1740,7 @@
       background: none;
       border: 1px solid rgba(180, 146, 90, .35);
       border-radius: 999px;
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 11.5px;
       letter-spacing: .06em;
       color: var(--gold);
@@ -1812,7 +1817,7 @@
     }
 
     .rsvp-title {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 26px;
       font-weight: 300;
       color: var(--char);
@@ -1839,17 +1844,17 @@
     }
 
     [data-lang="en"] .rsvp-notice {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13px;
     }
 
     /* ── WEDDING COUNTDOWN ── */
     .wedding-countdown {
-      margin-top: 28px;
-      padding: 24px 20px 20px;
-      background: rgba(180, 146, 90, .06);
-      border: 1px solid var(--border);
-      border-radius: 14px;
+      margin-top: 24px;
+      padding: 28px 20px 24px;
+      background: rgba(184, 150, 90, .06);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
       text-align: center;
     }
 
@@ -1876,8 +1881,9 @@
     }
 
     .countdown-num {
-      font-size: 36px;
-      font-weight: 300;
+      font-family: 'EB Garamond', serif;
+      font-size: 44px;
+      font-weight: 400;
       color: var(--char);
       line-height: 1;
       letter-spacing: .02em;
@@ -1885,19 +1891,21 @@
     }
 
     .countdown-name {
-      font-size: 10px;
-      letter-spacing: .2em;
+      font-family: 'EB Garamond', serif;
+      font-size: 9px;
+      letter-spacing: .30em;
       color: var(--light);
-      margin-top: 5px;
+      margin-top: 6px;
       text-transform: uppercase;
     }
 
     .countdown-sep {
-      font-size: 28px;
-      font-weight: 300;
+      font-family: 'EB Garamond', serif;
+      font-size: 34px;
+      font-weight: 400;
       color: var(--gold);
-      opacity: .5;
-      margin-bottom: 18px;
+      opacity: .45;
+      margin-bottom: 22px;
     }
 
     .countdown-date-lbl {
@@ -1997,7 +2005,7 @@
     }
 
     [data-lang="en"] .rsvp-skip-btn {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 14px;
     }
 
@@ -2304,7 +2312,7 @@
     <!-- Top Text -->
     <div class="hero-top-text">
       <span class="ko-text"
-        style="font-family: 'Noto Sans KR', sans-serif; letter-spacing: .15em; font-size: 14.5px;">결혼합니다</span>
+        style="font-family: 'Noto Serif KR', serif; letter-spacing: .15em; font-size: 14.5px;">결혼합니다</span>
       <span class="en-text">The Marriage Of</span>
     </div>
 
@@ -2336,7 +2344,7 @@
 
     <div class="hero-detail" style="color:var(--char);">
       <span class="ko-block">2026년 9월 5일 토요일 낮 12시 30분<br>롯데호텔월드 3F 크리스탈볼룸</span>
-      <span class="en-block" style="font-family:'Cormorant Garamond', serif; font-size:16px;">Saturday, September 5,
+      <span class="en-block" style="font-family:'EB Garamond', Georgia, serif; font-size:16px;">Saturday, September 5,
         2026 at 12:30 PM<br>Crystal Ballroom 3F, Lotte Hotel World</span>
     </div>
   </section>
@@ -2505,7 +2513,7 @@
         <p class="ko-block" style="margin-bottom: 6px;">서울 송파구 올림픽로 240</p>
         <p class="en-block" style="margin-bottom: 6px;">240 Olympic-ro, Songpa-gu, Seoul</p>
         <div
-          style="font-family: 'Noto Sans KR', sans-serif; font-size: 15.5px; font-weight: 500; color: #B4925A; line-height: 1.6; letter-spacing: 0.02em;">
+          style="font-family: 'Noto Serif KR', serif; font-size: 15.5px; font-weight: 500; color: #B4925A; line-height: 1.6; letter-spacing: 0.02em;">
           <span class="ko-block">롯데호텔월드<br>신부대기실 2F &nbsp;|&nbsp; 크리스탈볼룸 3F</span>
           <span class="en-block">Lotte Hotel World<br>Bridal Suite 2F &nbsp;|&nbsp; Crystal Ballroom 3F</span>
         </div>
