@@ -1671,11 +1671,9 @@
       margin-bottom: 32px;
     }
 
-    /* Accordion pill wrapper */
+    /* Accordion pill wrapper — no overflow clip */
     .acct-accordion {
       margin-bottom: 10px;
-      border-radius: 999px;
-      overflow: hidden;
     }
 
     .acct-accordion-btn {
@@ -1695,14 +1693,8 @@
       letter-spacing: .04em;
       cursor: pointer;
       text-align: center;
-      transition: border-color .2s, border-radius .35s cubic-bezier(.22,.61,.36,1);
+      transition: border-color .2s;
       -webkit-tap-highlight-color: transparent;
-    }
-
-    .acct-accordion-btn[aria-expanded="true"] {
-      border-radius: 20px 20px 0 0;
-      border-color: rgba(0,0,0,.09);
-      border-bottom-color: transparent;
     }
 
     .acct-accordion-icon {
@@ -1716,19 +1708,18 @@
       transform: rotate(180deg);
     }
 
-    /* grid trick: 0fr → 1fr */
+    /* grid trick: 0fr → 1fr, card floats below pill */
     .acct-body {
       display: grid;
       grid-template-rows: 0fr;
       transition: grid-template-rows .4s cubic-bezier(.22,.61,.36,1);
-      border: 1px solid rgba(0,0,0,.09);
-      border-top: none;
-      border-radius: 0 0 20px 20px;
-      background: var(--card-bg);
+      margin-top: 0;
+      transition: grid-template-rows .4s cubic-bezier(.22,.61,.36,1), margin-top .4s cubic-bezier(.22,.61,.36,1);
     }
 
     .acct-body.open {
       grid-template-rows: 1fr;
+      margin-top: 8px;
     }
 
     .acct-body-inner {
@@ -1736,12 +1727,15 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: 0 14px;
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 0;
       transition: padding .4s cubic-bezier(.22,.61,.36,1);
     }
 
     .acct-body.open .acct-body-inner {
-      padding: 12px 14px 16px;
+      padding: 14px;
     }
 
     .acct-card {
@@ -2605,15 +2599,11 @@
 ══════════════════════════════════════════ -->
   <section class="reveal">
     <h2 class="section-title">
-      <span class="ko-text">신랑 &amp; 신부에게<br>마음 전하기</span>
+      <span class="ko-text">축하의 마음을<br>전해주세요</span>
       <span class="en-text">Send Your<br>Warmest Wishes</span>
     </h2>
-    <p class="section-sub">
-      <span class="ko-text">축복의 의미로 축의금을 전달해보세요.</span>
-      <span class="en-text">Your warm gift would be deeply appreciated.</span>
-    </p>
 
-    <!-- 신랑측 -->
+    <!-- 신랑측 계좌 -->
     <div class="acct-accordion">
       <button class="acct-accordion-btn" aria-expanded="false" onclick="toggleAcct('Groom', this)">
         <span class="ko-text">신랑 측 계좌번호</span>
@@ -2658,7 +2648,7 @@
       </div>
     </div>
 
-    <!-- 신부측 -->
+    <!-- 신부측 계좌 -->
     <div class="acct-accordion">
       <button class="acct-accordion-btn" aria-expanded="false" onclick="toggleAcct('Bride', this)">
         <span class="ko-text">신부 측 계좌번호</span>
@@ -2703,27 +2693,6 @@
       </div>
     </div>
 
-    <!-- 쌀 화환 -->
-    <div class="acct-accordion">
-      <button class="acct-accordion-btn" aria-expanded="false" onclick="toggleAcct('Rice', this)">
-        <span class="ko-text">쌀 화환 보내기</span>
-        <span class="en-text">Rice Wreath Gift</span>
-        <svg class="acct-accordion-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M3 6L8 11L13 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <div class="acct-body" id="acctRice">
-        <div class="acct-body-inner">
-          <div class="acct-card">
-            <p class="acct-relation"><span class="ko-text">쌀 화환 문의</span><span class="en-text">Inquiry</span></p>
-            <div class="acct-row" style="justify-content:center;">
-              <span class="acct-num ko-text" style="flex:1; text-align:center;">준비 중입니다</span>
-              <span class="acct-num en-text" style="flex:1; text-align:center;">Coming soon</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
 
   <!-- ══════════════════════════════════════════
