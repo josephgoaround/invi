@@ -1606,43 +1606,77 @@
     /* ════════════════════════════════════════════
      ACCOUNT (마음 전하기)
   ════════════════════════════════════════════ */
-    .acct-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 20px;
+    /* Accordion wrapper */
+    .acct-accordion {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      margin-bottom: 10px;
     }
 
-    .acct-tab-btn {
-      padding: 13px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-card);
-      font-family: 'Noto Serif KR', serif;
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--mid);
+    .acct-accordion-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px;
+      background: none;
+      border: none;
       cursor: pointer;
-      transition: border-color .2s, background .2s, color .2s;
+      text-align: left;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    .acct-accordion-label {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 11px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .acct-accordion-names {
+      flex: 1;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13.5px;
+      color: var(--mid);
       letter-spacing: .04em;
     }
 
-    .acct-tab-btn.active {
-      border-color: var(--gold);
-      background: rgba(180, 146, 90, .06);
-      color: var(--char);
-      font-weight: 400;
+    .acct-accordion-icon {
+      flex-shrink: 0;
+      color: var(--light);
+      transition: transform .35s cubic-bezier(.22,.61,.36,1);
     }
 
-    .acct-panel {
-      display: none;
+    .acct-accordion-btn[aria-expanded="true"] .acct-accordion-icon {
+      transform: rotate(180deg);
     }
 
-    .acct-panel.active {
+    /* grid trick: 0fr → 1fr for smooth height transition */
+    .acct-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .4s cubic-bezier(.22,.61,.36,1);
+    }
+
+    .acct-body.open {
+      grid-template-rows: 1fr;
+    }
+
+    .acct-body-inner {
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
+      padding: 0 16px;
+      transition: padding .4s cubic-bezier(.22,.61,.36,1);
+    }
+
+    .acct-body.open .acct-body-inner {
+      padding: 0 16px 16px;
     }
 
     .acct-card {
@@ -2658,112 +2692,106 @@
       <span class="en-text">Send Your<br>Warmest Wishes</span>
     </h2>
 
-    <!-- 탭 -->
-    <div class="acct-tabs" role="tablist">
-      <button class="acct-tab-btn active" role="tab" aria-selected="true" onclick="switchAcctTab('groom', this)">
-        <span class="ko-text">신랑측</span>
-        <span class="en-text">Groom's Family</span>
-      </button>
-      <button class="acct-tab-btn" role="tab" aria-selected="false" onclick="switchAcctTab('bride', this)">
-        <span class="ko-text">신부측</span>
-        <span class="en-text">Bride's Family</span>
-      </button>
-    </div>
-
-    <!-- 신랑측 계좌 -->
-    <div class="acct-panel active" id="acctGroom" role="tabpanel">
-      <div class="acct-card">
-        <p class="acct-relation">
-          <span class="ko-text">신랑</span>
+    <!-- 신랑측 아코디언 -->
+    <div class="acct-accordion">
+      <button class="acct-accordion-btn" aria-expanded="false" onclick="toggleAcct('Groom', this)">
+        <span class="acct-accordion-label">
+          <span class="ko-text">신랑측</span>
           <span class="en-text">Groom</span>
-        </p>
-        <p class="acct-holder">강영석</p>
-        <div class="acct-row">
-          <span class="acct-bank">국민은행</span>
-          <span class="acct-num">578202-04-005944</span>
-          <button class="acct-copy-btn" onclick="copyAcct('578202-04-005944', this)">
-            <span class="ko-text">복사</span>
-            <span class="en-text">Copy</span>
-          </button>
-        </div>
-      </div>
-      <div class="acct-card">
-        <p class="acct-relation">
-          <span class="ko-text">신랑 아버지</span>
-          <span class="en-text">Groom's Father</span>
-        </p>
-        <p class="acct-holder">강중용</p>
-        <div class="acct-row">
-          <span class="acct-bank">국민은행</span>
-          <span class="acct-num">123-45-6789012</span>
-          <button class="acct-copy-btn" onclick="copyAcct('123-45-6789012', this)">
-            <span class="ko-text">복사</span>
-            <span class="en-text">Copy</span>
-          </button>
-        </div>
-      </div>
-      <div class="acct-card">
-        <p class="acct-relation">
-          <span class="ko-text">신랑 어머니</span>
-          <span class="en-text">Groom's Mother</span>
-        </p>
-        <p class="acct-holder">송영숙</p>
-        <div class="acct-row">
-          <span class="acct-bank">하나은행</span>
-          <span class="acct-num">123-456789-01234</span>
-          <button class="acct-copy-btn" onclick="copyAcct('123-456789-01234', this)">
-            <span class="ko-text">복사</span>
-            <span class="en-text">Copy</span>
-          </button>
+        </span>
+        <span class="acct-accordion-names ko-text">강영석 · 강중용 · 송영숙</span>
+        <span class="acct-accordion-names en-text">Young Seok · Father · Mother</span>
+        <svg class="acct-accordion-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M4 6.5L9 11.5L14 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="acct-body" id="acctGroom">
+        <div class="acct-body-inner">
+          <div class="acct-card">
+            <p class="acct-relation"><span class="ko-text">신랑</span><span class="en-text">Groom</span></p>
+            <p class="acct-holder">강영석</p>
+            <div class="acct-row">
+              <span class="acct-bank">국민은행</span>
+              <span class="acct-num">578202-04-005944</span>
+              <button class="acct-copy-btn" onclick="copyAcct('578202-04-005944', this)">
+                <span class="ko-text">복사</span><span class="en-text">Copy</span>
+              </button>
+            </div>
+          </div>
+          <div class="acct-card">
+            <p class="acct-relation"><span class="ko-text">신랑 아버지</span><span class="en-text">Groom's Father</span></p>
+            <p class="acct-holder">강중용</p>
+            <div class="acct-row">
+              <span class="acct-bank">국민은행</span>
+              <span class="acct-num">123-45-6789012</span>
+              <button class="acct-copy-btn" onclick="copyAcct('123-45-6789012', this)">
+                <span class="ko-text">복사</span><span class="en-text">Copy</span>
+              </button>
+            </div>
+          </div>
+          <div class="acct-card">
+            <p class="acct-relation"><span class="ko-text">신랑 어머니</span><span class="en-text">Groom's Mother</span></p>
+            <p class="acct-holder">송영숙</p>
+            <div class="acct-row">
+              <span class="acct-bank">하나은행</span>
+              <span class="acct-num">123-456789-01234</span>
+              <button class="acct-copy-btn" onclick="copyAcct('123-456789-01234', this)">
+                <span class="ko-text">복사</span><span class="en-text">Copy</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 신부측 계좌 -->
-    <div class="acct-panel" id="acctBride" role="tabpanel">
-      <div class="acct-card">
-        <p class="acct-relation">
-          <span class="ko-text">신부</span>
+    <!-- 신부측 아코디언 -->
+    <div class="acct-accordion">
+      <button class="acct-accordion-btn" aria-expanded="false" onclick="toggleAcct('Bride', this)">
+        <span class="acct-accordion-label">
+          <span class="ko-text">신부측</span>
           <span class="en-text">Bride</span>
-        </p>
-        <p class="acct-holder">권지은</p>
-        <div class="acct-row">
-          <span class="acct-bank">카카오뱅크</span>
-          <span class="acct-num">3333-12-3456789</span>
-          <button class="acct-copy-btn" onclick="copyAcct('3333-12-3456789', this)">
-            <span class="ko-text">복사</span>
-            <span class="en-text">Copy</span>
-          </button>
-        </div>
-      </div>
-      <div class="acct-card">
-        <p class="acct-relation">
-          <span class="ko-text">신부 아버지</span>
-          <span class="en-text">Bride's Father</span>
-        </p>
-        <p class="acct-holder">권경현</p>
-        <div class="acct-row">
-          <span class="acct-bank">우리은행</span>
-          <span class="acct-num">1002-123-456789</span>
-          <button class="acct-copy-btn" onclick="copyAcct('1002-123-456789', this)">
-            <span class="ko-text">복사</span>
-            <span class="en-text">Copy</span>
-          </button>
-        </div>
-      </div>
-      <div class="acct-card">
-        <p class="acct-relation">
-          <span class="ko-text">신부 어머니</span>
-          <span class="en-text">Bride's Mother</span>
-        </p>
-        <p class="acct-holder">안혜숙</p>
-        <div class="acct-row">
-          <span class="acct-bank">농협은행</span>
-          <span class="acct-num">301-1234-5678-01</span>
-          <button class="acct-copy-btn" onclick="copyAcct('301-1234-5678-01', this)">
-            <span class="ko-text">복사</span>
-            <span class="en-text">Copy</span>
-          </button>
+        </span>
+        <span class="acct-accordion-names ko-text">권지은 · 권경현 · 안혜숙</span>
+        <span class="acct-accordion-names en-text">Ji Eun · Father · Mother</span>
+        <svg class="acct-accordion-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M4 6.5L9 11.5L14 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="acct-body" id="acctBride">
+        <div class="acct-body-inner">
+          <div class="acct-card">
+            <p class="acct-relation"><span class="ko-text">신부</span><span class="en-text">Bride</span></p>
+            <p class="acct-holder">권지은</p>
+            <div class="acct-row">
+              <span class="acct-bank">카카오뱅크</span>
+              <span class="acct-num">3333-12-3456789</span>
+              <button class="acct-copy-btn" onclick="copyAcct('3333-12-3456789', this)">
+                <span class="ko-text">복사</span><span class="en-text">Copy</span>
+              </button>
+            </div>
+          </div>
+          <div class="acct-card">
+            <p class="acct-relation"><span class="ko-text">신부 아버지</span><span class="en-text">Bride's Father</span></p>
+            <p class="acct-holder">권경현</p>
+            <div class="acct-row">
+              <span class="acct-bank">우리은행</span>
+              <span class="acct-num">1002-123-456789</span>
+              <button class="acct-copy-btn" onclick="copyAcct('1002-123-456789', this)">
+                <span class="ko-text">복사</span><span class="en-text">Copy</span>
+              </button>
+            </div>
+          </div>
+          <div class="acct-card">
+            <p class="acct-relation"><span class="ko-text">신부 어머니</span><span class="en-text">Bride's Mother</span></p>
+            <p class="acct-holder">안혜숙</p>
+            <div class="acct-row">
+              <span class="acct-bank">농협은행</span>
+              <span class="acct-num">301-1234-5678-01</span>
+              <button class="acct-copy-btn" onclick="copyAcct('301-1234-5678-01', this)">
+                <span class="ko-text">복사</span><span class="en-text">Copy</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -3266,20 +3294,11 @@
     /* ── 4a. TMAP FALLBACK (Removed, handled by href target=_blank) ── */
 
     /* ── 5. ACCOUNT (마음 전하기) ── */
-    function switchAcctTab(side, btn) {
-      const isActive = btn.classList.contains('active');
-
-      document.querySelectorAll('.acct-tab-btn').forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
-      });
-      document.querySelectorAll('.acct-panel').forEach(p => p.classList.remove('active'));
-
-      if (!isActive) {
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-        document.getElementById(side === 'groom' ? 'acctGroom' : 'acctBride').classList.add('active');
-      }
+    function toggleAcct(side, btn) {
+      const body = document.getElementById('acct' + side);
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
     }
 
     function copyAcct(number, btn) {
