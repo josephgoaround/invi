@@ -700,61 +700,115 @@
       display: block;
     }
 
-    .addr-bar {
+    /* venue info block */
+    .venue-info {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .venue-name {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--char);
+      letter-spacing: .04em;
+      margin-bottom: 8px;
+    }
+
+    .venue-addr {
       display: flex;
       align-items: center;
-      gap: 14px;
-      background: var(--card-bg);
-      border-radius: var(--radius-card);
-      padding: 20px 20px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow-card);
-    }
-
-    .addr-bar svg {
-      flex-shrink: 0;
-      color: var(--gold);
-    }
-
-    .addr-bar .addr-txt p {
-      font-size: 13.5px;
-      color: var(--char);
-      line-height: 1.75;
-    }
-
-    .addr-bar .addr-txt small {
-      font-size: 11px;
-      color: var(--light);
-      display: block;
-      margin-top: 3px;
-    }
-
-    [data-lang="en"] .addr-bar .addr-txt p {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 15px;
-    }
-
-    [data-lang="en"] .addr-bar .addr-txt small {
+      justify-content: center;
+      gap: 10px;
       font-family: 'Noto Serif KR', serif;
       font-size: 13px;
+      color: var(--mid);
+      letter-spacing: .03em;
     }
 
-    /* ── Transport cards ── */
-    .t-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .venue-copy-btn {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--light);
+      cursor: pointer;
+      flex-shrink: 0;
     }
 
-    .t-card {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
+    /* Transport tabs */
+    .t-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .t-tab-btn {
+      padding: 11px 6px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13px;
+      color: var(--mid);
+      cursor: pointer;
+      transition: border-color .2s, color .2s, background .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .t-tab-btn.active {
+      border-color: var(--char);
+      color: var(--char);
+      font-weight: 500;
+      background: var(--ivory);
+    }
+
+    .t-panel {
+      display: none;
       background: var(--card-bg);
       border-radius: var(--radius-card);
       padding: 20px;
       box-shadow: var(--shadow-card);
     }
+
+    .t-panel.active { display: block; }
+
+    .t-info {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13.5px;
+      color: var(--mid);
+      line-height: 2;
+      letter-spacing: .03em;
+    }
+
+    .t-info strong { color: var(--char); font-weight: 500; }
+
+    /* nav buttons — simplified */
+    .nav-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 16px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      font-family: 'Noto Serif KR', serif;
+      font-size: 12.5px;
+      color: var(--char);
+      text-decoration: none;
+      background: var(--ivory);
+      transition: opacity .18s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-btn:active { opacity: .65; }
 
     .t-icon {
       width: 42px;
@@ -1606,60 +1660,71 @@
     /* ════════════════════════════════════════════
      ACCOUNT (마음 전하기)
   ════════════════════════════════════════════ */
-    /* Accordion wrapper */
+    /* section subtitle */
+    .section-sub {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13.5px;
+      color: var(--light);
+      text-align: center;
+      letter-spacing: .04em;
+      margin-top: -8px;
+      margin-bottom: 32px;
+    }
+
+    /* Accordion pill wrapper */
     .acct-accordion {
-      background: var(--card-bg);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card);
-      overflow: hidden;
       margin-bottom: 10px;
+      border-radius: 999px;
+      overflow: hidden;
     }
 
     .acct-accordion-btn {
       width: 100%;
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 20px;
-      background: none;
-      border: none;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px 24px;
+      background: var(--card-bg);
+      border: 1px solid rgba(0,0,0,.09);
+      border-radius: 999px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--char);
+      letter-spacing: .04em;
       cursor: pointer;
-      text-align: left;
+      text-align: center;
+      transition: border-color .2s, border-radius .35s cubic-bezier(.22,.61,.36,1);
       -webkit-tap-highlight-color: transparent;
     }
 
-    .acct-accordion-label {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 11px;
-      letter-spacing: .28em;
-      text-transform: uppercase;
-      color: var(--gold);
-      flex-shrink: 0;
-    }
-
-    .acct-accordion-names {
-      flex: 1;
-      font-family: 'Noto Serif KR', serif;
-      font-size: 13.5px;
-      color: var(--mid);
-      letter-spacing: .04em;
+    .acct-accordion-btn[aria-expanded="true"] {
+      border-radius: 20px 20px 0 0;
+      border-color: rgba(0,0,0,.09);
+      border-bottom-color: transparent;
     }
 
     .acct-accordion-icon {
       flex-shrink: 0;
       color: var(--light);
       transition: transform .35s cubic-bezier(.22,.61,.36,1);
+      margin-left: auto;
     }
 
     .acct-accordion-btn[aria-expanded="true"] .acct-accordion-icon {
       transform: rotate(180deg);
     }
 
-    /* grid trick: 0fr → 1fr for smooth height transition */
+    /* grid trick: 0fr → 1fr */
     .acct-body {
       display: grid;
       grid-template-rows: 0fr;
       transition: grid-template-rows .4s cubic-bezier(.22,.61,.36,1);
+      border: 1px solid rgba(0,0,0,.09);
+      border-top: none;
+      border-radius: 0 0 20px 20px;
+      background: var(--card-bg);
     }
 
     .acct-body.open {
@@ -1671,36 +1736,26 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: 0 16px;
+      padding: 0 14px;
       transition: padding .4s cubic-bezier(.22,.61,.36,1);
     }
 
     .acct-body.open .acct-body-inner {
-      padding: 0 16px 16px;
+      padding: 12px 14px 16px;
     }
 
     .acct-card {
-      background: var(--card-bg);
-      border-radius: var(--radius-card);
-      padding: 20px 20px 18px;
-      box-shadow: var(--shadow-card);
+      background: var(--ivory);
+      border-radius: 12px;
+      padding: 14px 16px;
     }
 
     .acct-relation {
-      font-size: 10px;
-      letter-spacing: .3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 6px;
-    }
-
-    .acct-holder {
       font-family: 'Noto Serif KR', serif;
-      font-size: 16.5px;
-      font-weight: 400;
-      color: var(--char);
-      letter-spacing: .08em;
-      margin-bottom: 12px;
+      font-size: 11px;
+      letter-spacing: .2em;
+      color: var(--mid);
+      margin-bottom: 8px;
     }
 
     .acct-row {
@@ -2104,10 +2159,6 @@
     <div class="rsvp-sheet" id="rsvpSheet">
       <button class="rsvp-close" onclick="closeRsvp()" aria-label="닫기">✕</button>
 
-      <span class="eyebrow" style="margin-bottom:14px">
-        <span class="ko-text">참석 안내</span>
-        <span class="en-text">RSVP</span>
-      </span>
       <p class="rsvp-notice">
         <span class="ko-text">귀한 걸음 하시는 모든 분을 정성껏 모실 수 있도록,<br>참석 여부를 미리 여쭙고자 합니다.<br>답변을 남겨주시면 보다 편안한 자리
           준비하겠습니다.</span>
@@ -2293,7 +2344,6 @@
      INVITATION TEXT
 ══════════════════════════════════════════ -->
   <section class="reveal">
-    <span class="eyebrow"><span class="ko-text">청첩장</span><span class="en-text">Invitation</span></span>
 
     <!-- ── 기획팀 작성 청첩 문구 ── -->
     <!-- 배경: 직장인 대학원, 비밀연애 → 결혼 -->
@@ -2382,7 +2432,6 @@
      GALLERY (Dynamic from Google Drive)
 \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 -->
   <section class="reveal" id="gallerySection">
-    <span class="eyebrow">Gallery</span>
 
     <!-- Loading skeletons -->
     <div class="gallery-grid" id="galleryGrid" aria-label="갤러리">
@@ -2431,11 +2480,7 @@
      VENUE & DIRECTIONS
 ══════════════════════════════════════════ -->
   <section class="reveal">
-    <span class="eyebrow">
-      <span class="ko-text">오시는 길</span>
-      <span class="en-text">Getting Here</span>
-    </span>
-    <!-- Map embed -->
+    <!-- Map -->
     <div class="map-wrap">
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.0729!2d127.09595!3d37.51123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca5dde4a21be3%3A0x3e5d50e4e4b21aef!2z66mU7YOs7Zi47Zi4!5e0!3m2!1sko!2skr!4v1698200000000"
@@ -2443,184 +2488,60 @@
       </iframe>
     </div>
 
-    <!-- Address bar -->
-    <div class="addr-bar">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path
-          d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-      </svg>
-      <div class="addr-txt" style="flex:1;">
-        <p class="ko-block" style="margin-bottom: 6px;">서울 송파구 올림픽로 240</p>
-        <p class="en-block" style="margin-bottom: 6px;">240 Olympic-ro, Songpa-gu, Seoul</p>
-        <div
-          style="font-family: 'Noto Serif KR', serif; font-size: 15.5px; font-weight: 500; color: #B4925A; line-height: 1.6; letter-spacing: 0.02em;">
-          <span class="ko-block">롯데호텔월드<br>신부대기실 2F &nbsp;|&nbsp; 크리스탈볼룸 3F</span>
-          <span class="en-block">Lotte Hotel World<br>Bridal Suite 2F &nbsp;|&nbsp; Crystal Ballroom 3F</span>
-        </div>
+    <!-- Venue + address -->
+    <div class="venue-info">
+      <div class="venue-name">
+        <span class="ko-text">롯데호텔월드 · 크리스탈볼룸 3F</span>
+        <span class="en-text">Lotte Hotel World · Crystal Ballroom 3F</span>
       </div>
-      <button class="acct-copy-btn"
-        style="flex-shrink:0; margin-left:auto; white-space:nowrap; padding:6px 10px; font-size:11px;"
-        onclick="copyAddr('서울 송파구 올림픽로 240', this)">
-        <span class="ko-text">주소 복사</span>
-        <span class="en-text">Copy</span>
+      <div class="venue-addr">
+        <span class="ko-text">서울 송파구 올림픽로 240</span>
+        <span class="en-text">240 Olympic-ro, Songpa-gu, Seoul</span>
+        <button class="venue-copy-btn" onclick="copyAddr('서울 송파구 올림픽로 240', this)">
+          <span class="ko-text">복사</span><span class="en-text">Copy</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Transport tabs -->
+    <div class="t-tabs" role="tablist">
+      <button class="t-tab-btn active" role="tab" onclick="switchTTab('subway', this)">
+        <span class="ko-text">지하철</span><span class="en-text">Subway</span>
+      </button>
+      <button class="t-tab-btn" role="tab" onclick="switchTTab('bus', this)">
+        <span class="ko-text">버스</span><span class="en-text">Bus</span>
+      </button>
+      <button class="t-tab-btn" role="tab" onclick="switchTTab('car', this)">
+        <span class="ko-text">자가용</span><span class="en-text">Car</span>
       </button>
     </div>
 
-    <!-- Transport cards -->
-    <div class="t-stack">
-
-      <!-- Subway -->
-      <div class="t-card">
-        <div class="t-icon subway" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-            stroke-linejoin="round">
-            <rect x="4" y="3" width="16" height="16" rx="3" />
-            <path d="M4 9h16" />
-            <path d="M9 20l-2 2m8-2l2 2" />
-            <circle cx="9" cy="13.5" r="1" fill="currentColor" stroke="none" />
-            <circle cx="15" cy="13.5" r="1" fill="currentColor" stroke="none" />
-          </svg>
-        </div>
-        <div class="t-body">
-          <h4>
-            <span class="ko-text">지하철</span>
-            <span class="en-text">Subway</span>
-          </h4>
-          <p class="ko-block">
-            <span class="badge b-line2">2호선</span>
-            <span class="badge b-line8">8호선</span>
-            잠실역 하차<br>
-            <span class="badge b-walk">3번 출구</span>
-            지하 연결 통로로 직접 연결<br>
-            호텔까지 도보 약 2분
-          </p>
-          <p class="en-block">
-            Line 2 &amp; Line 8 — Jamsil Station<br>
-            <span class="badge b-walk">Exit 3</span>
-            Underground tunnel, direct connection<br>
-            Approx. 2-minute walk to the hotel
-          </p>
-        </div>
-      </div>
-
-      <!-- Bus -->
-      <div class="t-card">
-        <div class="t-icon bus" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-            stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="14" rx="2" />
-            <path d="M3 10h18" />
-            <path d="M8 18v2m8-2v2" />
-            <circle cx="7" cy="14" r="1" fill="currentColor" stroke="none" />
-            <circle cx="17" cy="14" r="1" fill="currentColor" stroke="none" />
-          </svg>
-        </div>
-        <div class="t-body">
-          <h4>
-            <span class="ko-text">버스</span>
-            <span class="en-text">Bus</span>
-          </h4>
-          <p class="ko-block">
-            <strong>잠실역 · 롯데월드</strong> 정류장 하차<br>
-            <span class="badge b-blue">간선(파랑)</span> 301, 341, 345, 360<br>
-            <span class="badge b-green">지선(초록)</span> 2415, 3217, 3313, 3314,<br>
-            &emsp;3315, 3317, 3323, 3411, 3414, 4319
-          </p>
-          <p class="en-block">
-            Stop: <strong>Jamsil Station · Lotte World</strong><br>
-            <span class="badge b-blue">Trunk (Blue)</span> 301, 341, 345, 360<br>
-            <span class="badge b-green">Branch (Green)</span> 2415, 3217, 3313, 3314,<br>
-            &emsp;3315, 3317, 3323, 3411, 3414, 4319
-          </p>
-        </div>
-      </div>
-
-      <!-- Car + Parking (merged) -->
-      <div class="t-card">
-        <div class="t-icon car" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11" />
-            <rect x="3" y="11" width="18" height="7" rx="2" />
-            <circle cx="7.5" cy="18" r="1.5" fill="currentColor" stroke="none" />
-            <circle cx="16.5" cy="18" r="1.5" fill="currentColor" stroke="none" />
-          </svg>
-        </div>
-        <div class="t-body">
-          <h4>
-            <span class="ko-text">자가용 · 주차</span>
-            <span class="en-text">By Car &amp; Parking</span>
-          </h4>
-          <p class="ko-block">
-            내비게이션: <strong>롯데호텔월드</strong><br>
-            서울 송파구 올림픽로 240<br><br>
-            호텔 입구 진입 후 <strong>지하 H구역</strong> 이용<br>
-            H구역 만차 시 백화점 · 어드벤처 ·<br>
-            마트 방향 입차 후 주차 가능<br>
-            무료주차 최대 4시간 적용<br><br>
-            ※ 식장 인근 교통이 매우 혼잡하오니<br>
-            &emsp;대중교통 이용을 적극 권장합니다.
-          </p>
-          <p class="en-block">
-            Search: <strong>Lotte Hotel World</strong><br>
-            240 Olympic-ro, Songpa-gu, Seoul<br><br>
-            Enter the hotel entrance →<br>
-            <strong>Underground Zone H</strong> (nearest)<br>
-            If full: Dept. Store / Adventure / Mart<br>
-            Complimentary parking up to 4 hours<br><br>
-            ※ Heavy traffic is expected near the venue.<br>
-            &emsp;Public transit is strongly recommended.
-          </p>
-
-          <!-- 내비 앱 바로가기 버튼 (국문: 네이버, 카카오, 티맵 // 영문: 구글맵) -->
-          <div class="ko-block">
-            <div class="nav-btns">
-              <!-- 네이버지도: '롯데호텔월드' 검색결과로 바로 연결 -->
-              <a class="nav-btn naver" href="https://naver.me/F8lRrheE" target="_blank" rel="noopener">
-                <span class="nav-btn-icon">🗺</span>
-                <span class="ko-text">네이버지도</span>
-              </a>
-              <!-- 카카오맵: 목적지명+좌표로 바로 지정 -->
-              <a class="nav-btn kakao"
-                href="https://map.kakao.com/link/to/%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C,37.511089,127.098152"
-                target="_blank" rel="noopener">
-                <span class="nav-btn-icon">🗺</span>
-                <span class="ko-text">카카오맵</span>
-              </a>
-              <!-- 티맵: 웹 링크 클릭 시 새 탭에서 열리며 Tmap 앱 실행 또는 웹으로 연결 -->
-              <a class="nav-btn tmap"
-                href="https://www.tmap.co.kr/tmap2/mobile/tmap.jsp?scheme=tmap&host=route&goalname=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C&goalx=127.098152&goaly=37.511089"
-                target="_blank" rel="noopener">
-                <span class="nav-btn-icon">🗺</span>
-                <span class="ko-text">티맵</span>
-              </a>
-            </div>
-          </div>
-          <div class="en-block">
-            <div class="nav-btns">
-              <a class="nav-btn" style="border-color:#e0e0e0; color:#333;"
-                href="https://maps.app.goo.gl/HiFgM5Cd32p7yBQF8" target="_blank" rel="noopener">
-                <span class="nav-btn-icon" style="background:#f1f3f4;">🗺</span>
-                <span class="en-text">Google Maps</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div class="t-panel active" id="tSubway">
+      <p class="t-info ko-block">2호선 · 8호선 <strong>잠실역</strong> 3번 출구<br>지하 연결 통로 → 도보 약 2분</p>
+      <p class="t-info en-block">Line 2 · Line 8 — <strong>Jamsil Station</strong> Exit 3<br>Underground tunnel · 2-min walk</p>
     </div>
 
-    <!-- (Floor guide removed and relocated to the address section above) -->
+    <div class="t-panel" id="tBus">
+      <p class="t-info ko-block"><strong>잠실역 · 롯데월드</strong> 정류장<br>301 · 341 · 345 · 360 (간선)<br>2415 · 3217 · 3313 · 3411 (지선)</p>
+      <p class="t-info en-block"><strong>Jamsil Stn · Lotte World</strong> Stop<br>Trunk: 301 · 341 · 345 · 360<br>Branch: 2415 · 3217 · 3313 · 3411</p>
+    </div>
+
+    <div class="t-panel" id="tCar">
+      <p class="t-info ko-block">내비: <strong>롯데호텔월드</strong><br>지하 H구역 주차 · 최대 4시간 무료<br>※ 교통 혼잡 예상 — 대중교통 권장</p>
+      <p class="t-info en-block">Search: <strong>Lotte Hotel World</strong><br>Underground Zone H · 4 hrs free parking<br>※ Heavy traffic — public transit recommended</p>
+      <div class="nav-btns" style="margin-top:14px;">
+        <a class="nav-btn ko-text" href="https://naver.me/F8lRrheE" target="_blank" rel="noopener">네이버지도</a>
+        <a class="nav-btn ko-text" href="https://map.kakao.com/link/to/%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C,37.511089,127.098152" target="_blank" rel="noopener">카카오맵</a>
+        <a class="nav-btn ko-text" href="https://www.tmap.co.kr/tmap2/mobile/tmap.jsp?scheme=tmap&host=route&goalname=%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C&goalx=127.098152&goaly=37.511089" target="_blank" rel="noopener">티맵</a>
+        <a class="nav-btn en-text" href="https://maps.app.goo.gl/HiFgM5Cd32p7yBQF8" target="_blank" rel="noopener">Google Maps</a>
+      </div>
+    </div>
   </section>
 
   <!-- ══════════════════════════════════════════
      GUEST SNAP LINK
 ══════════════════════════════════════════ -->
   <section class="reveal">
-    <span class="eyebrow">
-      <span class="ko-text">하객 스냅</span>
-      <span class="en-text">Guest Snap</span>
-    </span>
 
     <div class="snap-hero">
       <h3>
@@ -2683,33 +2604,28 @@
      ACCOUNT (마음 전하기)
 ══════════════════════════════════════════ -->
   <section class="reveal">
-    <span class="eyebrow">
-      <span class="ko-text">마음 전하기</span>
-      <span class="en-text">Gift</span>
-    </span>
     <h2 class="section-title">
-      <span class="ko-text">축하의 마음을<br>전해주세요</span>
+      <span class="ko-text">신랑 &amp; 신부에게<br>마음 전하기</span>
       <span class="en-text">Send Your<br>Warmest Wishes</span>
     </h2>
+    <p class="section-sub">
+      <span class="ko-text">축복의 의미로 축의금을 전달해보세요.</span>
+      <span class="en-text">Your warm gift would be deeply appreciated.</span>
+    </p>
 
-    <!-- 신랑측 아코디언 -->
+    <!-- 신랑측 -->
     <div class="acct-accordion">
       <button class="acct-accordion-btn" aria-expanded="false" onclick="toggleAcct('Groom', this)">
-        <span class="acct-accordion-label">
-          <span class="ko-text">신랑측</span>
-          <span class="en-text">Groom</span>
-        </span>
-        <span class="acct-accordion-names ko-text">강영석 · 강중용 · 송영숙</span>
-        <span class="acct-accordion-names en-text">Young Seok · Father · Mother</span>
-        <svg class="acct-accordion-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path d="M4 6.5L9 11.5L14 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <span class="ko-text">신랑 측 계좌번호</span>
+        <span class="en-text">Groom's Family</span>
+        <svg class="acct-accordion-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 6L8 11L13 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
       <div class="acct-body" id="acctGroom">
         <div class="acct-body-inner">
           <div class="acct-card">
             <p class="acct-relation"><span class="ko-text">신랑</span><span class="en-text">Groom</span></p>
-            <p class="acct-holder">강영석</p>
             <div class="acct-row">
               <span class="acct-bank">국민은행</span>
               <span class="acct-num">578202-04-005944</span>
@@ -2720,7 +2636,6 @@
           </div>
           <div class="acct-card">
             <p class="acct-relation"><span class="ko-text">신랑 아버지</span><span class="en-text">Groom's Father</span></p>
-            <p class="acct-holder">강중용</p>
             <div class="acct-row">
               <span class="acct-bank">국민은행</span>
               <span class="acct-num">123-45-6789012</span>
@@ -2731,7 +2646,6 @@
           </div>
           <div class="acct-card">
             <p class="acct-relation"><span class="ko-text">신랑 어머니</span><span class="en-text">Groom's Mother</span></p>
-            <p class="acct-holder">송영숙</p>
             <div class="acct-row">
               <span class="acct-bank">하나은행</span>
               <span class="acct-num">123-456789-01234</span>
@@ -2744,24 +2658,19 @@
       </div>
     </div>
 
-    <!-- 신부측 아코디언 -->
+    <!-- 신부측 -->
     <div class="acct-accordion">
       <button class="acct-accordion-btn" aria-expanded="false" onclick="toggleAcct('Bride', this)">
-        <span class="acct-accordion-label">
-          <span class="ko-text">신부측</span>
-          <span class="en-text">Bride</span>
-        </span>
-        <span class="acct-accordion-names ko-text">권지은 · 권경현 · 안혜숙</span>
-        <span class="acct-accordion-names en-text">Ji Eun · Father · Mother</span>
-        <svg class="acct-accordion-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path d="M4 6.5L9 11.5L14 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <span class="ko-text">신부 측 계좌번호</span>
+        <span class="en-text">Bride's Family</span>
+        <svg class="acct-accordion-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 6L8 11L13 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
       <div class="acct-body" id="acctBride">
         <div class="acct-body-inner">
           <div class="acct-card">
             <p class="acct-relation"><span class="ko-text">신부</span><span class="en-text">Bride</span></p>
-            <p class="acct-holder">권지은</p>
             <div class="acct-row">
               <span class="acct-bank">카카오뱅크</span>
               <span class="acct-num">3333-12-3456789</span>
@@ -2772,7 +2681,6 @@
           </div>
           <div class="acct-card">
             <p class="acct-relation"><span class="ko-text">신부 아버지</span><span class="en-text">Bride's Father</span></p>
-            <p class="acct-holder">권경현</p>
             <div class="acct-row">
               <span class="acct-bank">우리은행</span>
               <span class="acct-num">1002-123-456789</span>
@@ -2783,7 +2691,6 @@
           </div>
           <div class="acct-card">
             <p class="acct-relation"><span class="ko-text">신부 어머니</span><span class="en-text">Bride's Mother</span></p>
-            <p class="acct-holder">안혜숙</p>
             <div class="acct-row">
               <span class="acct-bank">농협은행</span>
               <span class="acct-num">301-1234-5678-01</span>
@@ -2795,16 +2702,34 @@
         </div>
       </div>
     </div>
+
+    <!-- 쌀 화환 -->
+    <div class="acct-accordion">
+      <button class="acct-accordion-btn" aria-expanded="false" onclick="toggleAcct('Rice', this)">
+        <span class="ko-text">쌀 화환 보내기</span>
+        <span class="en-text">Rice Wreath Gift</span>
+        <svg class="acct-accordion-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 6L8 11L13 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="acct-body" id="acctRice">
+        <div class="acct-body-inner">
+          <div class="acct-card">
+            <p class="acct-relation"><span class="ko-text">쌀 화환 문의</span><span class="en-text">Inquiry</span></p>
+            <div class="acct-row" style="justify-content:center;">
+              <span class="acct-num ko-text" style="flex:1; text-align:center;">준비 중입니다</span>
+              <span class="acct-num en-text" style="flex:1; text-align:center;">Coming soon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ══════════════════════════════════════════
      GUESTBOOK
 ══════════════════════════════════════════ -->
   <section class="reveal">
-    <span class="eyebrow">
-      <span class="ko-text">방명록</span>
-      <span class="en-text">Guestbook</span>
-    </span>
     <h2 class="section-title">
       <span class="ko-text">축하 메시지</span>
       <span class="en-text">Leave a Message</span>
@@ -2858,10 +2783,6 @@
      RSVP CTA
 ══════════════════════════════════════════ -->
   <section class="rsvp-cta reveal">
-    <span class="eyebrow">
-      <span class="ko-text">참석 안내</span>
-      <span class="en-text">RSVP</span>
-    </span>
     <p class="rsvp-notice" style="margin-bottom:32px">
       <span class="ko-text">귀한 걸음 하시는 모든 분을 정성껏 모실 수 있도록,<br>참석 여부를 미리 여쭙고자 합니다.<br>답변을 남겨주시면 보다 편안한 자리를 준비하겠습니다.</span>
       <span class="en-text">To prepare a comfortable experience for everyone,<br>we kindly ask that you let us
@@ -3299,6 +3220,14 @@
       const isOpen = body.classList.contains('open');
       body.classList.toggle('open', !isOpen);
       btn.setAttribute('aria-expanded', String(!isOpen));
+    }
+
+    function switchTTab(tab, btn) {
+      document.querySelectorAll('.t-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.t-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const idMap = { subway: 'tSubway', bus: 'tBus', car: 'tCar' };
+      document.getElementById(idMap[tab]).classList.add('active');
     }
 
     function copyAcct(number, btn) {
