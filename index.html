@@ -90,14 +90,11 @@
     html.win .poem,
     html.win .hero-detail,
     html.win .hero-scroll .scroll-lbl,
-    html.win .t-body p,
     html.win .couple-parents,
     html.win .couple-role,
     html.win .couple-name,
     html.win .gallery-note,
     html.win .snap-hero p,
-    html.win .addr-bar .addr-txt p,
-    html.win .addr-bar .addr-txt small,
     html.win .eyebrow,
     html.win .section-title,
     html.win .hero-names-ko,
@@ -323,20 +320,6 @@
     @keyframes kenBurns {
       from { transform: scale(1.09); }
       to   { transform: scale(1.0);  }
-    }
-    @keyframes petalFloat {
-      0%   { transform: translateY(0)     rotate(0deg)   translateX(0);    opacity: 0;   }
-      8%   { opacity: .55; }
-      50%  { transform: translateY(-45vh) rotate(210deg) translateX(18px); opacity: .35; }
-      92%  { opacity: .15; }
-      100% { transform: translateY(-92vh) rotate(400deg) translateX(-12px);opacity: 0;   }
-    }
-    @keyframes petalFloat2 {
-      0%   { transform: translateY(0)     rotate(0deg)   translateX(0);    opacity: 0;   }
-      8%   { opacity: .45; }
-      50%  { transform: translateY(-40vh) rotate(-180deg) translateX(-20px); opacity: .3; }
-      92%  { opacity: .1;  }
-      100% { transform: translateY(-88vh) rotate(-360deg) translateX(10px); opacity: 0;  }
     }
 
     .hero {
@@ -810,213 +793,6 @@
 
     .nav-btn:active { opacity: .65; }
 
-    .t-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .t-icon svg {
-      width: 22px;
-      height: 22px;
-    }
-
-    .t-icon.subway {
-      background: rgba(59, 110, 199, .09);
-      color: #3B6EC7;
-    }
-
-    .t-icon.bus {
-      background: rgba(58, 140, 66, .09);
-      color: #3A8C42;
-    }
-
-    .t-icon.car {
-      background: rgba(140, 107, 26, .09);
-      color: #8C6B1A;
-    }
-
-    .t-icon.park {
-      background: rgba(123, 82, 168, .09);
-      color: #7B52A8;
-    }
-
-    .t-body h4 {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--char);
-      margin-bottom: 9px;
-      letter-spacing: .03em;
-    }
-
-    [data-lang="en"] .t-body h4 {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 17px;
-      font-weight: 400;
-    }
-
-    .t-body p {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 12px;
-      color: var(--mid);
-      line-height: 2;
-      font-weight: 300;
-    }
-
-    [data-lang="en"] .t-body p {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 14.5px;
-      line-height: 1.9;
-    }
-
-    /* ── Nav app buttons (자가용 섹션) ── */
-    .nav-btns {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      margin-top: 12px;
-    }
-
-    .nav-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-family: 'Noto Serif KR', serif;
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: .04em;
-      text-decoration: none;
-      transition: opacity .18s, transform .15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .nav-btn:active {
-      opacity: .72;
-      transform: scale(.97);
-    }
-
-    .nav-btn-icon {
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      flex-shrink: 0;
-    }
-
-    /* 네이버지도 — green */
-    .nav-btn.naver {
-      background: rgba(3, 199, 90, .08);
-      color: #008C3A;
-      border: 1px solid rgba(3, 199, 90, .2);
-    }
-
-    .nav-btn.naver .nav-btn-icon {
-      background: rgba(3, 199, 90, .15);
-    }
-
-    /* 카카오맵 — yellow */
-    .nav-btn.kakao {
-      background: rgba(254, 229, 0, .12);
-      color: #8A6600;
-      border: 1px solid rgba(254, 229, 0, .4);
-    }
-
-    .nav-btn.kakao .nav-btn-icon {
-      background: rgba(254, 229, 0, .3);
-    }
-
-    /* 티맵 — red */
-    .nav-btn.tmap {
-      background: rgba(255, 58, 47, .07);
-      color: #CC2B1F;
-      border: 1px solid rgba(255, 58, 47, .18);
-    }
-
-    .nav-btn.tmap .nav-btn-icon {
-      background: rgba(255, 58, 47, .12);
-    }
-
-    /* ── Floor guide (층별 안내) ── */
-    .floor-guide {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      padding: 10px 14px;
-      background: rgba(180, 146, 90, .05);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-
-    .floor-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11.5px;
-      color: var(--mid);
-      letter-spacing: .03em;
-      flex: 1;
-      justify-content: center;
-    }
-
-    .floor-item strong {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--gold);
-      letter-spacing: .06em;
-    }
-
-    .floor-pipe {
-      width: 1px;
-      height: 22px;
-      background: var(--border);
-      flex-shrink: 0;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 2px 9px;
-      border-radius: 99px;
-      font-size: 10.5px;
-      font-family: 'Noto Serif KR', serif;
-      font-weight: 400;
-      margin-right: 3px;
-    }
-
-    .b-line2 {
-      background: rgba(0, 122, 255, .1);
-      color: #0055CC;
-    }
-
-    .b-line8 {
-      background: rgba(255, 159, 10, .12);
-      color: #CC7700;
-    }
-
-    .b-walk {
-      background: rgba(180, 146, 90, .12);
-      color: var(--gold);
-    }
-
-    .b-blue {
-      background: rgba(0, 122, 255, .1);
-      color: #0055CC;
-    }
-
-    .b-green {
-      background: rgba(52, 199, 89, .1);
-      color: #1A8C2A;
-    }
 
     /* ════════════════════════════════════════════
      GUEST SNAP EVENT
@@ -1660,17 +1436,6 @@
     /* ════════════════════════════════════════════
      ACCOUNT (마음 전하기)
   ════════════════════════════════════════════ */
-    /* section subtitle */
-    .section-sub {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 13.5px;
-      color: var(--light);
-      text-align: center;
-      letter-spacing: .04em;
-      margin-top: -8px;
-      margin-bottom: 32px;
-    }
-
     /* Accordion pill wrapper — no overflow clip */
     .acct-accordion {
       margin-bottom: 10px;
@@ -2338,9 +2103,10 @@
      INVITATION TEXT
 ══════════════════════════════════════════ -->
   <section class="reveal">
-
-    <!-- ── 기획팀 작성 청첩 문구 ── -->
-    <!-- 배경: 직장인 대학원, 비밀연애 → 결혼 -->
+    <h2 class="section-title">
+      <span class="ko-text">청첩장</span>
+      <span class="en-text">Invitation</span>
+    </h2>
 
     <div class="poem">
 
@@ -2426,6 +2192,10 @@
      GALLERY (Dynamic from Google Drive)
 \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 -->
   <section class="reveal" id="gallerySection">
+    <h2 class="section-title">
+      <span class="ko-text">갤러리</span>
+      <span class="en-text">Gallery</span>
+    </h2>
 
     <!-- Loading skeletons -->
     <div class="gallery-grid" id="galleryGrid" aria-label="갤러리">
@@ -2474,6 +2244,10 @@
      VENUE & DIRECTIONS
 ══════════════════════════════════════════ -->
   <section class="reveal">
+    <h2 class="section-title">
+      <span class="ko-text">오시는 길</span>
+      <span class="en-text">Getting Here</span>
+    </h2>
     <!-- Map -->
     <div class="map-wrap">
       <iframe
@@ -2752,6 +2526,10 @@
      RSVP CTA
 ══════════════════════════════════════════ -->
   <section class="rsvp-cta reveal">
+    <h2 class="section-title">
+      <span class="ko-text">참석 안내</span>
+      <span class="en-text">RSVP</span>
+    </h2>
     <p class="rsvp-notice" style="margin-bottom:32px">
       <span class="ko-text">귀한 걸음 하시는 모든 분을 정성껏 모실 수 있도록,<br>참석 여부를 미리 여쭙고자 합니다.<br>답변을 남겨주시면 보다 편안한 자리를 준비하겠습니다.</span>
       <span class="en-text">To prepare a comfortable experience for everyone,<br>we kindly ask that you let us
