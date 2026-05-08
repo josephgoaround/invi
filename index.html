@@ -21,9 +21,6 @@
     })();
   </script>
 
-  <!-- 카카오맵 API: developers.kakao.com 에서 앱 등록 후 JavaScript 키를 YOUR_KAKAO_APP_KEY 자리에 입력하세요 -->
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=712b77ddc0ebd65c33164f3538d93486&autoload=false" async></script>
-
   <!-- ── Fonts: Korean sans + English serif + Cursive + Myeongjo ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -2646,20 +2643,14 @@
       attemptHidePreloader();
     }, 6000);
 
-    /* ── 카카오맵 초기화 (API 스크립트 로드 후 kakao.maps.load 로 호출됨) ── */
+    /* ── 카카오맵 초기화 — Kakao SDK 동기 로드 후 직접 호출 ── */
     function initKakaoMap() {
-      if (typeof kakao === 'undefined' || !kakao.maps) return;
-      kakao.maps.load(function () {
-        var latlng = new kakao.maps.LatLng(37.511089, 127.098152);
-        var map = new kakao.maps.Map(document.getElementById('kakaoMap'), {
-          center: latlng,
-          level: 3
-        });
-        new kakao.maps.Marker({ position: latlng, map: map });
-      });
+      var el = document.getElementById('kakaoMap');
+      if (!el || typeof kakao === 'undefined') return;
+      var latlng = new kakao.maps.LatLng(37.511089, 127.098152);
+      var map = new kakao.maps.Map(el, { center: latlng, level: 3 });
+      new kakao.maps.Marker({ position: latlng, map: map });
     }
-    /* async 스크립트 로드 완료 후 초기화 실행 */
-    window.addEventListener('load', initKakaoMap);
 
     /* ── 0. CONFIG ── */
     // Google Apps Script 배포 후 URL을 아래에 입력하세요
@@ -3264,6 +3255,10 @@
       }
     }
   </script>
+
+  <!-- 카카오맵 SDK: 동기 로드하여 initKakaoMap 즉시 실행 가능하게 함 -->
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=712b77ddc0ebd65c33164f3538d93486"></script>
+  <script>initKakaoMap();</script>
 </body>
 
 </html>
