@@ -2276,9 +2276,12 @@
       <span class="ko-text">오시는 길</span>
       <span class="en-text">Getting Here</span>
     </h2>
-    <!-- Map (카카오맵 JS API) -->
+    <!-- Map -->
     <div class="map-wrap">
-      <div id="kakaoMap" style="width:100%;height:100%;"></div>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.0729!2d127.09595!3d37.51123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca5dde4a21be3%3A0x3e5d50e4e4b21aef!2z66mU7YOs7Zi47Zi4!5e0!3m2!1sko!2skr!4v1698200000000"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="롯데호텔월드 지도">
+      </iframe>
     </div>
 
     <!-- Navigation app links (below map) -->
@@ -2643,14 +2646,6 @@
       attemptHidePreloader();
     }, 6000);
 
-    /* ── 카카오맵 초기화 — Kakao SDK 동기 로드 후 직접 호출 ── */
-    function initKakaoMap() {
-      var el = document.getElementById('kakaoMap');
-      if (!el || typeof kakao === 'undefined') return;
-      var latlng = new kakao.maps.LatLng(37.511089, 127.098152);
-      var map = new kakao.maps.Map(el, { center: latlng, level: 3 });
-      new kakao.maps.Marker({ position: latlng, map: map });
-    }
 
     /* ── 0. CONFIG ── */
     // Google Apps Script 배포 후 URL을 아래에 입력하세요
@@ -3256,9 +3251,6 @@
     }
   </script>
 
-  <!-- 카카오맵 SDK: 동기 로드하여 initKakaoMap 즉시 실행 가능하게 함 -->
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=712b77ddc0ebd65c33164f3538d93486"></script>
-  <script>initKakaoMap();</script>
 </body>
 
 </html>
