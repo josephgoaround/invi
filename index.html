@@ -1659,6 +1659,16 @@
       overflow-y: auto;
       position: relative;
       animation: rsvpSlideUp .8s cubic-bezier(.22, .61, .36, 1);
+      touch-action: pan-y;
+      will-change: transform;
+    }
+
+    .rsvp-drag-handle {
+      width: 36px;
+      height: 4px;
+      background: rgba(0,0,0,.15);
+      border-radius: 99px;
+      margin: 0 auto 20px;
     }
 
     @keyframes rsvpSlideUp {
@@ -1977,6 +1987,7 @@
 ══════════════════════════════════════════ -->
   <div class="rsvp-overlay" id="rsvpOverlay" style="display:none" role="dialog" aria-modal="true">
     <div class="rsvp-sheet" id="rsvpSheet">
+      <div class="rsvp-drag-handle" aria-hidden="true"></div>
       <button class="rsvp-close" onclick="closeRsvp()" aria-label="닫기">✕</button>
 
       <p class="rsvp-notice">
@@ -2722,6 +2733,45 @@
       overlay.style.opacity = '0';
       setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = '1'; }, 260);
     }
+
+    /* ── RSVP sheet swipe-down-to-dismiss ── */
+    (function () {
+      const sheet = document.getElementById('rsvpSheet');
+      let startY = 0, currentY = 0, startScrollTop = 0, dragging = false;
+
+      sheet.addEventListener('touchstart', function (e) {
+        startY = e.touches[0].clientY;
+        startScrollTop = sheet.scrollTop;
+        dragging = true;
+        sheet.style.transition = 'none';
+      }, { passive: true });
+
+      sheet.addEventListener('touchmove', function (e) {
+        if (!dragging) return;
+        const dy = e.touches[0].clientY - startY;
+        // only intercept downward drag when sheet is scrolled to top
+        if (dy > 0 && sheet.scrollTop <= 0) {
+          currentY = dy;
+          sheet.style.transform = 'translateY(' + currentY + 'px)';
+          // fade overlay proportionally
+          const overlay = document.getElementById('rsvpOverlay');
+          overlay.style.opacity = Math.max(0, 1 - currentY / 300);
+        }
+      }, { passive: true });
+
+      sheet.addEventListener('touchend', function () {
+        dragging = false;
+        sheet.style.transition = 'transform .3s cubic-bezier(.22,.61,.36,1)';
+        if (currentY > 100) {
+          sheet.style.transform = 'translateY(100%)';
+          setTimeout(closeRsvp, 280);
+        } else {
+          sheet.style.transform = 'translateY(0)';
+          document.getElementById('rsvpOverlay').style.opacity = '1';
+        }
+        currentY = 0;
+      });
+    })();
 
     async function submitRsvp() {
       const name = (document.getElementById('rsvpName').value || '').trim();
