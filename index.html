@@ -55,6 +55,8 @@
       --radius-card: 20px;
       --radius-sm:   12px;
       --shadow-card: 0 2px 24px rgba(0, 0, 0, .06);
+      /* height of fixed header gradient (safe-area + top-pad + button + bottom-fade) */
+      --header-h:    calc(max(env(safe-area-inset-top, 14px), 14px) + 88px);
     }
 
     html {
@@ -345,18 +347,19 @@
       height: 100vh;
       height: 100svh;
       overflow: hidden;
-      background: var(--char);
+      background: var(--bg);
     }
 
-    /* Top + bottom gradient overlays */
+    /* Dark overlay — only covers the photo area, starts where header gradient ends */
     .hero::before {
       content: '';
       position: absolute;
-      inset: 0;
+      top: var(--header-h);
+      left: 0; right: 0; bottom: 0;
       background: linear-gradient(
         to bottom,
-        rgba(10,8,6,.58) 0%,
-        rgba(10,8,6,.0)  34%,
+        rgba(10,8,6,.50) 0%,
+        rgba(10,8,6,.0)  30%,
         rgba(10,8,6,.0)  50%,
         rgba(10,8,6,.75) 100%
       );
@@ -366,7 +369,8 @@
 
     .hero-arch {
       position: absolute;
-      inset: 0;
+      top: var(--header-h);
+      left: 0; right: 0; bottom: 0;
       z-index: 0;
       background: var(--char);
     }
@@ -375,7 +379,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 10%;
+      object-position: center top;
       display: block;
       animation: kenBurns 9s cubic-bezier(.22,.61,.36,1) both;
       animation-delay: .25s;
