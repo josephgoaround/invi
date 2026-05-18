@@ -350,7 +350,7 @@
       background: var(--bg);
     }
 
-    /* Dark overlay — only covers the photo area, starts where header gradient ends */
+    /* Dark overlay at bottom + white fade-in at top of photo */
     .hero::before {
       content: '';
       position: absolute;
@@ -358,10 +358,11 @@
       left: 0; right: 0; bottom: 0;
       background: linear-gradient(
         to bottom,
-        rgba(10,8,6,.50) 0%,
-        rgba(10,8,6,.0)  30%,
-        rgba(10,8,6,.0)  50%,
-        rgba(10,8,6,.75) 100%
+        rgba(250,250,250,.92)  0%,
+        rgba(250,250,250,.55) 14%,
+        rgba(250,250,250,.0)  32%,
+        rgba(10,8,6,.0)       55%,
+        rgba(10,8,6,.72)     100%
       );
       z-index: 1;
       pointer-events: none;
@@ -644,7 +645,6 @@
     }
 
     .g-cell {
-      aspect-ratio: 1;
       background: var(--cream);
       border-radius: 0;
       overflow: hidden;
@@ -654,8 +654,7 @@
 
     .g-cell img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
       display: block;
       touch-action: manipulation;
       transition: transform .4s ease;
