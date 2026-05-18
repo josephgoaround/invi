@@ -79,6 +79,7 @@
       font-optical-sizing: auto;
       word-break: keep-all;
       overflow-wrap: break-word;
+      touch-action: pan-x pan-y; /* disable pinch-zoom at browser level */
     }
 
     /* ── WINDOWS RENDERING FIX ──
@@ -2798,8 +2799,11 @@
   <script>
     'use strict';
 
-    /* Prevent pinch-zoom (iOS ignores viewport user-scalable) */
+    /* Prevent pinch-zoom — iOS ignores viewport user-scalable */
     document.addEventListener('touchstart', function (e) {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('touchmove', function (e) {
       if (e.touches.length > 1) e.preventDefault();
     }, { passive: false });
     document.addEventListener('touchend', function (e) {
