@@ -146,6 +146,8 @@
       right: 0;
       z-index: 200;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity .4s ease;
     }
     .top-bar-inner {
       max-width: 480px;
@@ -350,19 +352,15 @@
       background: var(--bg);
     }
 
-    /* Dark overlay at bottom + white fade-in at top of photo */
+    /* Bottom vignette for hero text legibility */
     .hero::before {
       content: '';
       position: absolute;
-      top: var(--header-h);
-      left: 0; right: 0; bottom: 0;
+      inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(250,250,250,.92)  0%,
-        rgba(250,250,250,.55) 14%,
-        rgba(250,250,250,.0)  32%,
-        rgba(10,8,6,.0)       55%,
-        rgba(10,8,6,.72)     100%
+        rgba(10,8,6,.0)   50%,
+        rgba(10,8,6,.72) 100%
       );
       z-index: 1;
       pointer-events: none;
@@ -370,8 +368,7 @@
 
     .hero-arch {
       position: absolute;
-      top: var(--header-h);
-      left: 0; right: 0; bottom: 0;
+      inset: 0;
       z-index: 0;
       background: var(--char);
     }
@@ -2845,15 +2842,23 @@
 
     /* ── RSVP MODAL ── */
     const RSVP_KEY = 'rsvpDone_kye2026';
-    // Sync --header-h to actual rendered top-bar height
-    function syncHeaderH() {
+    // Scroll-reveal header: fade in as user scrolls down, hide at top
+    (function () {
       var bar = document.querySelector('.top-bar');
-      if (bar) {
-        document.documentElement.style.setProperty('--header-h', bar.getBoundingClientRect().height + 'px');
+      var btns = bar ? bar.querySelectorAll('button') : [];
+      var FADE = 140; // px to fully reveal
+
+      function updateHeader() {
+        var progress = Math.min(1, window.scrollY / FADE);
+        bar.style.opacity = progress;
+        // Disable button interactions when header is invisible
+        var interactive = progress > 0.05;
+        btns.forEach(function (b) { b.style.pointerEvents = interactive ? '' : 'none'; });
       }
-    }
-    syncHeaderH();
-    window.addEventListener('resize', syncHeaderH);
+
+      window.addEventListener('scroll', updateHeader, { passive: true });
+      updateHeader();
+    })();
 
     let rsvpAttendValue = null;
 
