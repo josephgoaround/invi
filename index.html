@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="format-detection" content="telephone=no,address=no,date=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -613,6 +613,26 @@
     /* ════════════════════════════════════════════
      GALLERY
   ════════════════════════════════════════════ */
+    .lb-viewport {
+      position: relative;
+      width: 100vw;
+      height: 88svh;
+      overflow: hidden;
+      touch-action: none;
+    }
+    .lb-slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-user-select: none;
+      will-change: transform;
+    }
+
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -633,6 +653,7 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      touch-action: manipulation;
       transition: transform .4s ease;
       pointer-events: none;
       -webkit-user-drag: none;
@@ -2392,8 +2413,10 @@
   <div id="galleryLightbox"
     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:9999;align-items:center;justify-content:center;flex-direction:column;"
     onclick="closeLightbox()">
-    <img id="lbImg" src="" alt=""
-      style="max-width:100vw;max-height:88svh;object-fit:contain;border-radius:6px;box-shadow:0 8px 48px rgba(0,0,0,.6);transition:transform 0.2s ease-out;pointer-events:none;-webkit-user-drag:none;user-select:none;-webkit-user-select:none;" />
+    <div class="lb-viewport" onclick="event.stopPropagation()">
+      <img id="lbImgA" class="lb-slide" src="" alt="" />
+      <img id="lbImgB" class="lb-slide" src="" alt="" style="transform:translateX(110vw)" />
+    </div>
 
     <!-- Prev / Next Overlays -->
     <div
@@ -2775,6 +2798,14 @@
   <script>
     'use strict';
 
+    /* Prevent pinch-zoom (iOS ignores viewport user-scalable) */
+    document.addEventListener('touchstart', function (e) {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('touchend', function (e) {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+
     /* ── PRELOADER ── */
     let isWindowLoaded = false;
     let isGalleryLoaded = false;
@@ -2988,39 +3019,27 @@
     let galleryImages = [];
     let currentLightboxIdx = 0;
 
-    function openLightbox(idx) {
-      if (idx < 0 || idx >= galleryImages.length) return;
-      currentLightboxIdx = idx;
-      const lb    = document.getElementById('galleryLightbox');
-      const lbImg = document.getElementById('lbImg');
-      lbImg.style.transition = 'none';
-      lbImg.style.transform  = 'translateX(0)';
-      lbImg.src = galleryImages[idx];
-      lb.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      preloadAdjacent(idx);
-    }
-    function prevLightbox(e) {
-      if (e) e.stopPropagation();
-      if (galleryImages.length === 0) return;
-      openLightbox((currentLightboxIdx - 1 + galleryImages.length) % galleryImages.length);
-    }
-    function nextLightbox(e) {
-      if (e) e.stopPropagation();
-      if (galleryImages.length === 0) return;
-      openLightbox((currentLightboxIdx + 1) % galleryImages.length);
-    }
-    function closeLightbox() {
-      document.getElementById('galleryLightbox').style.display = 'none';
-      document.getElementById('lbImg').src = '';
-      document.body.style.overflow = '';
+    // Two-image A/B ping-pong for instant consecutive swipes
+    const lb_ = {
+      slot: 'A',   // which slot is currently "current"
+      idx:  0,
+      startX: 0,
+      dx: 0,
+      dragging: false,
+      dir: 0,      // -1=left/next  1=right/prev  0=unknown
+      stbyIdx: -1  // which image index is loaded in standby slot
+    };
+
+    function lbSlots() {
+      const a = document.getElementById('lbImgA');
+      const b = document.getElementById('lbImgB');
+      return lb_.slot === 'A' ? { cur: a, stby: b } : { cur: b, stby: a };
     }
 
-    // Lightbox swipe — real-time drag tracking + adjacent preload
     const lbPreloadCache = {};
     function preloadAdjacent(idx) {
       if (galleryImages.length < 2) return;
-      [-1, 1].forEach(function (d) {
+      [-2, -1, 1, 2].forEach(function (d) {
         const ci = (idx + d + galleryImages.length) % galleryImages.length;
         if (!lbPreloadCache[ci]) {
           const img = new Image();
@@ -3030,41 +3049,142 @@
       });
     }
 
+    function openLightbox(idx) {
+      if (idx < 0 || idx >= galleryImages.length) return;
+      lb_.slot = 'A';
+      lb_.idx  = idx;
+      lb_.stbyIdx = -1;
+      lb_.dir = 0;
+      currentLightboxIdx = idx;
+
+      const a = document.getElementById('lbImgA');
+      const b = document.getElementById('lbImgB');
+      a.style.transition = 'none';
+      a.style.transform  = 'translateX(0)';
+      a.src = galleryImages[idx];
+      b.style.transition = 'none';
+      b.style.transform  = 'translateX(110vw)';
+      b.src = '';
+
+      document.getElementById('galleryLightbox').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      preloadAdjacent(idx);
+    }
+
+    function lbNavigate(newIdx) {
+      if (newIdx < 0 || newIdx >= galleryImages.length) return;
+      if (newIdx === lb_.idx) return;
+      const W = window.innerWidth * 1.08;
+      const goLeft = newIdx > lb_.idx; // swiping left = going to next
+      const { cur, stby } = lbSlots();
+
+      stby.style.transition = 'none';
+      stby.style.transform  = 'translateX(' + (goLeft ? W : -W) + 'px)';
+      if (stby.src !== galleryImages[newIdx]) stby.src = galleryImages[newIdx];
+
+      requestAnimationFrame(function () {
+        cur.style.transition  = 'transform .19s cubic-bezier(.22,.61,.36,1)';
+        cur.style.transform   = 'translateX(' + (goLeft ? -W : W) + 'px)';
+        stby.style.transition = 'transform .19s cubic-bezier(.22,.61,.36,1)';
+        stby.style.transform  = 'translateX(0)';
+      });
+
+      lb_.slot  = lb_.slot === 'A' ? 'B' : 'A';
+      lb_.idx   = newIdx;
+      lb_.stbyIdx = -1;
+      lb_.dir   = 0;
+      currentLightboxIdx = newIdx;
+      preloadAdjacent(newIdx);
+    }
+
+    function prevLightbox(e) {
+      if (e) e.stopPropagation();
+      if (!galleryImages.length) return;
+      lbNavigate((lb_.idx - 1 + galleryImages.length) % galleryImages.length);
+    }
+    function nextLightbox(e) {
+      if (e) e.stopPropagation();
+      if (!galleryImages.length) return;
+      lbNavigate((lb_.idx + 1) % galleryImages.length);
+    }
+    function closeLightbox() {
+      document.getElementById('galleryLightbox').style.display = 'none';
+      document.getElementById('lbImgA').src = '';
+      document.getElementById('lbImgB').src = '';
+      document.body.style.overflow = '';
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
-      const lbEl  = document.getElementById('galleryLightbox');
-      const lbImg = document.getElementById('lbImg');
-      if (!lbEl || !lbImg) return;
+      const lbVp = document.querySelector('.lb-viewport');
+      if (!lbVp) return;
 
-      let startX = 0, dx = 0, active = false;
-
-      lbEl.addEventListener('touchstart', function (e) {
-        startX = e.touches[0].clientX;
-        dx = 0;
-        active = true;
-        lbImg.style.transition = 'none';
+      lbVp.addEventListener('touchstart', function (e) {
+        if (e.touches.length > 1) return; // ignore pinch
+        lb_.startX   = e.touches[0].clientX;
+        lb_.dx       = 0;
+        lb_.dragging = true;
+        lb_.dir      = 0;
+        lb_.stbyIdx  = -1;
+        const { cur } = lbSlots();
+        cur.style.transition = 'none';
       }, { passive: true });
 
-      lbEl.addEventListener('touchmove', function (e) {
-        if (!active) return;
-        dx = e.touches[0].clientX - startX;
-        lbImg.style.transform = 'translateX(' + dx + 'px)';
+      lbVp.addEventListener('touchmove', function (e) {
+        if (!lb_.dragging || e.touches.length > 1) return;
+        const dx = e.touches[0].clientX - lb_.startX;
+        lb_.dx = dx;
+        const W = window.innerWidth * 1.08;
+        const { cur, stby } = lbSlots();
+
+        // On first meaningful move, determine direction and arm standby
+        if (lb_.dir === 0 && Math.abs(dx) > 6) {
+          const dir = dx < 0 ? -1 : 1;
+          lb_.dir = dir;
+          const ni = dir < 0
+            ? (lb_.idx + 1) % galleryImages.length
+            : (lb_.idx - 1 + galleryImages.length) % galleryImages.length;
+          lb_.stbyIdx = ni;
+          stby.style.transition = 'none';
+          stby.style.transform  = 'translateX(' + (dir < 0 ? W : -W) + 'px)';
+          if (stby.src !== galleryImages[ni]) stby.src = galleryImages[ni];
+        }
+
+        cur.style.transform = 'translateX(' + dx + 'px)';
+        if (lb_.dir !== 0) {
+          const offset = lb_.dir < 0 ? W : -W;
+          stby.style.transform = 'translateX(' + (dx + offset) + 'px)';
+        }
       }, { passive: true });
 
-      lbEl.addEventListener('touchend', function () {
-        if (!active) return;
-        active = false;
+      lbVp.addEventListener('touchend', function () {
+        if (!lb_.dragging) return;
+        lb_.dragging = false;
+        const { cur, stby } = lbSlots();
+        const W = window.innerWidth * 1.08;
         const THRESHOLD = 50;
-        if (dx < -THRESHOLD) {
-          lbImg.style.transition = 'transform .15s ease';
-          lbImg.style.transform  = 'translateX(-110vw)';
-          setTimeout(function () { nextLightbox(); }, 130);
-        } else if (dx > THRESHOLD) {
-          lbImg.style.transition = 'transform .15s ease';
-          lbImg.style.transform  = 'translateX(110vw)';
-          setTimeout(function () { prevLightbox(); }, 130);
+
+        if (Math.abs(lb_.dx) >= THRESHOLD && lb_.dir !== 0) {
+          const newIdx = lb_.stbyIdx;
+          cur.style.transition  = 'transform .19s cubic-bezier(.22,.61,.36,1)';
+          cur.style.transform   = 'translateX(' + (lb_.dir < 0 ? -W : W) + 'px)';
+          stby.style.transition = 'transform .19s cubic-bezier(.22,.61,.36,1)';
+          stby.style.transform  = 'translateX(0)';
+
+          lb_.slot = lb_.slot === 'A' ? 'B' : 'A';
+          lb_.idx  = newIdx;
+          lb_.stbyIdx = -1;
+          lb_.dir  = 0;
+          currentLightboxIdx = newIdx;
+          preloadAdjacent(newIdx);
         } else {
-          lbImg.style.transition = 'transform .22s cubic-bezier(.22,.61,.36,1)';
-          lbImg.style.transform  = 'translateX(0)';
+          cur.style.transition = 'transform .22s cubic-bezier(.22,.61,.36,1)';
+          cur.style.transform  = 'translateX(0)';
+          if (lb_.dir !== 0) {
+            const offset = lb_.dir < 0 ? W : -W;
+            stby.style.transition = 'transform .22s cubic-bezier(.22,.61,.36,1)';
+            stby.style.transform  = 'translateX(' + offset + 'px)';
+          }
+          lb_.dir = 0;
         }
       }, { passive: true });
     });
