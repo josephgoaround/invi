@@ -637,12 +637,13 @@
     }
 
     .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 4px;
+      columns: 3;
+      column-gap: 4px;
     }
 
     .g-cell {
+      break-inside: avoid;
+      margin-bottom: 4px;
       background: var(--cream);
       border-radius: 0;
       overflow: hidden;
@@ -666,10 +667,6 @@
       transform: scale(1.04);
     }
 
-    .g-cell.lg {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
 
     /* Skeleton loading */
     .g-skeleton {
@@ -680,10 +677,6 @@
       animation: shimmer 1.6s infinite;
     }
 
-    .g-skeleton.lg {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
 
     @keyframes shimmer {
       from {
@@ -712,9 +705,8 @@
     }
 
     .gallery-more-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 4px;
+      columns: 3;
+      column-gap: 4px;
       margin-top: 4px;
     }
 
@@ -3255,7 +3247,7 @@
           const fullSrc  = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w1600';
           galleryImages.push(fullSrc);
           const cell = document.createElement('div');
-          cell.className = 'g-cell' + (i === 0 ? ' lg' : '');
+          cell.className = 'g-cell';
           cell.onclick = function () { openLightbox(i); };
           const im = document.createElement('img');
           im.onload = im.onerror = function () {
