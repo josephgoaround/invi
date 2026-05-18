@@ -136,15 +136,33 @@
     }
 
 
-    /* ── FIXED TOP BUTTONS ── */
-    .top-btns {
+    /* ── FIXED TOP BAR ── */
+    .top-bar {
       position: fixed;
-      top: 18px;
-      right: 18px;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 200;
+      pointer-events: none;
+    }
+    .top-bar-inner {
+      max-width: 480px;
+      margin: 0 auto;
       display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
       gap: 8px;
-      align-items: center;
+      padding: max(env(safe-area-inset-top, 14px), 14px) 18px 48px;
+      background: linear-gradient(
+        to bottom,
+        rgba(250,250,250,.95) 0%,
+        rgba(250,250,250,.60) 40%,
+        rgba(250,250,250,0) 100%
+      );
+      pointer-events: none;
+    }
+    .top-bar-inner > * {
+      pointer-events: all;
     }
 
     .lang-btn,
@@ -2177,23 +2195,25 @@
   <!-- ══════════════════════════════════════════
      TOP FIXED BUTTONS (RSVP + LANGUAGE)
 ══════════════════════════════════════════ -->
-  <div class="top-btns">
-    <button class="rsvp-fixed-btn" id="rsvpFixedBtn" onclick="openRsvp()">
-      <span class="ko-text">참석 여부</span>
-      <span class="en-text">RSVP</span>
-    </button>
-    <!-- Calendar button -->
-    <button class="cal-fixed-btn" id="calBtn" aria-label="일정 저장" onclick="toggleCalPopup()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="4" width="18" height="18" rx="3"/>
-        <path d="M16 2v4M8 2v4M3 10h18"/>
-        <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
-      </svg>
-      <span class="ko-text">일정</span>
-      <span class="en-text">Save</span>
-    </button>
-    <button class="lang-btn" id="langBtn" aria-label="Switch language" onclick="toggleLang()">EN</button>
-  </div>
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <button class="rsvp-fixed-btn" id="rsvpFixedBtn" onclick="openRsvp()">
+        <span class="ko-text">참석 여부</span>
+        <span class="en-text">RSVP</span>
+      </button>
+      <!-- Calendar button -->
+      <button class="cal-fixed-btn" id="calBtn" aria-label="일정 저장" onclick="toggleCalPopup()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="3"/>
+          <path d="M16 2v4M8 2v4M3 10h18"/>
+          <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+        </svg>
+        <span class="ko-text">일정</span>
+        <span class="en-text">Save</span>
+      </button>
+      <button class="lang-btn" id="langBtn" aria-label="Switch language" onclick="toggleLang()">EN</button>
+    </div>
+  </header>
 
   <!-- Calendar popup -->
   <div class="cal-popup" id="calPopup" role="dialog" aria-label="일정 저장">
