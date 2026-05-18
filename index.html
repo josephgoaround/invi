@@ -2846,6 +2846,16 @@
 
     /* ── RSVP MODAL ── */
     const RSVP_KEY = 'rsvpDone_kye2026';
+    // Sync --header-h to actual rendered top-bar height
+    function syncHeaderH() {
+      var bar = document.querySelector('.top-bar');
+      if (bar) {
+        document.documentElement.style.setProperty('--header-h', bar.getBoundingClientRect().height + 'px');
+      }
+    }
+    syncHeaderH();
+    window.addEventListener('resize', syncHeaderH);
+
     let rsvpAttendValue = null;
 
     // 스크롤 시작 후 10초 뒤 RSVP 팝업 (첫 방문 시만)
