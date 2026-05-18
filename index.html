@@ -551,10 +551,11 @@
 
     .couple-parents {
       font-family: 'Noto Serif KR', serif;
-      font-size: 12px;
-      color: var(--light);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--char);
       line-height: 1.9;
-      letter-spacing: .02em;
+      letter-spacing: .12em;
     }
 
     .couple-role {
@@ -2215,7 +2216,7 @@
 
     <!-- Full-bleed photo -->
     <div class="hero-arch">
-      <img src="https://drive.google.com/thumbnail?id=1LGyPm5a8o7Hj1DHgzPhCl2SgOElTGVaN&sz=w1200" alt="Hero Photo"
+      <img src="https://drive.google.com/thumbnail?id=1Ediij2ACNLYA8j9_RrhiUCMJscBPDzj4&sz=w1200" alt="Hero Photo"
         loading="eager" />
     </div>
 
@@ -2296,7 +2297,7 @@
           </div>
           <div class="ko-block">
             <p class="couple-parents">강 중용 · 송 영숙의</p>
-            <p class="couple-role">장남</p>
+            <p class="couple-role">아들</p>
             <p class="couple-name">영석</p>
           </div>
           <div class="en-block">
@@ -2312,7 +2313,7 @@
           </div>
           <div class="ko-block">
             <p class="couple-parents">권 경현 · 안 혜숙의</p>
-            <p class="couple-role">장녀</p>
+            <p class="couple-role">딸</p>
             <p class="couple-name">지은</p>
           </div>
           <div class="en-block">
@@ -2813,10 +2814,10 @@
 
     function openRsvp() {
       const overlay = document.getElementById('rsvpOverlay');
-      // 폼 초기화 (재오픈 시 완료 상태 숨김)
       document.getElementById('rsvpFormWrap').style.display = 'block';
       document.getElementById('rsvpThanks').style.display = 'none';
       overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
     }
 
     function selectAttend(val) {
@@ -2828,7 +2829,11 @@
 
     function closeRsvp() {
       const overlay = document.getElementById('rsvpOverlay');
+      const sheet   = document.getElementById('rsvpSheet');
       overlay.style.opacity = '0';
+      sheet.style.transition = 'transform .3s cubic-bezier(.22,.61,.36,1)';
+      sheet.style.transform  = '';
+      document.body.style.overflow = '';
       setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = '1'; }, 260);
     }
 
@@ -2847,15 +2852,14 @@
       sheet.addEventListener('touchmove', function (e) {
         if (!dragging) return;
         const dy = e.touches[0].clientY - startY;
-        // only intercept downward drag when sheet is scrolled to top
         if (dy > 0 && sheet.scrollTop <= 0) {
+          e.preventDefault(); // 메인 페이지 스크롤 차단
           currentY = dy;
           sheet.style.transform = 'translateY(' + currentY + 'px)';
-          // fade overlay proportionally
           const overlay = document.getElementById('rsvpOverlay');
           overlay.style.opacity = Math.max(0, 1 - currentY / 300);
         }
-      }, { passive: true });
+      }, { passive: false }); // non-passive: preventDefault 허용
 
       sheet.addEventListener('touchend', function () {
         dragging = false;
