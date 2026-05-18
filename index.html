@@ -663,6 +663,47 @@
       color: var(--light);
     }
 
+    /* 갤러리 더보기 */
+    .gallery-more-wrap {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 1s cubic-bezier(.22,.61,.36,1);
+    }
+
+    .gallery-more-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .gallery-more-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13px;
+      letter-spacing: .06em;
+      color: var(--mid);
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .gallery-more-btn:active { background: var(--ivory); }
+
+    .gallery-more-icon {
+      transition: transform .4s cubic-bezier(.22,.61,.36,1);
+      flex-shrink: 0;
+    }
+
     /* ════════════════════════════════════════════
      VENUE + MAP
   ════════════════════════════════════════════ */
@@ -2301,6 +2342,25 @@
       <div class="g-skeleton"></div>
       <div class="g-skeleton"></div>
     </div>
+
+    <!-- 더보기 접힘 영역 -->
+    <div class="gallery-more-wrap" id="galleryMoreWrap">
+      <div class="gallery-more-grid" id="galleryMoreGrid"></div>
+    </div>
+
+    <!-- 더보기 버튼 -->
+    <button class="gallery-more-btn" id="galleryMoreBtn" aria-expanded="false"
+      onclick="toggleGalleryMore(this)" style="display:none">
+      <span class="gallery-more-lbl">
+        <span class="ko-text">더보기</span>
+        <span class="en-text">See More</span>
+      </span>
+      <svg class="gallery-more-icon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2 5L7 10L12 5" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
     <p class="gallery-note" id="galleryStatus" style="display:none">
       <span class="ko-text">사진을 불러오는 중입니다…</span>
       <span class="en-text">Loading photos…</span>
@@ -2896,7 +2956,7 @@
     /* \u2500\u2500 GALLERY \u2500\u2500 */
     /* Image download protection */
     document.addEventListener('contextmenu', function (e) {
-      if (e.target.tagName === 'IMG' || e.target.closest('#galleryGrid, #galleryLightbox')) {
+      if (e.target.tagName === 'IMG' || e.target.closest('#galleryGrid, #galleryMoreGrid, #galleryLightbox')) {
         e.preventDefault();
       }
     });
@@ -2976,13 +3036,17 @@
             return an.localeCompare(bn);
           });
 
+        const INITIAL_COUNT = 6;
+        const moreGrid = document.getElementById('galleryMoreGrid');
+        const moreBtn  = document.getElementById('galleryMoreBtn');
         grid.innerHTML = '';
+        if (moreGrid) moreGrid.innerHTML = '';
         galleryImages = [];
         let loadedCount = 0;
         const totalCount = sorted.length;
         sorted.forEach(function (img, i) {
           const thumbSrc = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w600';
-          const fullSrc = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w1600';
+          const fullSrc  = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w1600';
           galleryImages.push(fullSrc);
           const cell = document.createElement('div');
           cell.className = 'g-cell' + (i === 0 ? ' lg' : '');
@@ -2990,23 +3054,45 @@
           const im = document.createElement('img');
           im.onload = im.onerror = function () {
             loadedCount++;
-            if (loadedCount === totalCount) {
-              isGalleryLoaded = true;
-              attemptHidePreloader();
-            }
+            if (loadedCount === totalCount) { isGalleryLoaded = true; attemptHidePreloader(); }
           };
           im.src = thumbSrc;
           im.alt = img.name || ('사진 ' + (i + 1));
-          im.loading = 'lazy';
+          im.loading = i < INITIAL_COUNT ? 'eager' : 'lazy';
           im.decoding = 'async';
           im.draggable = false;
           cell.appendChild(im);
-          grid.appendChild(cell);
+          if (i < INITIAL_COUNT) {
+            grid.appendChild(cell);
+          } else if (moreGrid) {
+            moreGrid.appendChild(cell);
+          }
         });
+        if (moreGrid && moreGrid.children.length > 0 && moreBtn) {
+          moreBtn.style.display = 'flex';
+        }
       } catch (e) {
         grid.innerHTML = '<p class="gallery-note" style="grid-column:1/-1;text-align:center;padding:24px 0;color:var(--light);">✦ &nbsp;사진을 준비 중입니다&nbsp; ✦</p>';
         isGalleryLoaded = true;
         attemptHidePreloader();
+      }
+    }
+
+    function toggleGalleryMore(btn) {
+      const wrap = document.getElementById('galleryMoreWrap');
+      const icon = btn.querySelector('.gallery-more-icon');
+      const lbl  = btn.querySelector('.gallery-more-lbl');
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      if (!isOpen) {
+        wrap.style.maxHeight = wrap.scrollHeight + 'px';
+        btn.setAttribute('aria-expanded', 'true');
+        icon.style.transform = 'rotate(180deg)';
+        lbl.innerHTML = '<span class="ko-text">접기</span><span class="en-text" style="display:none">Less</span>';
+      } else {
+        wrap.style.maxHeight = '0';
+        btn.setAttribute('aria-expanded', 'false');
+        icon.style.transform = 'rotate(0deg)';
+        lbl.innerHTML = '<span class="ko-text">더보기</span><span class="en-text" style="display:none">See More</span>';
       }
     }
 
