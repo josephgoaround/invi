@@ -2941,16 +2941,15 @@
     })();
 
     async function submitRsvp() {
-      const name = (document.getElementById('rsvpName').value || '').trim();
+      const name     = (document.getElementById('rsvpName').value || '').trim();
       const relation = (document.getElementById('rsvpRelation').value || '').trim();
-      const contact = (document.getElementById('rsvpContact').value || '').trim();
-      const party = document.getElementById('rsvpParty').value;
-      const msg = (document.getElementById('rsvpMsg').value || '').trim();
-      const lang = currentLang;
-      const contactEl = document.getElementById('rsvpContact');
+      const contact  = (document.getElementById('rsvpContact').value || '').trim();
+      const party    = document.getElementById('rsvpParty').value;
+      const lang     = currentLang;
+      const contactEl  = document.getElementById('rsvpContact');
       const contactErr = document.getElementById('rsvpContactErr');
 
-      if (!name) { showToast(lang === 'ko' ? '성함을 입력해 주세요' : 'Please enter your name'); return; }
+      if (!name)     { showToast(lang === 'ko' ? '성함을 입력해 주세요' : 'Please enter your name'); return; }
       if (!relation) { showToast(lang === 'ko' ? '관계를 입력해 주세요' : 'Please enter your relation'); return; }
 
       // 한국어: 010-####-#### 형식 검증
@@ -2983,7 +2982,7 @@
         name, relation, contact,
         attending: rsvpAttendValue,
         partySize: party !== '' ? party : '0',
-        message: msg,
+        message: '',
         timestamp: new Date().toISOString()
       };
 
