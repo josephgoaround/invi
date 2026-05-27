@@ -637,13 +637,13 @@
     }
 
     .gallery-grid {
-      columns: 3;
-      column-gap: 4px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
     }
 
     .g-cell {
-      break-inside: avoid;
-      margin-bottom: 4px;
+      aspect-ratio: 3/4;
       background: var(--cream);
       border-radius: 0;
       overflow: hidden;
@@ -653,7 +653,8 @@
 
     .g-cell img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
       display: block;
       touch-action: manipulation;
       transition: transform .4s ease;
@@ -699,14 +700,30 @@
 
     /* 갤러리 더보기 */
     .gallery-more-wrap {
+      position: relative;
       overflow: hidden;
-      max-height: 0;
+      max-height: 120px;
       transition: max-height 1s cubic-bezier(.22,.61,.36,1);
     }
 
+    .gallery-more-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 64px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+      transition: opacity .4s;
+    }
+
+    .gallery-more-wrap.open::after {
+      opacity: 0;
+    }
+
     .gallery-more-grid {
-      columns: 3;
-      column-gap: 4px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
       margin-top: 4px;
     }
 
@@ -2371,7 +2388,7 @@
 
     <!-- Loading skeletons -->
     <div class="gallery-grid" id="galleryGrid" aria-label="갤러리">
-      <div class="g-skeleton lg"></div>
+      <div class="g-skeleton"></div>
       <div class="g-skeleton"></div>
       <div class="g-skeleton"></div>
       <div class="g-skeleton"></div>
@@ -2608,31 +2625,21 @@
       <div class="acct-body" id="acctGroom">
         <div class="acct-body-inner">
           <div class="acct-card">
-            <p class="acct-relation"><span class="ko-text">신랑</span><span class="en-text">Groom</span></p>
+            <p class="acct-relation"><span class="ko-text">아버지 <strong>강중용</strong></span><span class="en-text">Groom's Father</span></p>
             <div class="acct-row">
               <span class="acct-bank">국민은행</span>
-              <span class="acct-num">578202-04-005944</span>
-              <button class="acct-copy-btn" onclick="copyAcct('578202-04-005944', this)">
+              <span class="acct-num">283702-04-001303</span>
+              <button class="acct-copy-btn" onclick="copyAcct('283702-04-001303', this)">
                 <span class="ko-text">복사</span><span class="en-text">Copy</span>
               </button>
             </div>
           </div>
           <div class="acct-card">
-            <p class="acct-relation"><span class="ko-text">신랑 아버지</span><span class="en-text">Groom's Father</span></p>
+            <p class="acct-relation"><span class="ko-text">어머니 <strong>송영숙</strong></span><span class="en-text">Groom's Mother</span></p>
             <div class="acct-row">
               <span class="acct-bank">국민은행</span>
-              <span class="acct-num">123-45-6789012</span>
-              <button class="acct-copy-btn" onclick="copyAcct('123-45-6789012', this)">
-                <span class="ko-text">복사</span><span class="en-text">Copy</span>
-              </button>
-            </div>
-          </div>
-          <div class="acct-card">
-            <p class="acct-relation"><span class="ko-text">신랑 어머니</span><span class="en-text">Groom's Mother</span></p>
-            <div class="acct-row">
-              <span class="acct-bank">하나은행</span>
-              <span class="acct-num">123-456789-01234</span>
-              <button class="acct-copy-btn" onclick="copyAcct('123-456789-01234', this)">
+              <span class="acct-num">283702-04-008287</span>
+              <button class="acct-copy-btn" onclick="copyAcct('283702-04-008287', this)">
                 <span class="ko-text">복사</span><span class="en-text">Copy</span>
               </button>
             </div>
@@ -2653,31 +2660,21 @@
       <div class="acct-body" id="acctBride">
         <div class="acct-body-inner">
           <div class="acct-card">
-            <p class="acct-relation"><span class="ko-text">신부</span><span class="en-text">Bride</span></p>
-            <div class="acct-row">
-              <span class="acct-bank">카카오뱅크</span>
-              <span class="acct-num">3333-12-3456789</span>
-              <button class="acct-copy-btn" onclick="copyAcct('3333-12-3456789', this)">
-                <span class="ko-text">복사</span><span class="en-text">Copy</span>
-              </button>
-            </div>
-          </div>
-          <div class="acct-card">
-            <p class="acct-relation"><span class="ko-text">신부 아버지</span><span class="en-text">Bride's Father</span></p>
+            <p class="acct-relation"><span class="ko-text">아버지 <strong>권경현</strong></span><span class="en-text">Bride's Father</span></p>
             <div class="acct-row">
               <span class="acct-bank">우리은행</span>
-              <span class="acct-num">1002-123-456789</span>
-              <button class="acct-copy-btn" onclick="copyAcct('1002-123-456789', this)">
+              <span class="acct-num">1002-944-345899</span>
+              <button class="acct-copy-btn" onclick="copyAcct('1002-944-345899', this)">
                 <span class="ko-text">복사</span><span class="en-text">Copy</span>
               </button>
             </div>
           </div>
           <div class="acct-card">
-            <p class="acct-relation"><span class="ko-text">신부 어머니</span><span class="en-text">Bride's Mother</span></p>
+            <p class="acct-relation"><span class="ko-text">어머니 <strong>안혜숙</strong></span><span class="en-text">Bride's Mother</span></p>
             <div class="acct-row">
-              <span class="acct-bank">농협은행</span>
-              <span class="acct-num">301-1234-5678-01</span>
-              <button class="acct-copy-btn" onclick="copyAcct('301-1234-5678-01', this)">
+              <span class="acct-bank">농협</span>
+              <span class="acct-num">356-1112-6366-43</span>
+              <button class="acct-copy-btn" onclick="copyAcct('356-1112-6366-43', this)">
                 <span class="ko-text">복사</span><span class="en-text">Copy</span>
               </button>
             </div>
@@ -3286,11 +3283,13 @@
       const isOpen = btn.getAttribute('aria-expanded') === 'true';
       if (!isOpen) {
         wrap.style.maxHeight = wrap.scrollHeight + 'px';
+        wrap.classList.add('open');
         btn.setAttribute('aria-expanded', 'true');
         icon.style.transform = 'rotate(180deg)';
         lbl.innerHTML = '<span class="ko-text">접기</span><span class="en-text" style="display:none">Less</span>';
       } else {
-        wrap.style.maxHeight = '0';
+        wrap.style.maxHeight = '120px';
+        wrap.classList.remove('open');
         btn.setAttribute('aria-expanded', 'false');
         icon.style.transform = 'rotate(0deg)';
         lbl.innerHTML = '<span class="ko-text">더보기</span><span class="en-text" style="display:none">See More</span>';
