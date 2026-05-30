@@ -63,6 +63,7 @@
       scroll-behavior: smooth;
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
+      font-size: 16px;
     }
 
     body {
@@ -311,7 +312,7 @@
 
     .section-title {
       font-family: 'Noto Serif KR', serif;
-      font-size: 26px;
+      font-size: clamp(20px, 5.5vw, 26px);
       font-weight: 400;
       text-align: center;
       color: var(--char);
@@ -323,7 +324,7 @@
     [data-lang="en"] .section-title {
       font-family: 'EB Garamond', Georgia, serif;
       font-style: italic;
-      font-size: 34px;
+      font-size: clamp(24px, 7vw, 34px);
       letter-spacing: .04em;
       line-height: 1.25;
     }
@@ -402,7 +403,7 @@
     /* Korean names */
     .hero-names-ko {
       font-family: 'Noto Serif KR', serif;
-      font-size: 32px;
+      font-size: clamp(22px, 6.7vw, 32px);
       font-weight: 400;
       line-height: 1.4;
       text-align: center;
@@ -414,7 +415,7 @@
     /* English names */
     .hero-names-en {
       font-family: 'EB Garamond', Georgia, serif;
-      font-size: 48px;
+      font-size: clamp(32px, 10vw, 48px);
       font-weight: 400;
       line-height: 1.2;
       text-align: center;
@@ -444,14 +445,14 @@
       text-align: center;
       font-family: 'Noto Serif KR', serif;
       line-height: 1.9;
-      font-size: 14.5px;
+      font-size: clamp(12.5px, 3.2vw, 15px);
       color: rgba(255,255,255,.82);
       letter-spacing: .08em;
     }
 
     [data-lang="en"] .hero-detail {
       font-family: 'EB Garamond', Georgia, serif;
-      font-size: 18px;
+      font-size: clamp(14px, 4vw, 18px);
       letter-spacing: .03em;
     }
 
@@ -509,7 +510,7 @@
   ════════════════════════════════════════════ */
     .poem {
       font-family: 'Noto Serif KR', serif;
-      font-size: 17px;
+      font-size: clamp(14px, 3.7vw, 17px);
       line-height: 2.4;
       color: var(--char);
       text-align: center;
@@ -519,7 +520,7 @@
 
     [data-lang="en"] .poem {
       font-family: 'EB Garamond', Georgia, serif;
-      font-size: 21px;
+      font-size: clamp(15px, 4.5vw, 21px);
       font-style: italic;
       line-height: 2.2;
       letter-spacing: .03em;
@@ -570,9 +571,14 @@
       -webkit-user-select: none;
     }
 
+    .couple-photo.bride img {
+      transform: scale(1.2);
+      transform-origin: top center;
+    }
+
     .couple-parents {
       font-family: 'Noto Serif KR', serif;
-      font-size: 17px;
+      font-size: clamp(13px, 3.7vw, 17px);
       font-weight: 700;
       color: var(--char);
       line-height: 1.9;
@@ -581,7 +587,7 @@
 
     .couple-role {
       font-family: 'Noto Serif KR', serif;
-      font-size: 13px;
+      font-size: clamp(11px, 2.8vw, 13px);
       color: var(--mid);
       margin-top: 2px;
       letter-spacing: .04em;
@@ -590,7 +596,7 @@
     .couple-name {
       font-family: 'Noto Serif KR', serif;
       font-weight: 700;
-      font-size: 17px;
+      font-size: clamp(13px, 3.7vw, 17px);
       color: var(--char);
       letter-spacing: .12em;
       margin-top: 5px;
@@ -598,7 +604,7 @@
 
     [data-lang="en"] .couple-parents {
       font-family: 'EB Garamond', Georgia, serif;
-      font-size: 14px;
+      font-size: clamp(11px, 3vw, 14px);
       line-height: 1.8;
       font-style: italic;
     }
@@ -609,7 +615,7 @@
 
     [data-lang="en"] .couple-name {
       font-family: 'EB Garamond', Georgia, serif;
-      font-size: 20px;
+      font-size: clamp(15px, 4.3vw, 20px);
       font-style: italic;
     }
 
@@ -2359,7 +2365,7 @@
 
         <!-- 신부 (Right) -->
         <div class="couple-card">
-          <div class="couple-photo">
+          <div class="couple-photo bride">
             <img src="https://drive.google.com/thumbnail?id=1neTSOMfaZwE3m7JgeoVSdMuUNMDYN1j3&sz=w600" alt="신부 지은" loading="lazy" />
           </div>
           <div class="ko-block">
