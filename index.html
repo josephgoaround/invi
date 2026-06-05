@@ -8,6 +8,17 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="theme-color" content="#FAFAFA" />
+
+  <!-- Open Graph / KakaoTalk link preview -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://joseph-jieun.cc/" />
+  <meta property="og:title"       content="강영석 ♥ 권지은 결혼합니다" />
+  <meta property="og:description" content="2026년 9월 5일 토요일 낮 12시 30분 · 롯데호텔월드 3F 크리스탈볼룸" />
+  <meta property="og:image"       content="https://drive.google.com/thumbnail?id=1Ediij2ACNLYA8j9_RrhiUCMJscBPDzj4&sz=w1200" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="900" />
+  <meta property="og:locale"      content="ko_KR" />
+  <meta property="og:site_name"   content="강영석 ♥ 권지은" />
   <title>강영석 ♥ 권지은</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♥</text></svg>" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♥</text></svg>" />
@@ -27,6 +38,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+KR:wght@300;400;600;700&family=Great+Vibes&display=swap"
     rel="stylesheet" />
+
+  <!-- Kakao JS SDK -->
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
 
   <style>
     /* ════════════════════════════════════════════
@@ -199,6 +213,27 @@
     }
 
     .cal-fixed-btn svg { width:14px; height:14px; flex-shrink:0; }
+
+    .kakao-share-btn {
+      background: #FEE500;
+      border: none;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .1em;
+      color: #3A1D1D;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: background .2s, transform .15s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .kakao-share-btn svg { width:15px; height:15px; flex-shrink:0; }
+    .kakao-share-btn:active { background: #F5D800; transform: scale(.96); }
 
     .lang-btn:active,
     .rsvp-fixed-btn:active,
@@ -2248,6 +2283,12 @@
         <span class="ko-text">일정</span>
         <span class="en-text">Save</span>
       </button>
+      <button class="kakao-share-btn" aria-label="카카오톡으로 공유" onclick="shareKakao()">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 3C6.477 3 2 6.925 2 11.75c0 2.99 1.657 5.63 4.2 7.26L5.1 22.5l4.32-2.18A11.87 11.87 0 0012 20.5c5.523 0 10-3.925 10-8.75S17.523 3 12 3z"/>
+        </svg>
+        <span>공유</span>
+      </button>
       <button class="lang-btn" id="langBtn" aria-label="Switch language" onclick="toggleLang()">EN</button>
     </div>
   </header>
@@ -2858,6 +2899,46 @@
     /* ── 0. CONFIG ── */
     // Google Apps Script 배포 후 URL을 아래에 입력하세요
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYSbC2rgAD8aYeeSQJdMtdO11A1ZevKXDNYDsu6LcUuPJT8XPpPCbfPdRvHVFDnnEb/exec';
+
+    /* ── Kakao ── */
+    if (window.Kakao && !Kakao.isInitialized()) {
+      Kakao.init('712b77ddc0ebd65c33164f3538d93486');
+    }
+
+    function shareKakao() {
+      if (!window.Kakao || !Kakao.isInitialized()) {
+        alert('카카오 공유 기능을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+        return;
+      }
+      Kakao.Share.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: '강영석 ♥ 권지은 결혼합니다',
+          description: '2026년 9월 5일 토요일 낮 12시 30분\n롯데호텔월드 3F 크리스탈볼룸',
+          imageUrl: 'https://drive.google.com/thumbnail?id=1Ediij2ACNLYA8j9_RrhiUCMJscBPDzj4&sz=w1200',
+          link: {
+            mobileWebUrl: 'https://joseph-jieun.cc/',
+            webUrl: 'https://joseph-jieun.cc/',
+          },
+        },
+        buttons: [
+          {
+            title: '초대장 보기',
+            link: {
+              mobileWebUrl: 'https://joseph-jieun.cc/',
+              webUrl: 'https://joseph-jieun.cc/',
+            },
+          },
+          {
+            title: '위치 보기',
+            link: {
+              mobileWebUrl: 'https://map.kakao.com/link/to/롯데호텔월드,37.511089,127.098152',
+              webUrl: 'https://map.kakao.com/link/to/롯데호텔월드,37.511089,127.098152',
+            },
+          },
+        ],
+      });
+    }
 
     /* ── RSVP MODAL ── */
     const RSVP_KEY = 'rsvpDone_kye2026';
