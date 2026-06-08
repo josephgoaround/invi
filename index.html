@@ -610,8 +610,6 @@
 
     .couple-photo.groom img {
       object-position: center bottom;
-      transform: scale(1.15);
-      transform-origin: center bottom;
     }
 
     .couple-photo.bride img {
@@ -2100,7 +2098,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center center;
+      object-position: center top;
       transform-origin: center center;
       animation: preloaderCinema 14s cubic-bezier(.25,.46,.45,.94) forwards;
     }
@@ -3413,15 +3411,13 @@
           '1LGyPm5a8o7Hj1DHgzPhCl2SgOElTGVaN'
         ]);
 
-        /* 0404* 파일 먼저, 이후 dsc* 순으로 정렬 */
+        /* 파일명 순번 순으로 정렬 */
         const sorted = json.images
           .filter(img => !GALLERY_EXCLUDE.has(img.id))
           .sort(function (a, b) {
             const an = (a.name || '').toLowerCase();
             const bn = (b.name || '').toLowerCase();
-            const a04 = an.startsWith('0404'), b04 = bn.startsWith('0404');
-            if (a04 !== b04) return a04 ? -1 : 1;
-            return an.localeCompare(bn);
+            return an.localeCompare(bn, undefined, { numeric: true });
           });
 
         const INITIAL_COUNT = 6;
