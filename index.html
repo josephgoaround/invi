@@ -608,8 +608,14 @@
       -webkit-user-select: none;
     }
 
+    .couple-photo.groom img {
+      object-position: center bottom;
+      transform: scale(1.15);
+      transform-origin: center bottom;
+    }
+
     .couple-photo.bride img {
-      transform: scale(1.2);
+      transform: scale(1.0);
       transform-origin: center center;
     }
 
@@ -2413,7 +2419,7 @@
 
         <!-- 신랑 (Left) -->
         <div class="couple-card">
-          <div class="couple-photo">
+          <div class="couple-photo groom">
             <img src="https://drive.google.com/thumbnail?id=1BrlJXIwQNjOBKiMMZSCUv6t8ALnRH8Cj&sz=w600" alt="신랑 영석" loading="lazy" />
           </div>
           <div class="ko-block">
@@ -2611,7 +2617,29 @@
     </div>
 
     <div class="t-panel" id="tCar">
-      <p style="margin-top:0;font-family:'Noto Serif KR',serif;font-size:13.5px;color:var(--rose);line-height:1.9;letter-spacing:.02em;word-break:keep-all;">
+      <p class="t-info ko-block" style="word-break:keep-all;line-height:1.9;">
+        내비게이션 : <strong>롯데호텔월드</strong>
+      </p>
+      <p class="t-info ko-block" style="margin-top:6px;font-weight:600;word-break:keep-all;">-결혼식 하객 주차안내-</p>
+      <p class="t-info ko-block" style="margin-top:4px;word-break:keep-all;line-height:1.9;">
+        호텔 입구로 들어오셔서 지하 <strong>H구역</strong>이 가장 가깝습니다만,<br>
+        H구역이 만차인 경우가 많아<br>
+        <strong>백화점, 어드벤처, 마트</strong>로 입차하여 주차도 가능합니다.<br><br>
+        ※ 주차장이 복잡한 관계로 자가 이용 시 미리 출발하시면 조금 편리하십니다.<br>
+        ※ 대중교통을 이용하시면 더욱 더 편리합니다.
+      </p>
+      <p class="t-info en-block" style="word-break:keep-all;line-height:1.9;">
+        Navigation: <strong>Lotte Hotel World</strong>
+      </p>
+      <p class="t-info en-block" style="margin-top:6px;font-weight:600;">- Wedding Guest Parking Guide -</p>
+      <p class="t-info en-block" style="margin-top:4px;line-height:1.9;">
+        After entering the hotel, Underground <strong>Zone H</strong> is the closest.<br>
+        However, Zone H is often full —<br>
+        parking is also available at the <strong>Department Store, Adventure, or Mart</strong> entrances.<br><br>
+        ※ Parking can be congested — we recommend departing early if driving.<br>
+        ※ Public transit is even more convenient.
+      </p>
+      <p style="margin-top:14px;font-family:'Noto Serif KR',serif;font-size:13.5px;color:var(--rose);line-height:1.9;letter-spacing:.02em;word-break:keep-all;">
         <span class="ko-block">⚠ 내비게이션 검색 시 반드시 <strong>롯데호텔월드</strong>로 검색해주세요.<br>인근의 <strong>롯데월드타워 (시그니엘)</strong>과는 다른 건물로,<br>혼동하시면 다른 목적지로 안내될 수 있습니다.</span>
         <span class="en-block">⚠ Please search exactly for <strong>Lotte Hotel World</strong>.<br>The nearby <strong>Lotte World Tower (Signiel)</strong> is a different building — navigation may route you to the wrong destination.</span>
       </p>
@@ -2965,8 +2993,8 @@
           {
             title: '위치 보기',
             link: {
-              mobileWebUrl: 'https://map.kakao.com/link/to/롯데호텔월드,37.511089,127.098152',
-              webUrl: 'https://map.kakao.com/link/to/롯데호텔월드,37.511089,127.098152',
+              mobileWebUrl: 'https://map.kakao.com/link/map/%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C,37.511089,127.098152',
+              webUrl: 'https://map.kakao.com/link/map/%EB%A1%AF%EB%8D%B0%ED%98%B8%ED%85%94%EC%9B%94%EB%93%9C,37.511089,127.098152',
             },
           },
         ],
