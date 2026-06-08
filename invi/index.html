@@ -3423,15 +3423,18 @@
           '1J6E7Kvj51RP0VBcybOxCIpmLKiMGN0vY'  // kakao share banner
         ]);
 
-        /* 파일명 순번 순으로 정렬 */
+        /* 파일명 순번 1~11만 고정 표시 (신규 업로드 반영 안 됨) */
         const sorted = json.images
           .filter(img => !GALLERY_EXCLUDE.has(img.id))
+          .filter(img => {
+            const n = parseInt((img.name || ''), 10);
+            return Number.isFinite(n) && n >= 1 && n <= 11;
+          })
           .sort(function (a, b) {
             const an = (a.name || '').toLowerCase();
             const bn = (b.name || '').toLowerCase();
             return an.localeCompare(bn, undefined, { numeric: true });
-          })
-          .slice(0, 11);
+          });
 
         const INITIAL_COUNT = 6;
         const moreGrid = document.getElementById('galleryMoreGrid');
