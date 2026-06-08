@@ -3430,7 +3430,8 @@
             const an = (a.name || '').toLowerCase();
             const bn = (b.name || '').toLowerCase();
             return an.localeCompare(bn, undefined, { numeric: true });
-          });
+          })
+          .slice(0, 11);
 
         const INITIAL_COUNT = 6;
         const moreGrid = document.getElementById('galleryMoreGrid');
