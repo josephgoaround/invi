@@ -610,12 +610,12 @@
 
     .couple-photo.groom img {
       object-position: top center;
-      transform: scale(1.35) translateY(-18%);
+      transform: scale(1.35) translateY(-20%);
       transform-origin: top center;
     }
 
     .couple-photo.bride img {
-      transform: scale(1.0);
+      transform: scale(1.05);
       transform-origin: center center;
     }
 
@@ -2972,7 +2972,7 @@
         content: {
           title: '강영석 ♥ 권지은 결혼합니다',
           description: '2026년 9월 5일 토요일 낮 12시 30분\n롯데호텔월드 3F 크리스탈볼룸',
-          imageUrl: 'https://lh3.googleusercontent.com/d/1nBRLxK25Tkm5lWcu2uPUGtv63WMaBUc-=w1200-h1600-n',
+          imageUrl: 'https://lh3.googleusercontent.com/d/1nBRLxK25Tkm5lWcu2uPUGtv63WMaBUc-=w1200-h1600-s',
           link: {
             mobileWebUrl: 'https://joseph-jieun.cc/',
             webUrl: 'https://joseph-jieun.cc/',
@@ -3257,6 +3257,7 @@
 
       document.getElementById('galleryLightbox').style.display = 'flex';
       document.body.style.overflow = 'hidden';
+      history.pushState({ lightbox: true }, '');
       preloadAdjacent(idx);
     }
 
@@ -3296,12 +3297,23 @@
       if (!galleryImages.length) return;
       lbNavigate((lb_.idx + 1) % galleryImages.length);
     }
-    function closeLightbox() {
+    function _doCloseLightbox() {
       document.getElementById('galleryLightbox').style.display = 'none';
       document.getElementById('lbImgA').src = '';
       document.getElementById('lbImgB').src = '';
       document.body.style.overflow = '';
     }
+    function closeLightbox() {
+      if (history.state && history.state.lightbox) {
+        history.back();
+      } else {
+        _doCloseLightbox();
+      }
+    }
+    window.addEventListener('popstate', function () {
+      const lb = document.getElementById('galleryLightbox');
+      if (lb && lb.style.display !== 'none') _doCloseLightbox();
+    });
 
     document.addEventListener('DOMContentLoaded', function () {
       const lbVp = document.querySelector('.lb-viewport');
