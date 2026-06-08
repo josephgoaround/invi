@@ -3261,11 +3261,10 @@
       preloadAdjacent(idx);
     }
 
-    function lbNavigate(newIdx) {
+    function lbNavigate(newIdx, goLeft) {
       if (newIdx < 0 || newIdx >= galleryImages.length) return;
       if (newIdx === lb_.idx) return;
       const W = window.innerWidth * 1.08;
-      const goLeft = newIdx > lb_.idx; // swiping left = going to next
       const { cur, stby } = lbSlots();
 
       stby.style.transition = 'none';
@@ -3290,12 +3289,12 @@
     function prevLightbox(e) {
       if (e) e.stopPropagation();
       if (!galleryImages.length) return;
-      lbNavigate((lb_.idx - 1 + galleryImages.length) % galleryImages.length);
+      lbNavigate((lb_.idx - 1 + galleryImages.length) % galleryImages.length, false);
     }
     function nextLightbox(e) {
       if (e) e.stopPropagation();
       if (!galleryImages.length) return;
-      lbNavigate((lb_.idx + 1) % galleryImages.length);
+      lbNavigate((lb_.idx + 1) % galleryImages.length, true);
     }
     function _doCloseLightbox() {
       document.getElementById('galleryLightbox').style.display = 'none';
