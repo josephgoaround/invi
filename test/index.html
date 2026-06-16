@@ -2177,14 +2177,14 @@
       top: max(env(safe-area-inset-top, 14px), 14px);
       left: 16px;
       z-index: 1000;
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      border: 1px solid rgba(247, 244, 238, 0.28);
-      background: rgba(247, 244, 238, 0.12);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: rgba(247, 244, 238, 0.60);
+      border: 1px solid var(--border);
+      background: rgba(253, 252, 249, .92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      color: var(--gold);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -2192,7 +2192,7 @@
       transition: background .2s, color .2s;
       -webkit-tap-highlight-color: transparent;
     }
-    #musicBtn:active { background: rgba(247, 244, 238, 0.28); }
+    #musicBtn:active { background: rgba(253, 252, 249, 1); }
     #musicBtn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
 </style>
