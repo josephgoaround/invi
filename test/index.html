@@ -195,22 +195,23 @@
       -webkit-backdrop-filter: blur(18px);
       border: 1px solid var(--border);
       border-radius: 999px;
-      padding: 9px 18px;
+      height: 36px;
+      padding: 0 16px;
       font-family: 'Noto Serif KR', serif;
       font-size: 13px;
       font-weight: 400;
       letter-spacing: .15em;
       color: var(--gold);
       cursor: pointer;
+      display: flex;
+      align-items: center;
       transition: background .25s, transform .15s;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
 
     .cal-fixed-btn {
-      padding: 9px 13px;
-      display: flex;
-      align-items: center;
+      padding: 0 13px;
       gap: 5px;
     }
 
@@ -220,7 +221,10 @@
       background: #FEE500;
       border: none;
       border-radius: 999px;
-      padding: 9px 14px;
+      height: 36px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
       font-family: 'Noto Serif KR', serif;
       font-size: 13px;
       font-weight: 500;
@@ -2354,9 +2358,9 @@
       <button class="lang-btn" id="langBtn" aria-label="Switch language" onclick="toggleLang()">EN</button>
     </div>
   </header>
-  <!-- Background music: "Wallpaper" by Kevin MacLeod (incompetech.com), CC BY 4.0 -->
-  <audio id="bgAudio" loop preload="none"
-    src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Wallpaper.mp3"></audio>
+  <!-- Background music: "Crinoline Dreams" by Kevin MacLeod (incompetech.com), CC BY 4.0 -->
+  <audio id="bgAudio" loop preload="auto"
+    src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Crinoline%20Dreams.mp3"></audio>
 
 
   <!-- Calendar popup -->
@@ -2959,6 +2963,25 @@
     'use strict';
 
     /* ── BACKGROUND MUSIC ── */
+    (function initMusic() {
+      const audio = document.getElementById('bgAudio');
+      if (!audio) { isMusicReady = true; return; }
+
+      function onReady() {
+        if (isMusicReady) return;
+        isMusicReady = true;
+        attemptHidePreloader();
+        audio.play().then(() => {
+          document.getElementById('musicIconPlay').style.display  = 'none';
+          document.getElementById('musicIconPause').style.display = '';
+        }).catch(() => { /* browser blocked autoplay — user clicks to start */ });
+      }
+
+      audio.addEventListener('canplaythrough', onReady, { once: true });
+      // Safety: don't block preloader if audio is slow
+      setTimeout(() => { isMusicReady = true; attemptHidePreloader(); }, 6000);
+    })();
+
     function toggleBgMusic() {
       const audio = document.getElementById('bgAudio');
       const play  = document.getElementById('musicIconPlay');
@@ -2990,11 +3013,12 @@
     /* ── PRELOADER ── */
     let isWindowLoaded = false;
     let isGalleryLoaded = false;
+    let isMusicReady = false;
     let preloaderHidden = false;
 
     function attemptHidePreloader() {
       if (preloaderHidden) return;
-      if (isWindowLoaded && isGalleryLoaded) {
+      if (isWindowLoaded && isGalleryLoaded && isMusicReady) {
         preloaderHidden = true;
         const pl = document.getElementById('preloader');
         if (pl) {
