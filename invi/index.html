@@ -668,7 +668,7 @@
       width: 100vw;
       height: 88svh;
       overflow: hidden;
-      touch-action: none;
+      touch-action: manipulation;
     }
     .lb-slide {
       position: absolute;
@@ -699,7 +699,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      touch-action: manipulation;
       transition: transform .4s ease;
     }
 
@@ -1812,7 +1811,6 @@
       overflow-y: auto;
       position: relative;
       animation: rsvpSlideUp .8s cubic-bezier(.22, .61, .36, 1);
-      touch-action: pan-y;
       will-change: transform;
     }
 
