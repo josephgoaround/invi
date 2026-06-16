@@ -195,12 +195,12 @@
       -webkit-backdrop-filter: blur(18px);
       border: 1px solid var(--border);
       border-radius: 999px;
-      height: 36px;
-      padding: 0 16px;
+      height: 32px;
+      padding: 0 13px;
       font-family: 'Noto Serif KR', serif;
-      font-size: 13px;
+      font-size: 11.5px;
       font-weight: 400;
-      letter-spacing: .15em;
+      letter-spacing: .12em;
       color: var(--gold);
       cursor: pointer;
       display: flex;
@@ -211,7 +211,6 @@
     }
 
     .cal-fixed-btn {
-      padding: 0 13px;
       gap: 5px;
     }
 
@@ -221,8 +220,8 @@
       background: #FEE500;
       border: none;
       border-radius: 999px;
-      height: 36px;
-      padding: 0 14px;
+      height: 32px;
+      padding: 0 12px;
       display: flex;
       align-items: center;
       font-family: 'Noto Serif KR', serif;
@@ -2172,10 +2171,14 @@
       to   { width: 56px; }
     }
   
-    /* ── MUSIC BUTTON ── */
+    /* ── MUSIC BUTTON (always visible, fixed) ── */
     #musicBtn {
-      width: 36px;
-      height: 36px;
+      position: fixed;
+      top: max(env(safe-area-inset-top, 14px), 14px);
+      left: 16px;
+      z-index: 1000;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       border: 1px solid rgba(247, 244, 238, 0.28);
       background: rgba(247, 244, 238, 0.12);
@@ -2186,12 +2189,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
       transition: background .2s, color .2s;
       -webkit-tap-highlight-color: transparent;
     }
     #musicBtn:active { background: rgba(247, 244, 238, 0.28); }
-    #musicBtn svg { width: 15px; height: 15px; flex-shrink: 0; }
+    #musicBtn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
 </style>
 </head>
@@ -2324,17 +2326,6 @@
 ══════════════════════════════════════════ -->
   <header class="top-bar">
     <div class="top-bar-inner">
-      <!-- Music toggle -->
-      <button id="musicBtn" aria-label="배경음악 재생/정지" onclick="toggleBgMusic()">
-        <svg id="musicIconPlay" viewBox="0 0 24 24" fill="currentColor">
-          <polygon points="6,3 20,12 6,21"/>
-        </svg>
-        <svg id="musicIconPause" viewBox="0 0 24 24" fill="currentColor" style="display:none">
-          <rect x="5" y="4" width="4" height="16" rx="1"/>
-          <rect x="15" y="4" width="4" height="16" rx="1"/>
-        </svg>
-      </button>
-      <span style="flex:1"></span>
       <button class="rsvp-fixed-btn" id="rsvpFixedBtn" onclick="openRsvp()">
         <span class="ko-text">참석 여부</span>
         <span class="en-text">RSVP</span>
@@ -2358,6 +2349,18 @@
       <button class="lang-btn" id="langBtn" aria-label="Switch language" onclick="toggleLang()">EN</button>
     </div>
   </header>
+
+  <!-- Music toggle button (always visible, independent of top-bar) -->
+  <button id="musicBtn" aria-label="배경음악 재생/정지" onclick="toggleBgMusic()">
+    <svg id="musicIconPlay" viewBox="0 0 24 24" fill="currentColor">
+      <polygon points="6,3 20,12 6,21"/>
+    </svg>
+    <svg id="musicIconPause" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+      <rect x="5" y="4" width="4" height="16" rx="1"/>
+      <rect x="15" y="4" width="4" height="16" rx="1"/>
+    </svg>
+  </button>
+
   <!-- Background music: "Crinoline Dreams" by Kevin MacLeod (incompetech.com), CC BY 4.0 -->
   <audio id="bgAudio" loop preload="auto"
     src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Crinoline%20Dreams.mp3"></audio>
