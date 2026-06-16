@@ -2170,22 +2170,19 @@
   
     /* ── MUSIC BUTTON ── */
     #musicBtn {
-      position: fixed;
-      top: 14px;
-      left: 16px;
-      z-index: 1100;
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      border: 1px solid rgba(247, 244, 238, 0.30);
-      background: rgba(247, 244, 238, 0.15);
+      border: 1px solid rgba(247, 244, 238, 0.28);
+      background: rgba(247, 244, 238, 0.12);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      color: rgba(247, 244, 238, 0.65);
+      color: rgba(247, 244, 238, 0.60);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
       transition: background .2s, color .2s;
       -webkit-tap-highlight-color: transparent;
     }
@@ -2323,6 +2320,17 @@
 ══════════════════════════════════════════ -->
   <header class="top-bar">
     <div class="top-bar-inner">
+      <!-- Music toggle -->
+      <button id="musicBtn" aria-label="배경음악 재생/정지" onclick="toggleBgMusic()">
+        <svg id="musicIconPlay" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="6,3 20,12 6,21"/>
+        </svg>
+        <svg id="musicIconPause" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+          <rect x="5" y="4" width="4" height="16" rx="1"/>
+          <rect x="15" y="4" width="4" height="16" rx="1"/>
+        </svg>
+      </button>
+      <span style="flex:1"></span>
       <button class="rsvp-fixed-btn" id="rsvpFixedBtn" onclick="openRsvp()">
         <span class="ko-text">참석 여부</span>
         <span class="en-text">RSVP</span>
@@ -2346,20 +2354,9 @@
       <button class="lang-btn" id="langBtn" aria-label="Switch language" onclick="toggleLang()">EN</button>
     </div>
   </header>
-  <!-- Background music (Bensound – Acoustic Breeze, free with attribution bensound.com) -->
+  <!-- Background music: "Wallpaper" by Kevin MacLeod (incompetech.com), CC BY 4.0 -->
   <audio id="bgAudio" loop preload="none"
-    src="https://www.bensound.com/bensound-music/bensound-acousticbreeze.mp3"></audio>
-
-  <!-- Music toggle button -->
-  <button id="musicBtn" aria-label="배경음악 재생/정지" onclick="toggleBgMusic()">
-    <svg id="musicIconPlay" viewBox="0 0 24 24" fill="currentColor">
-      <polygon points="6,3 20,12 6,21"/>
-    </svg>
-    <svg id="musicIconPause" viewBox="0 0 24 24" fill="currentColor" style="display:none">
-      <rect x="5" y="4" width="4" height="16" rx="1"/>
-      <rect x="15" y="4" width="4" height="16" rx="1"/>
-    </svg>
-  </button>
+    src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Wallpaper.mp3"></audio>
 
 
   <!-- Calendar popup -->
