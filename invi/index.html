@@ -3401,7 +3401,7 @@
           .filter(img => !GALLERY_EXCLUDE.has(img.id))
           .filter(img => {
             const n = parseInt((img.name || ''), 10);
-            return Number.isFinite(n) && ((n >= 1 && n <= 11) || n === 15 || n === 16);
+            return Number.isFinite(n) && n >= 1 && n <= 11;
           })
           .sort(function (a, b) {
             const an = (a.name || '').toLowerCase();
