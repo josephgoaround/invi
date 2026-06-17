@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="format-detection" content="telephone=no,address=no,date=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -96,7 +96,6 @@
       font-optical-sizing: auto;
       word-break: keep-all;
       overflow-wrap: break-word;
-      touch-action: pan-x pan-y; /* disable pinch-zoom at browser level */
     }
 
     /* ── WINDOWS RENDERING FIX ──
@@ -605,10 +604,6 @@
       object-fit: cover;
       object-position: center center;
       display: block;
-      pointer-events: none;
-      -webkit-user-drag: none;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     .couple-photo.groom img {
@@ -673,7 +668,7 @@
       width: 100vw;
       height: 88svh;
       overflow: hidden;
-      touch-action: none;
+      touch-action: manipulation;
     }
     .lb-slide {
       position: absolute;
@@ -681,10 +676,6 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      pointer-events: none;
-      -webkit-user-drag: none;
-      user-select: none;
-      -webkit-user-select: none;
       will-change: transform;
     }
 
@@ -708,12 +699,7 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      touch-action: manipulation;
       transition: transform .4s ease;
-      pointer-events: none;
-      -webkit-user-drag: none;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     .g-cell:hover img {
@@ -1825,7 +1811,6 @@
       overflow-y: auto;
       position: relative;
       animation: rsvpSlideUp .8s cubic-bezier(.22, .61, .36, 1);
-      touch-action: pan-y;
       will-change: transform;
     }
 
@@ -3002,16 +2987,6 @@
 
 
 
-    /* Prevent pinch-zoom — iOS ignores viewport user-scalable */
-    document.addEventListener('touchstart', function (e) {
-      if (e.touches.length > 1) e.preventDefault();
-    }, { passive: false });
-    document.addEventListener('touchmove', function (e) {
-      if (e.touches.length > 1) e.preventDefault();
-    }, { passive: false });
-    document.addEventListener('touchend', function (e) {
-      if (e.touches.length > 1) e.preventDefault();
-    }, { passive: false });
 
     /* ── PRELOADER ── */
     let isWindowLoaded = false;
@@ -3289,12 +3264,6 @@
     }
 
     /* \u2500\u2500 GALLERY \u2500\u2500 */
-    /* Image download protection */
-    document.addEventListener('contextmenu', function (e) {
-      if (e.target.tagName === 'IMG' || e.target.closest('#galleryGrid, #galleryMoreGrid, #galleryLightbox')) {
-        e.preventDefault();
-      }
-    });
 
     let galleryImages = [];
     let currentLightboxIdx = 0;
@@ -3540,7 +3509,6 @@
           im.alt = img.name || ('사진 ' + (i + 1));
           im.loading = i < INITIAL_COUNT ? 'eager' : 'lazy';
           im.decoding = 'async';
-          im.draggable = false;
           cell.appendChild(im);
           if (i < INITIAL_COUNT) {
             grid.appendChild(cell);
