@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="format-detection" content="telephone=no,address=no,date=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -96,6 +96,7 @@
       font-optical-sizing: auto;
       word-break: keep-all;
       overflow-wrap: break-word;
+      touch-action: pan-x pan-y; /* disable pinch-zoom at browser level */
     }
 
     /* ── WINDOWS RENDERING FIX ──
@@ -604,6 +605,10 @@
       object-fit: cover;
       object-position: center center;
       display: block;
+      pointer-events: none;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .couple-photo.groom img {
@@ -668,7 +673,7 @@
       width: 100vw;
       height: 88svh;
       overflow: hidden;
-      touch-action: manipulation;
+      touch-action: none;
     }
     .lb-slide {
       position: absolute;
@@ -676,6 +681,10 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      pointer-events: none;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-user-select: none;
       will-change: transform;
     }
 
@@ -699,7 +708,12 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      touch-action: manipulation;
       transition: transform .4s ease;
+      pointer-events: none;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .g-cell:hover img {
@@ -1811,6 +1825,7 @@
       overflow-y: auto;
       position: relative;
       animation: rsvpSlideUp .8s cubic-bezier(.22, .61, .36, 1);
+      touch-action: pan-y;
       will-change: transform;
     }
 
@@ -2155,32 +2170,7 @@
       from { width: 0; }
       to   { width: 56px; }
     }
-  
-    /* ── MUSIC BUTTON (always visible, fixed) ── */
-    #musicBtn {
-      position: fixed;
-      top: max(env(safe-area-inset-top, 14px), 14px);
-      left: 16px;
-      z-index: 1000;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: rgba(253, 252, 249, .92);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      color: var(--gold);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background .2s, color .2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    #musicBtn:active { background: rgba(253, 252, 249, 1); }
-    #musicBtn svg { width: 14px; height: 14px; flex-shrink: 0; }
-
-</style>
+  </style>
 </head>
 
 <body>
@@ -2334,22 +2324,6 @@
       <button class="lang-btn" id="langBtn" aria-label="Switch language" onclick="toggleLang()">EN</button>
     </div>
   </header>
-
-  <!-- Music toggle button (always visible, independent of top-bar) -->
-  <button id="musicBtn" aria-label="배경음악 재생/정지" onclick="toggleBgMusic()">
-    <svg id="musicIconPlay" viewBox="0 0 24 24" fill="currentColor">
-      <polygon points="6,3 20,12 6,21"/>
-    </svg>
-    <svg id="musicIconPause" viewBox="0 0 24 24" fill="currentColor" style="display:none">
-      <rect x="5" y="4" width="4" height="16" rx="1"/>
-      <rect x="15" y="4" width="4" height="16" rx="1"/>
-    </svg>
-  </button>
-
-  <!-- Background music: "Crinoline Dreams" by Kevin MacLeod (incompetech.com), CC BY 4.0 -->
-  <audio id="bgAudio" loop preload="auto"
-    src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Crinoline%20Dreams.mp3"></audio>
-
 
   <!-- Calendar popup -->
   <div class="cal-popup" id="calPopup" role="dialog" aria-label="일정 저장">
@@ -2950,53 +2924,25 @@
   <script>
     'use strict';
 
-    /* ── BACKGROUND MUSIC ── */
-    (function initMusic() {
-      const audio = document.getElementById('bgAudio');
-      if (!audio) { isMusicReady = true; return; }
-
-      function onReady() {
-        if (isMusicReady) return;
-        isMusicReady = true;
-        attemptHidePreloader();
-        audio.play().then(() => {
-          document.getElementById('musicIconPlay').style.display  = 'none';
-          document.getElementById('musicIconPause').style.display = '';
-        }).catch(() => { /* browser blocked autoplay — user clicks to start */ });
-      }
-
-      audio.addEventListener('canplaythrough', onReady, { once: true });
-      // Safety: don't block preloader if audio is slow
-      setTimeout(() => { isMusicReady = true; attemptHidePreloader(); }, 6000);
-    })();
-
-    function toggleBgMusic() {
-      const audio = document.getElementById('bgAudio');
-      const play  = document.getElementById('musicIconPlay');
-      const pause = document.getElementById('musicIconPause');
-      if (audio.paused) {
-        audio.play().catch(() => {});
-        play.style.display  = 'none';
-        pause.style.display = '';
-      } else {
-        audio.pause();
-        play.style.display  = '';
-        pause.style.display = 'none';
-      }
-    }
-
-
-
+    /* Prevent pinch-zoom — iOS ignores viewport user-scalable */
+    document.addEventListener('touchstart', function (e) {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('touchmove', function (e) {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('touchend', function (e) {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
 
     /* ── PRELOADER ── */
     let isWindowLoaded = false;
     let isGalleryLoaded = false;
-    let isMusicReady = false;
     let preloaderHidden = false;
 
     function attemptHidePreloader() {
       if (preloaderHidden) return;
-      if (isWindowLoaded && isGalleryLoaded && isMusicReady) {
+      if (isWindowLoaded && isGalleryLoaded) {
         preloaderHidden = true;
         const pl = document.getElementById('preloader');
         if (pl) {
@@ -3040,16 +2986,16 @@
           description: '2026년 9월 5일 토요일 낮 12시 30분\n롯데호텔월드 3F 크리스탈볼룸',
           imageUrl: 'https://lh3.googleusercontent.com/d/1J6E7Kvj51RP0VBcybOxCIpmLKiMGN0vY=w1200',
           link: {
-            mobileWebUrl: 'https://joseph-jieun.cc/',
-            webUrl: 'https://joseph-jieun.cc/',
+            mobileWebUrl: 'https://joseph-jieun.cc/invi2/',
+            webUrl: 'https://joseph-jieun.cc/invi2/',
           },
         },
         buttons: [
           {
             title: '초대장 보기',
             link: {
-              mobileWebUrl: 'https://joseph-jieun.cc/',
-              webUrl: 'https://joseph-jieun.cc/',
+              mobileWebUrl: 'https://joseph-jieun.cc/invi2/',
+              webUrl: 'https://joseph-jieun.cc/invi2/',
             },
           },
         ],
@@ -3264,6 +3210,12 @@
     }
 
     /* \u2500\u2500 GALLERY \u2500\u2500 */
+    /* Image download protection */
+    document.addEventListener('contextmenu', function (e) {
+      if (e.target.tagName === 'IMG' || e.target.closest('#galleryGrid, #galleryMoreGrid, #galleryLightbox')) {
+        e.preventDefault();
+      }
+    });
 
     let galleryImages = [];
     let currentLightboxIdx = 0;
@@ -3509,6 +3461,7 @@
           im.alt = img.name || ('사진 ' + (i + 1));
           im.loading = i < INITIAL_COUNT ? 'eager' : 'lazy';
           im.decoding = 'async';
+          im.draggable = false;
           cell.appendChild(im);
           if (i < INITIAL_COUNT) {
             grid.appendChild(cell);
