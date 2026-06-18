@@ -1798,6 +1798,104 @@
     }
 
     /* ════════════════════════════════════════════
+     ATTEND NUDGE POPUP
+  ════════════════════════════════════════════ */
+    .attend-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 26, 26, .45);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 850;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity .35s ease;
+      pointer-events: none;
+    }
+    .attend-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .attend-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 28px 28px;
+      width: 100%;
+      max-width: 340px;
+      position: relative;
+      transform: translateY(20px) scale(.97);
+      transition: transform .4s cubic-bezier(.22,.61,.36,1), opacity .35s ease;
+      opacity: 0;
+      text-align: center;
+    }
+    .attend-backdrop.open .attend-card {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    .attend-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      width: 28px;
+      height: 28px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--light);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      padding: 0;
+    }
+    .attend-label {
+      font-size: 11px;
+      letter-spacing: .18em;
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+    }
+    .attend-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--char);
+      margin-bottom: 16px;
+      letter-spacing: -.01em;
+    }
+    .attend-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+      margin: 0 auto 18px;
+    }
+    .attend-body {
+      font-size: 13.5px;
+      line-height: 1.8;
+      color: var(--mid);
+      margin-bottom: 24px;
+      word-break: keep-all;
+    }
+    .attend-cta {
+      width: 100%;
+      padding: 14px 0;
+      background: var(--char);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      letter-spacing: .06em;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .2s;
+    }
+    .attend-cta:active { background: #333; }
+
+    /* ════════════════════════════════════════════
      RSVP MODAL
   ════════════════════════════════════════════ */
     .rsvp-overlay {
@@ -2183,6 +2281,25 @@
       <div class="preloader-date">2026 · 9 · 5</div>
       <div class="preloader-line"></div>
       <div class="preloader-date-sub">GETTING MARRIED</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+     ATTEND NUDGE POPUP
+══════════════════════════════════════════ -->
+  <div class="attend-backdrop" id="attendBackdrop" role="dialog" aria-modal="true" style="display:none">
+    <div class="attend-card" id="attendCard">
+      <button class="attend-close" onclick="closeAttendPopup()" aria-label="닫기">✕</button>
+      <p class="attend-label">Attend</p>
+      <p class="attend-title">참석 정보</p>
+      <div class="attend-divider"></div>
+      <p class="attend-body">
+        참석의 부담은 가지지 말아주시고,<br>
+        정성껏 준비하기 위해 여쭤는 것이니<br>
+        참석 정보를 알려주시면<br>
+        감사하겠습니다.
+      </p>
+      <button class="attend-cta" onclick="attendToRsvp()">참석여부 체크하기</button>
     </div>
   </div>
 
@@ -3048,18 +3165,39 @@
       history.scrollRestoration = 'manual';
       window.scrollTo(0, 0);
 
-      // 스크롤 시작 후 10초 뒤 RSVP 팝업 (이전 제출 여부 무관)
-      let rsvpTriggered = false;
+      // 스크롤 시작 후 10초 뒤 참석 안내 팝업
+      let attendTriggered = false;
       window.addEventListener('scroll', function onFirstScroll() {
-        if (rsvpTriggered) return;
-        rsvpTriggered = true;
+        if (attendTriggered) return;
+        attendTriggered = true;
         window.removeEventListener('scroll', onFirstScroll);
-        setTimeout(() => openRsvp(), 10000);
+        setTimeout(() => openAttendPopup(), 10000);
       }, { passive: true });
 
       // 갤러리 로드
       loadGallery();
     });
+
+    function openAttendPopup() {
+      const backdrop = document.getElementById('attendBackdrop');
+      backdrop.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { backdrop.classList.add('open'); });
+      });
+    }
+
+    function closeAttendPopup() {
+      const backdrop = document.getElementById('attendBackdrop');
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => { backdrop.style.display = 'none'; }, 380);
+    }
+
+    function attendToRsvp() {
+      closeAttendPopup();
+      setTimeout(() => openRsvp(), 200);
+    }
 
     function openRsvp() {
       const overlay = document.getElementById('rsvpOverlay');
