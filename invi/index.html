@@ -682,7 +682,7 @@
 
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(12, 1fr);
       gap: 4px;
     }
 
@@ -693,6 +693,7 @@
       overflow: hidden;
       cursor: pointer;
       position: relative;
+      grid-column: span 4; /* 기본: 3열 (12/4=3) */
     }
 
     .g-cell img {
@@ -761,7 +762,7 @@
 
     .gallery-more-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(12, 1fr);
       gap: 4px;
       margin-top: 4px;
     }
@@ -3407,7 +3408,8 @@
             return an.localeCompare(bn, undefined, { numeric: true });
           });
 
-        const INITIAL_COUNT = 6;
+        /* 1~3열: 3장씩 (span 4), 나머지: 4장씩 (span 3), 빈 칸 없도록 동적 조정 */
+        const INITIAL_COUNT = 9; /* 첫 3열 = 9장 */
         const moreGrid = document.getElementById('galleryMoreGrid');
         const moreBtn  = document.getElementById('galleryMoreBtn');
         grid.innerHTML = '';
@@ -3415,6 +3417,25 @@
         galleryImages = [];
         let loadedCount = 0;
         const totalCount = sorted.length;
+
+        /* 나머지 n장을 3·4장 행으로 빈 칸 없이 배치하는 span 배열 계산
+           12열 그리드 기준: span 3 = 4장/행, span 4 = 3장/행 */
+        function computeSpans(n) {
+          if (n <= 0) return [];
+          for (let fours = Math.floor(n / 4); fours >= 0; fours--) {
+            const rem = n - fours * 4;
+            if (rem % 3 === 0) {
+              const spans = [];
+              for (let i = 0; i < fours * 4; i++) spans.push(3); /* 4장/행 */
+              for (let i = 0; i < rem;         i++) spans.push(4); /* 3장/행 */
+              return spans;
+            }
+          }
+          return Array(n).fill(3); /* fallback */
+        }
+
+        const moreSpans = computeSpans(Math.max(0, sorted.length - INITIAL_COUNT));
+
         sorted.forEach(function (img, i) {
           const thumbSrc = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w600';
           const fullSrc  = 'https://drive.google.com/thumbnail?id=' + img.id + '&sz=w1600';
@@ -3433,8 +3454,11 @@
           im.decoding = 'async';
           cell.appendChild(im);
           if (i < INITIAL_COUNT) {
+            /* 첫 9장: span 4 (3장/행) — CSS 기본값과 동일 */
             grid.appendChild(cell);
           } else if (moreGrid) {
+            const span = moreSpans[i - INITIAL_COUNT];
+            if (span) cell.style.gridColumn = 'span ' + span;
             moreGrid.appendChild(cell);
           }
         });
