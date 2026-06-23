@@ -3444,8 +3444,8 @@
             const rem = n - fours * 4;
             if (rem % 3 === 0) {
               const spans = [];
-              for (let i = 0; i < fours * 4; i++) spans.push(3); /* 4장/행 */
-              for (let i = 0; i < rem;         i++) spans.push(4); /* 3장/행 */
+              for (let i = 0; i < rem;         i++) spans.push(4); /* 3장/행 — 위쪽에 집중 */
+              for (let i = 0; i < fours * 4; i++) spans.push(3); /* 4장/행 — 아래쪽 */
               return spans;
             }
           }
