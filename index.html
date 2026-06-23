@@ -3146,6 +3146,15 @@
       window.scrollTo(0, 0);
 
 
+      // 스크롤 시작 시 참석 안내 팝업 (항상 표시)
+      let attendTriggered = false;
+      window.addEventListener('scroll', function onFirstScroll() {
+        if (attendTriggered) return;
+        attendTriggered = true;
+        window.removeEventListener('scroll', onFirstScroll);
+        setTimeout(() => openAttendPopup(), 1000);
+      }, { passive: true });
+
       // 갤러리 로드
       loadGallery();
     });
