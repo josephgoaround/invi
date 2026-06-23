@@ -682,7 +682,7 @@
 
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 4px;
     }
 
@@ -3606,16 +3606,6 @@
             const bn = (b.name || '').toLowerCase();
             return an.localeCompare(bn, undefined, { numeric: true });
           });
-
-        /* 스튜디오 독사진: 6번 사진 뒤에 삽입 (신랑→신부) */
-        const STUDIO_IDS = [
-          '1eMVMIj9Gna6B1l5rPRcZwW1rcl6y_PTa',  // groom studio
-          '1LbDZz8KfhQnU3rMd_IKwl6BPVYhPbJua'   // bride studio
-        ];
-        const studioPhotos = json.images
-          .filter(img => STUDIO_IDS.includes(img.id))
-          .sort((a, b) => STUDIO_IDS.indexOf(a.id) - STUDIO_IDS.indexOf(b.id));
-        sorted.splice(6, 0, ...studioPhotos);
 
         const INITIAL_COUNT = 6;
         const moreGrid = document.getElementById('galleryMoreGrid');
