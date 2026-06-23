@@ -3514,9 +3514,13 @@
           '1J6E7Kvj51RP0VBcybOxCIpmLKiMGN0vY'  // kakao share banner
         ]);
 
-        /* 파일명 순번 순으로 정렬 */
+        /* 파일명 순번 순으로 정렬 (21~27번 제외) */
         const sorted = json.images
           .filter(img => !GALLERY_EXCLUDE.has(img.id))
+          .filter(img => {
+            const n = parseInt((img.name || ''), 10);
+            return !(Number.isFinite(n) && n >= 21 && n <= 27);
+          })
           .sort(function (a, b) {
             const an = (a.name || '').toLowerCase();
             const bn = (b.name || '').toLowerCase();
