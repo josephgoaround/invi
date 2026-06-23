@@ -3167,13 +3167,15 @@
       history.scrollRestoration = 'manual';
       window.scrollTo(0, 0);
 
-      // 스크롤 시작 후 10초 뒤 참석 안내 팝업
+      // 스크롤 시작 시 참석 안내 팝업 (이미 제출한 경우 스킵)
       let attendTriggered = false;
       window.addEventListener('scroll', function onFirstScroll() {
         if (attendTriggered) return;
         attendTriggered = true;
         window.removeEventListener('scroll', onFirstScroll);
-        setTimeout(() => openAttendPopup(), 10000);
+        if (!localStorage.getItem(RSVP_KEY)) {
+          setTimeout(() => openAttendPopup(), 1000);
+        }
       }, { passive: true });
 
       // 갤러리 로드
