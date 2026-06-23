@@ -1835,23 +1835,6 @@
       transform: translateY(0) scale(1);
       opacity: 1;
     }
-    .attend-close {
-      position: absolute;
-      top: 14px;
-      right: 16px;
-      width: 28px;
-      height: 28px;
-      background: none;
-      border: none;
-      font-size: 18px;
-      color: var(--light);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-      padding: 0;
-    }
     .attend-label {
       font-size: 11px;
       letter-spacing: .18em;
@@ -2289,7 +2272,6 @@
 ══════════════════════════════════════════ -->
   <div class="attend-backdrop" id="attendBackdrop" role="dialog" aria-modal="true" style="display:none">
     <div class="attend-card" id="attendCard">
-      <button class="attend-close" onclick="closeAttendPopup()" aria-label="닫기">✕</button>
       <p class="attend-label">Attend</p>
       <p class="attend-title">참석 정보</p>
       <div class="attend-divider"></div>
