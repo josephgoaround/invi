@@ -3199,14 +3199,6 @@
       history.scrollRestoration = 'manual';
       window.scrollTo(0, 0);
 
-      // 스크롤 시작 후 10초 뒤 RSVP 팝업 (이전 제출 여부 무관)
-      let rsvpTriggered = false;
-      window.addEventListener('scroll', function onFirstScroll() {
-        if (rsvpTriggered) return;
-        rsvpTriggered = true;
-        window.removeEventListener('scroll', onFirstScroll);
-        setTimeout(() => openRsvp(), 10000);
-      }, { passive: true });
 
       // 갤러리 로드
       loadGallery();
