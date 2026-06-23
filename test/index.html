@@ -691,7 +691,7 @@
 
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(12, 1fr);
       gap: 4px;
     }
 
@@ -702,6 +702,7 @@
       overflow: hidden;
       cursor: pointer;
       position: relative;
+      grid-column: span 4; /* 기본: 3장/행 (12/4) */
     }
 
     .g-cell img {
@@ -726,6 +727,7 @@
     .g-skeleton {
       aspect-ratio: 1;
       border-radius: 8px;
+      grid-column: span 4;
       background: linear-gradient(90deg, var(--cream) 25%, rgba(180, 146, 90, .12) 50%, var(--cream) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.6s infinite;
@@ -775,7 +777,7 @@
 
     .gallery-more-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(12, 1fr);
       gap: 4px;
       margin-top: 4px;
     }
@@ -2196,8 +2198,8 @@
       <button class="rsvp-close" onclick="closeRsvp()" aria-label="닫기">✕</button>
 
       <p class="rsvp-notice">
-        <span class="ko-text">귀한 걸음 하시는 모든 분을<br>정성껏 모실 수 있도록<br>참석 여부를 미리 여쭙고자 합니다.<br>답변을 남겨주시면<br>보다 편안한 자리를 준비하겠습니다.</span>
-        <span class="en-text">To ensure a warm welcome for all our guests,<br>we kindly ask that you let us know<br>whether you'll be joining us on our special day.<br>Your RSVP is deeply appreciated.</span>
+        <span class="ko-text">예식과 식사가 같은 자리에서 함께 진행되어<br>귀한 걸음 해주시는 모든 분을<br>정성껏 모실 수 있도록<br>참석 여부를 미리 여쭙고자 합니다.<br>번거로우시더라도 답변을 남겨주시면<br>보다 편안한 자리로 모시겠습니다.</span>
+        <span class="en-text">As the ceremony and reception are held together in the same place,<br>we kindly ask that you let us know whether you'll be able to join us.<br>Your thoughtful reply helps us welcome every guest<br>and prepare a comfortable seat for you.</span>
       </p>
       <p
         style="font-size:13px;color:var(--light);text-align:center;line-height:1.85;margin-top:-10px;margin-bottom:18px;letter-spacing:.02em;">
@@ -2880,9 +2882,9 @@
       <span class="en-text">RSVP</span>
     </h2>
     <p class="rsvp-notice" style="margin-bottom:32px">
-      <span class="ko-text">귀한 걸음 하시는 모든 분을<br>정성껏 모실 수 있도록<br>참석 여부를 미리 여쭙고자 합니다.<br>답변을 남겨주시면<br>보다 편안한 자리를 준비하겠습니다.</span>
-      <span class="en-text">To prepare a comfortable experience for everyone,<br>we kindly ask that you let us
-        know<br>if you will be able to join us on our special day.<br>Your RSVP is deeply appreciated.</span>
+      <span class="ko-text">예식과 식사가 같은 자리에서 함께 진행되어<br>귀한 걸음 해주시는 모든 분을<br>정성껏 모실 수 있도록<br>참석 여부를 미리 여쭙고자 합니다.<br>번거로우시더라도 답변을 남겨주시면<br>보다 편안한 자리로 모시겠습니다.</span>
+      <span class="en-text">As the ceremony and reception are held together in the same place,<br>we kindly ask that you let us
+        know<br>whether you'll be able to join us.<br>Your thoughtful reply helps us welcome every guest and prepare a comfortable seat for you.</span>
     </p>
     <button class="rsvp-open-btn" onclick="openRsvp()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -3434,7 +3436,34 @@
             return an.localeCompare(bn, undefined, { numeric: true });
           });
 
-        const INITIAL_COUNT = 6;
+        /* 갤러리: 모든 행을 3~4장으로 채워 빈 칸이 없도록 동적 배치
+           (12열 그리드 · span 4 = 3장/행, span 3 = 4장/행) */
+        function computeSpans(n) {
+          if (n <= 0) return [];
+          for (let fours = Math.floor(n / 4); fours >= 0; fours--) {
+            const rem = n - fours * 4;
+            if (rem % 3 === 0) {
+              const spans = [];
+              for (let i = 0; i < fours * 4; i++) spans.push(3); /* 4장/행 */
+              for (let i = 0; i < rem;         i++) spans.push(4); /* 3장/행 */
+              return spans;
+            }
+          }
+          return Array(n).fill(4); /* fallback: 가능한 한 3장/행 */
+        }
+
+        const allSpans = computeSpans(sorted.length);
+
+        /* 행 경계 기준으로 미리보기 2행, 나머지는 더보기 영역으로 */
+        const rowEnds = [];
+        let spanAcc = 0;
+        for (let k = 0; k < allSpans.length; k++) {
+          spanAcc += allSpans[k];
+          if (spanAcc >= 12) { rowEnds.push(k + 1); spanAcc = 0; }
+        }
+        const PREVIEW_ROWS = 2;
+        const initialCount = rowEnds.length > PREVIEW_ROWS ? rowEnds[PREVIEW_ROWS - 1] : sorted.length;
+
         const moreGrid = document.getElementById('galleryMoreGrid');
         const moreBtn  = document.getElementById('galleryMoreBtn');
         grid.innerHTML = '';
@@ -3448,6 +3477,7 @@
           galleryImages.push(fullSrc);
           const cell = document.createElement('div');
           cell.className = 'g-cell';
+          cell.style.gridColumn = 'span ' + allSpans[i];
           cell.onclick = function () { openLightbox(i); };
           const im = document.createElement('img');
           im.onload = im.onerror = function () {
@@ -3456,11 +3486,11 @@
           };
           im.src = thumbSrc;
           im.alt = img.name || ('사진 ' + (i + 1));
-          im.loading = i < INITIAL_COUNT ? 'eager' : 'lazy';
+          im.loading = i < initialCount ? 'eager' : 'lazy';
           im.decoding = 'async';
           im.draggable = false;
           cell.appendChild(im);
-          if (i < INITIAL_COUNT) {
+          if (i < initialCount) {
             grid.appendChild(cell);
           } else if (moreGrid) {
             moreGrid.appendChild(cell);
