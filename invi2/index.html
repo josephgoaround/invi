@@ -3948,6 +3948,27 @@
         window.location.href = 'snap.html';
       }
     }
+
+    /* RSVP 관계 입력 예시를 순환 노출하여 다양화 */
+    (function rotateRelationPlaceholder() {
+      const el = document.getElementById('rsvpRelation');
+      if (!el) return;
+      const samples = [
+        '신랑 친구', '신부 친구',
+        '신랑 학교 동기', '신부 대학 동기',
+        '신랑 직장 동료', '신부 직장 동료',
+        '신랑 친척', '신부 친척',
+        '신랑 어머니 지인', '신부 어머니 지인',
+        '신랑 아버지 지인', '신부 아버지 지인'
+      ];
+      let idx = 0;
+      el.placeholder = '예) ' + samples[0];
+      setInterval(function () {
+        if (document.activeElement === el || el.value) return;
+        idx = (idx + 1) % samples.length;
+        el.placeholder = '예) ' + samples[idx];
+      }, 2200);
+    })();
   </script>
 
 </body>
