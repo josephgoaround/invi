@@ -2237,7 +2237,7 @@
             <span class="ko-text">관계 *</span>
             <span class="en-text">Relation *</span>
           </label>
-          <input type="text" id="rsvpRelation" class="f-input" placeholder="예) 신랑 친구, 신부 직장 동료" autocomplete="off" />
+          <input type="text" id="rsvpRelation" class="f-input" placeholder="예) 신부 아버지 직장 동료, 신부 어머니 지인" autocomplete="off" />
         </div>
 
         <div class="form-field">
@@ -3952,24 +3952,6 @@
         window.location.href = 'snap.html';
       }
     }
-
-    /* RSVP 관계 입력 예시를 순환 노출하여 다양화 */
-    (function rotateRelationPlaceholder() {
-      const el = document.getElementById('rsvpRelation');
-      if (!el) return;
-      const samples = [
-        '신부 아버지 직장 동료', '신부 어머니 지인',
-        '신부 아버지 지인', '신부 어머니 친구',
-        '신부 아버지 친구', '신부 어머니 지인'
-      ];
-      let idx = 0;
-      el.placeholder = '예) ' + samples[0];
-      setInterval(function () {
-        if (document.activeElement === el || el.value) return;
-        idx = (idx + 1) % samples.length;
-        el.placeholder = '예) ' + samples[idx];
-      }, 2200);
-    })();
   </script>
 
 </body>
