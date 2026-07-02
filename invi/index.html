@@ -2012,7 +2012,11 @@
     }
 
     .rsvp-radio-lbl input[type="radio"] {
-      display: none;
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      pointer-events: none;
     }
 
     .rsvp-radio-lbl.selected {
@@ -2228,11 +2232,11 @@
           </span>
           <div class="rsvp-radio-group">
             <label class="rsvp-radio-lbl" id="lblAttendYes" onclick="selectAttend('yes')">
-              <input type="radio" name="rsvpAttend" value="yes" />
+              <input type="radio" name="rsvpAttend" value="yes" onchange="selectAttend('yes')" />
               <span class="ko-text">✓ 참석</span><span class="en-text">✓ Attending</span>
             </label>
             <label class="rsvp-radio-lbl" id="lblAttendNo" onclick="selectAttend('no')">
-              <input type="radio" name="rsvpAttend" value="no" />
+              <input type="radio" name="rsvpAttend" value="no" onchange="selectAttend('no')" />
               <span class="ko-text">✕ 불참</span><span class="en-text">✕ Not Attending</span>
             </label>
           </div>
@@ -3081,7 +3085,7 @@
       sheet.addEventListener('touchmove', function (e) {
         if (!dragging) return;
         const dy = e.touches[0].clientY - startY;
-        if (dy > 0 && sheet.scrollTop <= 0) {
+        if (dy > 6 && sheet.scrollTop <= 0) {
           e.preventDefault(); // 메인 페이지 스크롤 차단
           currentY = dy;
           sheet.style.transform = 'translateY(' + currentY + 'px)';
