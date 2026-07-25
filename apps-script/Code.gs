@@ -92,6 +92,38 @@ function doGet(e) {
     }
   }
 
+  // ── GET: ?action=comments → 축하 메시지 목록 반환 ──
+  if (action === 'comments') {
+    try {
+      var cSheet = SpreadsheetApp.openById(COMMENT_SHEET_ID).getSheets()[0];
+      var lastRow = cSheet.getLastRow();
+      var list = [];
+      if (lastRow > 1) {
+        var rows = cSheet.getRange(2, 1, lastRow - 1, 4).getValues(); // ID | 타임스탬프 | 성함 | 메시지
+        for (var r = 0; r < rows.length; r++) {
+          if (!rows[r][0] && !rows[r][3]) continue; // 빈 행 skip
+          var ts = rows[r][1];
+          if (Object.prototype.toString.call(ts) === '[object Date]') {
+            ts = Utilities.formatDate(ts, 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss');
+          }
+          list.push({
+            id: String(rows[r][0]),
+            timestamp: String(ts),
+            name: String(rows[r][2] || ''),
+            message: String(rows[r][3] || '')
+          });
+        }
+      }
+      return ContentService
+        .createTextOutput(JSON.stringify({ ok: true, comments: list }))
+        .setMimeType(ContentService.MimeType.JSON);
+    } catch (err) {
+      return ContentService
+        .createTextOutput(JSON.stringify({ ok: false, error: err.toString() }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+
   // 기본 응답
   return ContentService
     .createTextOutput('Wedding API is running ✦')
