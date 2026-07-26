@@ -3718,13 +3718,34 @@
 
     /* ── 6. GUESTBOOK (방명록) ── */
     const GB_KEY = 'guestbook_kye2026_v2'; // v2: 기존 댓글 초기화 + PIN 기능
-    let comments = [];
+    let myComments = [];   // 이 기기에서 작성한 메시지 (PIN 보관용)
+    let comments = [];     // 화면에 표시할 전체 메시지 (서버 + 내 것 병합)
 
     try {
       const raw = localStorage.getItem(GB_KEY);
-      comments = raw ? JSON.parse(raw) : [];
-    } catch (e) { comments = []; }
+      myComments = raw ? JSON.parse(raw) : [];
+    } catch (e) { myComments = []; }
+    comments = myComments.slice();
     renderComments();
+    loadComments();
+
+    // 서버에 등록된 전체 축하 메시지를 불러와 화면에 게시
+    async function loadComments() {
+      if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') return;
+      try {
+        const res = await fetch(APPS_SCRIPT_URL + '?action=comments');
+        const json = await res.json();
+        if (!json || !json.ok || !Array.isArray(json.comments)) return;
+        const pinById = {};
+        myComments.forEach(c => { if (c.pin) pinById[c.id] = c.pin; });
+        const merged = json.comments.map(c => pinById[c.id] ? { ...c, pin: pinById[c.id] } : c);
+        // 등록 직후 서버 반영이 늦어도 내 최신 글은 보이도록 포함
+        myComments.forEach(c => { if (!merged.some(m => m.id === c.id)) merged.push(c); });
+        merged.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        comments = merged;
+        renderComments();
+      } catch (e) { /* 실패 시 로컬 목록 유지 */ }
+    }
 
     function renderComments() {
       const list = document.getElementById('gbList');
@@ -3789,8 +3810,10 @@
       const lang = currentLang;
       const comment = comments.find(c => c.id === id);
       if (!comment) return;
+      const mine = myComments.find(c => c.id === id);
+      const validPin = (mine && mine.pin) || comment.pin;
 
-      if (entered !== comment.pin && entered !== '1214') {
+      if (entered !== validPin && entered !== '1214') {
         showToast(lang === 'ko' ? '비밀번호가 일치하지 않습니다' : 'Incorrect Password');
         wrap.querySelector('.gb-pin-input').value = '';
         wrap.querySelector('.gb-pin-input').focus();
@@ -3798,7 +3821,8 @@
       }
 
       comments = comments.filter(c => c.id !== id);
-      try { localStorage.setItem(GB_KEY, JSON.stringify(comments)); } catch (e) { }
+      myComments = myComments.filter(c => c.id !== id);
+      try { localStorage.setItem(GB_KEY, JSON.stringify(myComments)); } catch (e) { }
 
       if (APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
         try {
@@ -3840,8 +3864,9 @@
         } catch (e) { }
       }
 
+      myComments.push(entry);
       comments.push(entry);
-      try { localStorage.setItem(GB_KEY, JSON.stringify(comments)); } catch (e) { }
+      try { localStorage.setItem(GB_KEY, JSON.stringify(myComments)); } catch (e) { }
 
       document.getElementById('gbName').value = '';
       document.getElementById('gbPin').value = '';
