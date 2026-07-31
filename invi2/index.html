@@ -3121,6 +3121,20 @@
     });
 
 
+    /* 인앱 브라우저(카카오 등): 스크롤 시 툴바가 숨으면 100vh가 커져 히어로가 확대되는 현상 방지.
+       히어로 높이를 로드 시점 높이로 고정하고, 가로폭이 바뀔 때(회전)만 재계산 */
+    (function () {
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
+      let lastW = window.innerWidth;
+      function pinHero() { hero.style.height = window.innerHeight + 'px'; }
+      pinHero();
+      window.addEventListener('load', pinHero);
+      window.addEventListener('resize', function () {
+        if (window.innerWidth !== lastW) { lastW = window.innerWidth; pinHero(); }
+      });
+    })();
+
     function openRsvp() {
       const overlay = document.getElementById('rsvpOverlay');
       document.getElementById('rsvpFormWrap').style.display = 'block';
