@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko" data-lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no,address=no,date=no" />
+  <meta name="theme-color" content="#1C1814" />
+  <title>스냅 피드 · 강영석 ♥ 권지은</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ivory: #F7F4EE; --cream: #EDE8DE; --gold: #B4925A; --gold-lt: #D4B280;
+      --char: #1A1A1A; --mid: #5A5248; --light: #9A9088;
+      --border: rgba(180,146,90,.18); --dark-bg: #1C1814; --like: #E0555A;
+    }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    body {
+      background: var(--dark-bg); color: #fff;
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+      font-weight: 300; max-width: 480px; margin: 0 auto; overflow-x: hidden;
+      -webkit-font-smoothing: auto; word-break: keep-all; overflow-wrap: break-word;
+      padding-bottom: max(40px, env(safe-area-inset-bottom, 0px));
+    }
+    a { color: inherit; }
+
+    /* HEADER */
+    .feed-top {
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px; background: rgba(28,24,20,.92);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(180,146,90,.16);
+    }
+    .feed-back {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 50%;
+      color: rgba(255,255,255,.7); text-decoration: none; flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .feed-title { font-size: 16px; font-weight: 500; letter-spacing: .04em; color: #fff; }
+    .feed-title small { display: block; font-size: 10.5px; font-weight: 300; letter-spacing: .18em; color: var(--gold-lt); text-transform: uppercase; margin-top: 2px; }
+
+    /* INTRO */
+    .feed-intro { text-align: center; padding: 26px 24px 8px; }
+    .feed-intro p { font-size: 12.5px; color: rgba(255,255,255,.5); line-height: 1.9; }
+
+    /* STATES */
+    .feed-state { text-align: center; padding: 70px 24px; color: rgba(255,255,255,.45); font-size: 13.5px; line-height: 2; }
+    .feed-state .sym { color: var(--gold); font-size: 18px; letter-spacing: .3em; margin-bottom: 16px; }
+    .feed-cta {
+      display: inline-block; margin-top: 22px; padding: 11px 24px;
+      border: 1px solid rgba(180,146,90,.4); border-radius: 999px;
+      color: var(--gold-lt); text-decoration: none; font-size: 13px; letter-spacing: .06em;
+    }
+
+    /* FEED */
+    .feed-list { padding: 12px 14px 0; display: flex; flex-direction: column; gap: 18px; }
+    .fcard {
+      background: var(--ivory); color: var(--char);
+      border-radius: 18px; overflow: hidden;
+      box-shadow: 0 6px 22px rgba(0,0,0,.28);
+    }
+    .fc-head { display: flex; align-items: center; gap: 10px; padding: 13px 15px; }
+    .fc-avatar {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 500;
+    }
+    .fc-who { line-height: 1.35; }
+    .fc-name { font-size: 14px; font-weight: 500; color: var(--char); }
+    .fc-date { font-size: 11px; color: var(--light); letter-spacing: .03em; }
+
+    .fc-media {
+      position: relative; width: 100%; aspect-ratio: 4/5;
+      background: var(--cream); overflow: hidden;
+    }
+    .fc-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .fc-media iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+
+    .fc-actions { display: flex; align-items: center; gap: 8px; padding: 12px 15px 4px; }
+    .like-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; padding: 0; background: none; border: none;
+      cursor: pointer; color: var(--char); -webkit-tap-highlight-color: transparent;
+      transition: transform .12s;
+    }
+    .like-btn:active { transform: scale(.82); }
+    .like-btn.liked { color: var(--like); }
+    .like-btn svg { width: 26px; height: 26px; }
+    .like-count { font-size: 13.5px; font-weight: 500; color: var(--char); letter-spacing: .02em; }
+    .like-count small { font-weight: 300; color: var(--light); }
+
+    .fc-caption { padding: 4px 15px 16px; font-size: 13.5px; line-height: 1.6; color: var(--mid); }
+    .fc-caption b { color: var(--char); font-weight: 500; margin-right: 6px; }
+
+    .feed-foot { text-align: center; padding: 30px 24px 10px; font-size: 11px; color: rgba(255,255,255,.3); letter-spacing: .1em; }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-thumb { background: rgba(180,146,90,.22); border-radius: 99px; }
+  </style>
+</head>
+
+<body>
+  <div class="feed-top">
+    <a class="feed-back" href="snap.html" aria-label="뒤로">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+    </a>
+    <div class="feed-title">스냅 피드<small>Guest Snap Feed</small></div>
+  </div>
+
+  <div class="feed-intro">
+    <p>하객분들이 대표로 남겨주신 순간들이에요.<br>마음에 드는 스냅에 ♥ 를 눌러주세요.</p>
+  </div>
+
+  <div id="feedState" class="feed-state">
+    <div class="sym">✦ &nbsp; ✦ &nbsp; ✦</div>
+    불러오는 중…
+  </div>
+
+  <div id="feedList" class="feed-list"></div>
+
+  <div class="feed-foot" id="feedFoot" style="display:none">강영석 ♥ 권지은 · 하객 스냅</div>
+
+  <script>
+    'use strict';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYSbC2rgAD8aYeeSQJdMtdO11A1ZevKXDNYDsu6LcUuPJT8XPpPCbfPdRvHVFDnnEb/exec';
+    const LIKE_KEY = 'snap_likes_v1';
+
+    let liked = {};
+    try { liked = JSON.parse(localStorage.getItem(LIKE_KEY) || '{}') || {}; } catch (e) { liked = {}; }
+    function saveLiked() { try { localStorage.setItem(LIKE_KEY, JSON.stringify(liked)); } catch (e) {} }
+
+    function esc(s) { return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function heartSvg(fill) {
+      return '<svg viewBox="0 0 24 24" fill="' + (fill ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
+    }
+    function fmtDate(ts) {
+      const d = new Date((ts || '').replace(' ', 'T'));
+      if (isNaN(d)) return ts || '';
+      return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+    }
+
+    async function loadFeed() {
+      const state = document.getElementById('feedState');
+      const list = document.getElementById('feedList');
+      try {
+        const res = await fetch(APPS_SCRIPT_URL + '?action=feed');
+        const json = await res.json();
+        if (!json.ok || !json.posts || !json.posts.length) {
+          state.innerHTML = '<div class="sym">✦ &nbsp; ✦ &nbsp; ✦</div>아직 게시된 스냅이 없어요.<br>첫 순간을 남겨주세요.'
+            + '<br><a class="feed-cta" href="snap.html">스냅 남기러 가기</a>';
+          return;
+        }
+        state.style.display = 'none';
+        json.posts.forEach(post => list.appendChild(renderCard(post)));
+        document.getElementById('feedFoot').style.display = 'block';
+      } catch (e) {
+        state.innerHTML = '<div class="sym">✦</div>스냅을 불러오지 못했어요.<br>잠시 후 다시 시도해주세요.';
+      }
+    }
+
+    function renderCard(post) {
+      const card = document.createElement('div');
+      card.className = 'fcard';
+      const initial = esc((post.uploader || '하객').trim().charAt(0) || '♥');
+      let media;
+      if (post.type === 'video') {
+        media = '<iframe src="https://drive.google.com/file/d/' + post.id + '/preview" allow="autoplay" loading="lazy" allowfullscreen></iframe>';
+      } else {
+        media = '<img loading="lazy" src="https://lh3.googleusercontent.com/d/' + post.id + '=w1000" alt="스냅" '
+          + 'onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=\'https://drive.google.com/thumbnail?id=' + post.id + '&sz=w1000\';}">';
+      }
+      const isLiked = !!liked[post.id];
+      card.innerHTML =
+        '<div class="fc-head"><div class="fc-avatar">' + initial + '</div>'
+        + '<div class="fc-who"><div class="fc-name">' + esc(post.uploader || '하객') + '</div>'
+        + '<div class="fc-date">' + fmtDate(post.ts) + '</div></div></div>'
+        + '<div class="fc-media">' + media + '</div>'
+        + '<div class="fc-actions">'
+        + '<button class="like-btn' + (isLiked ? ' liked' : '') + '" aria-label="좋아요">' + heartSvg(isLiked) + '</button>'
+        + '<span class="like-count">' + post.likes + '<small> 좋아요</small></span></div>'
+        + (post.caption ? '<div class="fc-caption"><b>' + esc(post.uploader || '') + '</b>' + esc(post.caption) + '</div>' : '');
+
+      const btn = card.querySelector('.like-btn');
+      const cnt = card.querySelector('.like-count');
+      let count = Number(post.likes) || 0;
+      btn.addEventListener('click', () => {
+        const nowLiked = !liked[post.id];
+        if (nowLiked) { liked[post.id] = true; count++; }
+        else { delete liked[post.id]; count = Math.max(0, count - 1); }
+        saveLiked();
+        btn.classList.toggle('liked', nowLiked);
+        btn.innerHTML = heartSvg(nowLiked);
+        cnt.innerHTML = count + '<small> 좋아요</small>';
+        sendLike(post.id, nowLiked ? 'like' : 'unlike');
+      });
+      return card;
+    }
+
+    function sendLike(id, op) {
+      try {
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ type: 'snaplike', id: id, op: op })
+        });
+      } catch (e) { /* silent */ }
+    }
+
+    loadFeed();
+  </script>
+</body>
+
+</html>

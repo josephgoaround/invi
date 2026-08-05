@@ -124,6 +124,34 @@ function doGet(e) {
     }
   }
 
+  // ── GET: ?action=feed → 게시된(대표) 하객 스냅 목록 반환 ──
+  if (action === 'feed') {
+    try {
+      var fsh = getFeedSheet();
+      var flast = fsh.getLastRow();
+      var posts = [];
+      if (flast > 1) {
+        var frows = fsh.getRange(2, 1, flast - 1, 7).getValues(); // ID|타임스탬프|업로더|유형|캡션|좋아요|파일명
+        for (var i = 0; i < frows.length; i++) {
+          if (!frows[i][0]) continue;
+          posts.push({
+            id: String(frows[i][0]),
+            ts: String(frows[i][1]),
+            uploader: String(frows[i][2] || ''),
+            type: String(frows[i][3] || 'image'),
+            caption: String(frows[i][4] || ''),
+            likes: Number(frows[i][5]) || 0,
+            name: String(frows[i][6] || '')
+          });
+        }
+      }
+      posts.reverse(); // 최신순
+      return jsonOut({ ok: true, posts: posts });
+    } catch (err) {
+      return jsonOut({ ok: false, error: err.toString() });
+    }
+  }
+
   // 기본 응답
   return ContentService
     .createTextOutput('Wedding API is running ✦')
@@ -134,9 +162,10 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
 
-    if      (data.type === 'rsvp')    handleRsvp(data);
-    else if (data.type === 'snap')    handleSnap(data);
-    else if (data.type === 'comment') handleComment(data);
+    if      (data.type === 'rsvp')     handleRsvp(data);
+    else if (data.type === 'snap')     handleSnap(data);
+    else if (data.type === 'comment')  handleComment(data);
+    else if (data.type === 'snaplike') handleSnapLike(data);
 
     return ContentService
       .createTextOutput(JSON.stringify({ success: true }))
@@ -273,28 +302,30 @@ function handleComment(data) {
 }
 
 // ── 스냅 → Drive 폴더에 업로드 + 제출 명단 기록 ──────
-// 파일명 규칙: 성함_HHmmss_N.ext  (예: 홍길동_143022_1.jpg)
-// 컬럼 순서: 타임스탬프 | 성함 | 연락처 | 파일 수 | 저장 파일명
+// 파일명 규칙: 성함_MMdd-HHmmss_N.ext  (예: 홍길동_0905-143022_1.jpg)
+// 컬럼 순서: 타임스탬프 | 성함 | 연락처 | 파일 수 | 저장 파일명 | 게시 수
 function handleSnap(data) {
   const sheet  = SpreadsheetApp.openById(SNAP_SHEET_ID).getSheets()[0];
-  const HEADER = ['타임스탬프', '성함', '연락처', '파일 수', '저장 파일명'];
+  const HEADER = ['타임스탬프', '성함', '연락처', '파일 수', '저장 파일명', '게시 수'];
 
   ensureHeader(sheet, HEADER);
 
   const rootFolder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
   const tag        = Utilities.formatDate(new Date(), 'Asia/Seoul', 'MMdd-HHmmss');
   const savedNames = [];
-  let idx = 1;
+  const caption    = (data.caption || '').toString().slice(0, 200);
+  let idx = 1, posted = 0;
 
   if (data.files && data.files.length) {
     data.files.forEach(function(f) {
       try {
-        const ext      = f.ext || (f.mimeType && f.mimeType.startsWith('video/') ? 'mp4' : 'jpg');
+        const ext      = f.ext || (f.mimeType && f.mimeType.indexOf('video/') === 0 ? 'mp4' : 'jpg');
         const fileName = data.name + '_' + tag + '_' + idx + '.' + ext;
         const bytes    = Utilities.base64Decode(f.base64);
         const blob     = Utilities.newBlob(bytes, f.mimeType, fileName);
-        rootFolder.createFile(blob);
+        const file     = rootFolder.createFile(blob);
         savedNames.push(fileName);
+        if (f.featured) { addFeedPost(file, data.name, f.mimeType, caption); posted++; }
         idx++;
       } catch (err) { /* 파일 하나 실패해도 계속 진행 */ }
     });
@@ -305,6 +336,64 @@ function handleSnap(data) {
     data.name,
     data.contact,
     savedNames.length,
-    savedNames.join(' / ')
+    savedNames.join(' / '),
+    posted
   ]);
+}
+
+// ── 피드(게시) 시트 가져오기/생성 ──────────────────────
+// SNAP 스프레드시트 안에 '피드' 탭을 사용합니다.
+// 컬럼: ID(파일) | 타임스탬프 | 업로더 | 유형 | 캡션 | 좋아요 | 파일명
+function getFeedSheet() {
+  const ss = SpreadsheetApp.openById(SNAP_SHEET_ID);
+  let sh = ss.getSheetByName('피드');
+  if (!sh) {
+    sh = ss.insertSheet('피드');
+    sh.appendRow(['ID', '타임스탬프', '업로더', '유형', '캡션', '좋아요', '파일명']);
+    sh.getRange(1, 1, 1, 7).setFontWeight('bold').setBackground('#F7F4EE');
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+// ── 대표 스냅을 피드에 게시 (공개 공유 + 드라이브 파일에 좋아요 기록) ──
+function addFeedPost(file, uploader, mime, caption) {
+  try { file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); } catch (e) {}
+  try { file.setDescription('좋아요: 0'); } catch (e) {}
+  const type = (mime && mime.indexOf('video/') === 0) ? 'video' : 'image';
+  getFeedSheet().appendRow([
+    file.getId(),
+    Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
+    uploader || '',
+    type,
+    caption || '',
+    0,
+    file.getName()
+  ]);
+}
+
+// ── 좋아요 반영: 피드 시트 + 연결된 드라이브 파일 설명에 기록 ──
+// data: { type:'snaplike', id:파일ID, op:'like'|'unlike' }
+function handleSnapLike(data) {
+  const sh = getFeedSheet();
+  const last = sh.getLastRow();
+  if (last < 2) return;
+  const rows = sh.getRange(2, 1, last - 1, 7).getValues();
+  for (let i = 0; i < rows.length; i++) {
+    if (String(rows[i][0]) === String(data.id)) {
+      const delta = (data.op === 'unlike') ? -1 : 1;
+      let n = (Number(rows[i][5]) || 0) + delta;
+      if (n < 0) n = 0;
+      sh.getRange(i + 2, 6).setValue(n);
+      try { DriveApp.getFileById(String(data.id)).setDescription('좋아요: ' + n); } catch (e) {}
+      return;
+    }
+  }
+}
+
+// ── JSON 응답 헬퍼 ──
+function jsonOut(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
 }

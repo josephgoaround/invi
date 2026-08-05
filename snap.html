@@ -531,6 +531,116 @@
       transform: translateX(-50%) translateY(0);
     }
 
+    /* PREVIEW GRID (대표 게시 선택) */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 2px 0 10px;
+    }
+
+    .pv-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--cream);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .pv-item img,
+    .pv-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pv-vid-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(0, 0, 0, .55);
+      color: #fff;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 99px;
+      letter-spacing: .04em;
+    }
+
+    .pv-star {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: background .15s, transform .15s;
+    }
+
+    .pv-item.featured {
+      outline: 2.5px solid var(--gold);
+      outline-offset: -2.5px;
+    }
+
+    .pv-item.featured .pv-star {
+      background: var(--gold);
+      transform: scale(1.08);
+    }
+
+    .pv-hint {
+      font-size: 11.5px;
+      color: var(--mid);
+      text-align: center;
+      margin: 0 0 14px;
+      letter-spacing: .01em;
+      line-height: 1.7;
+    }
+
+    .pv-hint b {
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    [data-lang="en"] .pv-hint {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-size: 13px;
+    }
+
+    .cap-field {
+      display: none;
+    }
+
+    /* VIEW FEED LINK */
+    .feed-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      background: none;
+      border: 1px solid rgba(180, 146, 90, .38);
+      border-radius: var(--radius-card);
+      color: var(--gold);
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      font-size: 14px;
+      letter-spacing: .05em;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .feed-link:active {
+      background: rgba(180, 146, 90, .06);
+    }
+
     ::-webkit-scrollbar {
       width: 3px;
     }
@@ -631,6 +741,20 @@
         <span id="fileChosenTxt"></span>
       </div>
 
+      <!-- 대표 게시 선택 미리보기 -->
+      <div class="preview-grid" id="previewGrid"></div>
+      <p class="pv-hint" id="pvHint" style="display:none">
+        <span class="ko-text">별표 ⭐ 를 누르면 <b>대표로 게시</b>돼, 스냅 피드에 인스타그램처럼 올라가요.</span>
+        <span class="en-text">Tap the ⭐ to feature it on the public snap feed.</span>
+      </p>
+      <div class="form-field cap-field" id="capField">
+        <label class="f-label" for="snapCaption">
+          <span class="ko-text">한마디 <span class="optional-badge">(게시 시 함께 표시)</span></span>
+          <span class="en-text">Caption <span class="optional-badge">(shown on feed)</span></span>
+        </label>
+        <input type="text" id="snapCaption" class="f-input" maxlength="60" placeholder="축하의 한마디를 남겨보세요 ✦" />
+      </div>
+
       <!-- Progress -->
       <div class="upload-progress-wrap" id="progressWrap">
         <p>
@@ -656,6 +780,15 @@
         <span class="ko-text">제출하기</span>
         <span class="en-text">Submit</span>
       </button>
+
+      <a class="feed-link" href="snap-feed.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="3.5" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+        </svg>
+        <span class="ko-text">게시된 스냅 피드 보기</span>
+        <span class="en-text">View snap feed</span>
+      </a>
     </div>
 
     <!-- Thank you -->
@@ -675,6 +808,14 @@
         <span class="ko-text">다른 파일 추가하기</span>
         <span class="en-text">Submit more files</span>
       </button>
+      <a class="feed-link" href="snap-feed.html" style="max-width:280px;margin:18px auto 0;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="3.5" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+        </svg>
+        <span class="ko-text">게시된 스냅 피드 보기</span>
+        <span class="en-text">View snap feed</span>
+      </a>
     </div>
 
   </div>
@@ -687,7 +828,38 @@
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYSbC2rgAD8aYeeSQJdMtdO11A1ZevKXDNYDsu6LcUuPJT8XPpPCbfPdRvHVFDnnEb/exec';
     const MAX_FILES = 20;
     let pendingFiles = [];
+    let featured = new Set();   // 대표로 게시할 파일 인덱스
+    let previewURLs = [];
     let currentLang = 'ko';
+
+    function starSvg() {
+      return '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.8 6.1 20.8l1.2-6.6L2.5 9l6.6-.9z"/></svg>';
+    }
+    function clearPreviews() { previewURLs.forEach(u => URL.revokeObjectURL(u)); previewURLs = []; }
+    function renderPreviews() {
+      const grid = document.getElementById('previewGrid');
+      const hint = document.getElementById('pvHint');
+      const cap = document.getElementById('capField');
+      clearPreviews(); grid.innerHTML = '';
+      if (!pendingFiles.length) { hint.style.display = 'none'; cap.style.display = 'none'; return; }
+      hint.style.display = 'block'; cap.style.display = 'block';
+      pendingFiles.forEach((f, i) => {
+        const url = URL.createObjectURL(f); previewURLs.push(url);
+        const isVid = f.type.startsWith('video/');
+        const item = document.createElement('div');
+        item.className = 'pv-item' + (featured.has(i) ? ' featured' : '');
+        item.innerHTML =
+          (isVid
+            ? '<video src="' + url + '" muted playsinline preload="metadata"></video><span class="pv-vid-badge">▶ 동영상</span>'
+            : '<img src="' + url + '" alt="">')
+          + '<span class="pv-star">' + starSvg() + '</span>';
+        item.addEventListener('click', () => {
+          if (featured.has(i)) featured.delete(i); else featured.add(i);
+          item.classList.toggle('featured');
+        });
+        grid.appendChild(item);
+      });
+    }
 
     /* Language toggle */
     const htmlEl = document.documentElement;
@@ -719,7 +891,9 @@
       pendingFiles = Array.from(this.files)
         .filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'))
         .slice(0, MAX_FILES);
+      featured = new Set();
       updateFileIndicator();
+      renderPreviews();
     });
 
     function updateFileIndicator() {
@@ -803,7 +977,7 @@
           const ext = f.name.includes('.')
             ? f.name.split('.').pop().toLowerCase()
             : f.type.startsWith('video/') ? 'mp4' : 'jpg';
-          filesData.push({ base64, mimeType: f.type, ext, savedName: `${nameVal}_${_tag}_${i + 1}.${ext}` });
+          filesData.push({ base64, mimeType: f.type, ext, savedName: `${nameVal}_${_tag}_${i + 1}.${ext}`, featured: featured.has(i) });
           // 진행률 업데이트
           progressFill.style.width = `${Math.round((i + 1) / pendingFiles.length * 70)}%`;
         } catch (e) { /* skip */ }
@@ -813,6 +987,7 @@
         type: 'snap',
         name: nameVal,
         contact: contactVal || '-',
+        caption: (document.getElementById('snapCaption').value || '').trim(),
         timestamp: new Date().toISOString(),
         fileCount: filesData.length,
         files: filesData
@@ -833,6 +1008,12 @@
       await new Promise(r => setTimeout(r, 400));
 
       pendingFiles = [];
+      featured = new Set();
+      clearPreviews();
+      document.getElementById('previewGrid').innerHTML = '';
+      document.getElementById('pvHint').style.display = 'none';
+      document.getElementById('capField').style.display = 'none';
+      document.getElementById('snapCaption').value = '';
       document.getElementById('fileInput').value = '';
       document.getElementById('fileChosen').style.display = 'none';
       progressWrap.style.display = 'none';
@@ -847,6 +1028,12 @@
       document.getElementById('snapName').value = '';
       document.getElementById('snapContact').value = '';
       pendingFiles = [];
+      featured = new Set();
+      clearPreviews();
+      document.getElementById('previewGrid').innerHTML = '';
+      document.getElementById('pvHint').style.display = 'none';
+      document.getElementById('capField').style.display = 'none';
+      document.getElementById('snapCaption').value = '';
       document.getElementById('fileChosen').style.display = 'none';
       document.getElementById('snapThanks').style.display = 'none';
       document.getElementById('snapFormWrap').style.display = '';
@@ -874,7 +1061,9 @@
           pendingFiles = Array.from(e.dataTransfer.files)
             .filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'))
             .slice(0, MAX_FILES);
+          featured = new Set();
           updateFileIndicator();
+          renderPreviews();
         }
       });
     })();
