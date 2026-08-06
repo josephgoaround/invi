@@ -444,9 +444,17 @@
     .upload-progress-wrap p {
       font-size: 12px;
       color: var(--mid);
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 8px;
       letter-spacing: .05em;
+    }
+
+    #progressPct {
+      color: var(--gold);
+      font-weight: 400;
+      font-variant-numeric: tabular-nums;
     }
 
     .upload-progress-bar {
@@ -758,8 +766,8 @@
       <!-- Progress -->
       <div class="upload-progress-wrap" id="progressWrap">
         <p>
-          <span class="ko-text" id="progressTxtKo">업로드 중…</span>
-          <span class="en-text" id="progressTxtEn">Uploading…</span>
+          <span id="progressLabel">업로드 중…</span>
+          <span id="progressPct">0%</span>
         </p>
         <div class="upload-progress-bar">
           <div class="upload-progress-fill" id="progressFill"></div>
@@ -965,23 +973,27 @@
       const progressFill = document.getElementById('progressFill');
       progressWrap.style.display = 'block';
 
-      // base64 인코딩 — 파일명 규칙: 성함_MMdd-HHmmss_N.ext (예: 홍길동_0905-143022_1.jpg) — Code.gs와 동일
+      // 원본 그대로 base64 인코딩 (화질·크기 손실 없음) — 파일명: 성함_MMdd-HHmmss_N.ext
+      setProg(0, 'prep');
       const _now = new Date();
       const _pad = n => String(n).padStart(2, '0');
       const _tag = `${_pad(_now.getMonth() + 1)}${_pad(_now.getDate())}-${_pad(_now.getHours())}${_pad(_now.getMinutes())}${_pad(_now.getSeconds())}`;
+      const totalBytes = pendingFiles.reduce((a, f) => a + (f.size || 0), 0) || 1;
+      let doneBytes = 0;
       const filesData = [];
       for (let i = 0; i < pendingFiles.length; i++) {
         const f = pendingFiles[i];
         try {
-          const base64 = await readAsBase64(f);
+          // 파일 준비(인코딩) 진행률: 0~45%
+          const base64 = await readAsBase64(f, loaded => setProg((doneBytes + loaded) / totalBytes * 45, 'prep'));
           const ext = f.name.includes('.')
             ? f.name.split('.').pop().toLowerCase()
             : f.type.startsWith('video/') ? 'mp4' : 'jpg';
           filesData.push({ base64, mimeType: f.type, ext, savedName: `${nameVal}_${_tag}_${i + 1}.${ext}`, featured: featured.has(i) });
-          // 진행률 업데이트
-          progressFill.style.width = `${Math.round((i + 1) / pendingFiles.length * 70)}%`;
         } catch (e) { /* skip */ }
+        doneBytes += (f.size || 0);
       }
+      setProg(48, 'upload');
 
       const payload = {
         type: 'snap',
@@ -993,19 +1005,10 @@
         files: filesData
       };
 
-      progressFill.style.width = '85%';
-
-      try {
-        await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify(payload)
-        });
-      } catch (e) { /* silent */ }
-
-      progressFill.style.width = '100%';
-      await new Promise(r => setTimeout(r, 400));
+      // 실제 업로드 진행률(전송 바이트 기준): 50~100%
+      await xhrPost(payload, up => setProg(50 + up * 50, 'upload'));
+      setProg(100, 'upload');
+      await new Promise(r => setTimeout(r, 350));
 
       pendingFiles = [];
       featured = new Set();
@@ -1039,12 +1042,45 @@
       document.getElementById('snapFormWrap').style.display = '';
     }
 
-    function readAsBase64(file) {
+    function readAsBase64(file, onProgress) {
       return new Promise((resolve, reject) => {
         const r = new FileReader();
+        if (onProgress) r.onprogress = e => { if (e.lengthComputable) onProgress(e.loaded); };
         r.onload = e => resolve(e.target.result.split(',')[1]);
         r.onerror = () => reject(new Error('read failed'));
         r.readAsDataURL(file);
+      });
+    }
+
+    /* 진행률 바 갱신 (phase: 'prep' | 'upload') */
+    function setProg(pct, phase) {
+      pct = Math.max(0, Math.min(100, Math.round(pct)));
+      const fill = document.getElementById('progressFill');
+      if (fill) fill.style.width = pct + '%';
+      const pctEl = document.getElementById('progressPct');
+      if (pctEl) pctEl.textContent = pct + '%';
+      const lbl = document.getElementById('progressLabel');
+      if (lbl) lbl.textContent = currentLang === 'ko'
+        ? (phase === 'prep' ? '파일 준비 중…' : '업로드 중…')
+        : (phase === 'prep' ? 'Preparing…' : 'Uploading…');
+    }
+
+    /* XHR 업로드 — 전송 바이트 기준 실제 진행률 제공 (응답은 fire-and-forget) */
+    function xhrPost(payload, onUp) {
+      return new Promise(resolve => {
+        let done = false;
+        const fin = () => { if (!done) { done = true; resolve(); } };
+        try {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', APPS_SCRIPT_URL, true);
+          xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
+          if (xhr.upload) {
+            xhr.upload.onprogress = e => { if (e.lengthComputable && onUp) onUp(e.loaded / e.total); };
+            xhr.upload.onload = () => { if (onUp) onUp(1); };
+          }
+          xhr.onload = fin; xhr.onerror = fin; xhr.ontimeout = fin; xhr.onabort = fin;
+          xhr.send(JSON.stringify(payload));
+        } catch (e) { fin(); }
       });
     }
 
