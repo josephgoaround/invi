@@ -1813,7 +1813,6 @@
       max-height: 92svh;
       overflow-y: auto;
       position: relative;
-      animation: rsvpSlideUp .4s cubic-bezier(.22, .61, .36, 1);
       touch-action: pan-y;
     }
 
@@ -3060,6 +3059,9 @@
       document.getElementById('rsvpFormWrap').style.display = 'block';
       document.getElementById('rsvpThanks').style.display = 'none';
       overlay.style.display = 'flex';
+      overlay.style.opacity = '0';
+      overlay.offsetHeight; // 리플로우 강제 → transform 없이 페이드인 (삼성 한글 IME 정상)
+      overlay.style.opacity = '1';
       document.body.style.overflow = 'hidden';
     }
 
