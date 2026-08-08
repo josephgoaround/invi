@@ -3016,17 +3016,14 @@
       }
     }
 
-    window.addEventListener('load', () => {
-      isWindowLoaded = true;
-      attemptHidePreloader();
-    });
+    window.addEventListener('load', () => { isWindowLoaded = true; });
 
-    // Safety fallback: hide preloader after 6s regardless
+    // 인트로(프리로더) 3초 노출 후 닫기
     setTimeout(() => {
       isWindowLoaded = true;
       isGalleryLoaded = true;
       attemptHidePreloader();
-    }, 6000);
+    }, 3000);
 
 
     /* ── 0. CONFIG ── */
@@ -3114,16 +3111,22 @@
 
 
 
-      // 로드 후 잠시 뒤 RSVP 팝업 자동 표시 (클릭 불필요 · 세션당 1회)
+      // 스크롤 다운 후 5초 뒤 RSVP 팝업 자동 표시 (세션당 1회)
       var _rsvpAuto = null;
       try { _rsvpAuto = sessionStorage.getItem('rsvpAutoShown'); } catch (e) {}
       if (!_rsvpAuto) {
-        setTimeout(function () {
-          if (typeof openRsvpModal === 'function') {
-            openRsvpModal();
-            try { sessionStorage.setItem('rsvpAutoShown', '1'); } catch (e) {}
-          }
-        }, 4500);
+        var _rsvpArmed = false;
+        window.addEventListener('scroll', function onRsvpScroll() {
+          if (_rsvpArmed || window.scrollY <= 40) return;   // 아래로 내렸을 때만 발동
+          _rsvpArmed = true;
+          window.removeEventListener('scroll', onRsvpScroll);
+          setTimeout(function () {
+            if (typeof openRsvpModal === 'function') {
+              openRsvpModal();
+              try { sessionStorage.setItem('rsvpAutoShown', '1'); } catch (e) {}
+            }
+          }, 5000);
+        }, { passive: true });
       }
 
       // 갤러리 로드
