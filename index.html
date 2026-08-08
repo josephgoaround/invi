@@ -1803,12 +1803,12 @@
     /* ════════════════════════════════════════════
      RSVP MODAL
   ════════════════════════════════════════════ */
-    body.rsvp-open *, body.rsvp-open *::before, body.rsvp-open *::after { animation-play-state: paused !important; }
-
     .rsvp-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(26, 26, 26, .86);
+      background: rgba(26, 26, 26, .72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       z-index: 900;
       display: flex;
       align-items: flex-end;
@@ -1827,7 +1827,9 @@
       max-height: 92svh;
       overflow-y: auto;
       position: relative;
+      animation: rsvpSlideUp .8s cubic-bezier(.22, .61, .36, 1);
       touch-action: pan-y;
+      will-change: transform;
     }
 
     .rsvp-drag-handle {
@@ -3084,13 +3086,7 @@
       document.getElementById('rsvpFormWrap').style.display = 'block';
       document.getElementById('rsvpThanks').style.display = 'none';
       overlay.style.display = 'flex';
-      document.getElementById('rsvpSheet').style.transform = ''; // 잔존 transform 제거 (IME 보호)
-      overlay.style.opacity = '0';
-      overlay.offsetHeight; // 리플로우 강제 → transform 없이 페이드인 (삼성 한글 IME 정상)
-      overlay.style.opacity = '1';
       document.body.style.overflow = 'hidden';
-      document.body.classList.add('rsvp-open'); // 열려있는 동안 모든 CSS 애니메이션 정지 (삼성 한글 IME 보호)
-      if (window.__pauseCd) window.__pauseCd(); // 팝업 열려있는 동안 카운트다운 정지 (한글 IME 안정)
     }
 
     function selectAttend(val) {
@@ -3111,12 +3107,46 @@
       sheet.style.transition = 'transform .3s cubic-bezier(.22,.61,.36,1)';
       sheet.style.transform  = '';
       document.body.style.overflow = '';
-      document.body.classList.remove('rsvp-open');
-      if (window.__resumeCd) window.__resumeCd();
       setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = '1'; }, 260);
     }
 
-    /* RSVP: 스와이프 닫기 제거 — 삼성 한글 IME 호환 (닫기는 ✕ / '다음에' 버튼) */
+    /* ── RSVP sheet swipe-down-to-dismiss ── */
+    (function () {
+      const sheet = document.getElementById('rsvpSheet');
+      let startY = 0, currentY = 0, startScrollTop = 0, dragging = false;
+
+      sheet.addEventListener('touchstart', function (e) {
+        startY = e.touches[0].clientY;
+        startScrollTop = sheet.scrollTop;
+        dragging = true;
+        sheet.style.transition = 'none';
+      }, { passive: true });
+
+      sheet.addEventListener('touchmove', function (e) {
+        if (!dragging) return;
+        const dy = e.touches[0].clientY - startY;
+        if (dy > 6 && sheet.scrollTop <= 0) {
+          e.preventDefault(); // 메인 페이지 스크롤 차단 (탭은 무시하도록 6px 임계값)
+          currentY = dy;
+          sheet.style.transform = 'translateY(' + currentY + 'px)';
+          const overlay = document.getElementById('rsvpOverlay');
+          overlay.style.opacity = Math.max(0, 1 - currentY / 300);
+        }
+      }, { passive: false }); // non-passive: preventDefault 허용
+
+      sheet.addEventListener('touchend', function () {
+        dragging = false;
+        sheet.style.transition = 'transform .3s cubic-bezier(.22,.61,.36,1)';
+        if (currentY > 100) {
+          sheet.style.transform = 'translateY(100%)';
+          setTimeout(closeRsvp, 280);
+        } else {
+          sheet.style.transform = 'translateY(0)';
+          document.getElementById('rsvpOverlay').style.opacity = '1';
+        }
+        currentY = 0;
+      });
+    })();
 
     async function submitRsvp() {
       const name     = (document.getElementById('rsvpName').value || '').trim();
@@ -3911,16 +3941,6 @@
 
       var timer = setInterval(tick, 1000);
       tick();
-
-      // 입력 중에는 카운트다운 정지 — 매초 리플로우가 삼성 한글 IME 조합을 취소하는 문제 방지
-      window.__pauseCd = function () { if (timer) { clearInterval(timer); timer = null; } };
-      window.__resumeCd = function () { if (!timer && !isWeddingDay()) { timer = setInterval(tick, 1000); } };
-      document.addEventListener('focusin', function (e) {
-        if (e.target && e.target.matches && e.target.matches('input, textarea')) window.__pauseCd();
-      });
-      document.addEventListener('focusout', function (e) {
-        if (e.target && e.target.matches && e.target.matches('input, textarea')) window.__resumeCd();
-      });
     })();
 
     function snapGo() {
