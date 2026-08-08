@@ -3945,6 +3945,16 @@
 
       var timer = setInterval(tick, 1000);
       tick();
+
+      // 입력 중에는 카운트다운 정지 — 매초 리플로우가 삼성 한글 IME 조합을 취소하는 문제 방지
+      function pauseCd() { if (timer) { clearInterval(timer); timer = null; } }
+      function resumeCd() { if (!timer && !isWeddingDay()) { timer = setInterval(tick, 1000); } }
+      document.addEventListener('focusin', function (e) {
+        if (e.target && e.target.matches && e.target.matches('input, textarea')) pauseCd();
+      });
+      document.addEventListener('focusout', function (e) {
+        if (e.target && e.target.matches && e.target.matches('input, textarea')) resumeCd();
+      });
     })();
 
     function snapGo() {
