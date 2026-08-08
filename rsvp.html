@@ -103,6 +103,10 @@
     .thanks p { font-family: 'Noto Serif KR', serif; font-size: 15px; color: var(--mid); line-height: 2.2; margin-bottom: 28px; }
     .thanks a { display: inline-block; border: 1px solid var(--border); border-radius: 999px; padding: 11px 26px; font-size: 13px; letter-spacing: .08em; color: var(--gold); text-decoration: none; }
 
+    /* iframe(페이지 내 팝업)으로 삽입된 경우 */
+    .embedded .head { padding-top: 30px; }
+    .embedded .back-link { display: none; }
+
     /* KO/EN */
     .en-text, .en-block { display: none; }
     [data-lang="en"] .ko-text, [data-lang="en"] .ko-block { display: none; }
@@ -186,7 +190,7 @@
     <div class="thanks" id="thanks" aria-live="polite">
       <div class="sym">✦ &nbsp; ✦ &nbsp; ✦</div>
       <p><span class="ko-block">참석 여부를 전달해 주셔서<br>진심으로 감사합니다.</span><span class="en-block">Thank you for letting us know.<br>We can't wait to see you.</span></p>
-      <a href="index.html"><span class="ko-text">청첩장으로 돌아가기</span><span class="en-text">Back to Invitation</span></a>
+      <a href="index.html" id="thanksBack"><span class="ko-text">청첩장으로 돌아가기</span><span class="en-text">Back to Invitation</span></a>
     </div>
   </div>
 
@@ -197,6 +201,21 @@
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYSbC2rgAD8aYeeSQJdMtdO11A1ZevKXDNYDsu6LcUuPJT8XPpPCbfPdRvHVFDnnEb/exec';
     let currentLang = 'ko';
     let attendValue = null;
+
+    // 페이지 내 팝업(iframe)으로 삽입된 경우: 부모창과 닫기 연동
+    const embedded = window.self !== window.top;
+    if (embedded) {
+      document.documentElement.classList.add('embedded');
+      window.addEventListener('DOMContentLoaded', function () {
+        const tb = document.getElementById('thanksBack');
+        if (tb) {
+          tb.href = 'javascript:void(0)';
+          tb.innerHTML = '<span class="ko-text">닫기</span><span class="en-text">Close</span>';
+          tb.addEventListener('click', function () { parent.postMessage('rsvp-close', '*'); });
+        }
+      });
+    }
+    function notifyDone() { if (embedded) { try { parent.postMessage('rsvp-submitted', '*'); } catch (e) {} } }
 
     function toggleLang() {
       currentLang = currentLang === 'ko' ? 'en' : 'ko';
@@ -272,6 +291,7 @@
       document.getElementById('formWrap').style.display = 'none';
       document.getElementById('thanks').style.display = 'block';
       window.scrollTo(0, 0);
+      notifyDone();
       btn.disabled = false;
     }
   </script>
