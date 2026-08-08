@@ -3060,14 +3060,17 @@
 
 
 
-      // 스크롤 시작 후 10초 뒤 RSVP 팝업
-      let rsvpTriggered = false;
-      window.addEventListener('scroll', function onFirstScroll() {
-        if (rsvpTriggered) return;
-        rsvpTriggered = true;
-        window.removeEventListener('scroll', onFirstScroll);
-        /* 자동 팝업 비활성화 — RSVP는 rsvp.html 단독 페이지 사용 */
-      }, { passive: true });
+      // 로드 후 잠시 뒤 RSVP 팝업 자동 표시 (클릭 불필요 · 세션당 1회)
+      var _rsvpAuto = null;
+      try { _rsvpAuto = sessionStorage.getItem('rsvpAutoShown'); } catch (e) {}
+      if (!_rsvpAuto) {
+        setTimeout(function () {
+          if (typeof openRsvpModal === 'function') {
+            openRsvpModal();
+            try { sessionStorage.setItem('rsvpAutoShown', '1'); } catch (e) {}
+          }
+        }, 4500);
+      }
 
       // 갤러리 로드
       loadGallery();
