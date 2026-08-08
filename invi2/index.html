@@ -3137,6 +3137,7 @@
       document.getElementById('rsvpFormWrap').style.display = 'block';
       document.getElementById('rsvpThanks').style.display = 'none';
       overlay.style.display = 'flex';
+      document.getElementById('rsvpSheet').style.transform = ''; // 잔존 transform 제거 (IME 보호)
       overlay.style.opacity = '0';
       overlay.offsetHeight; // 리플로우 강제 → transform 없이 페이드인 (삼성 한글 IME 정상)
       overlay.style.opacity = '1';
@@ -3196,6 +3197,7 @@
       }, { passive: false }); // non-passive: preventDefault 허용
 
       sheet.addEventListener('touchend', function () {
+        if (!dragging) return; // 입력창 탭 등 실제 드래그가 아니면 transform을 건드리지 않음 (삼성 한글 IME 보호)
         dragging = false;
         sheet.style.transition = 'transform .3s cubic-bezier(.22,.61,.36,1)';
         if (currentY > 100) {
@@ -3204,6 +3206,8 @@
         } else {
           sheet.style.transform = 'translateY(0)';
           document.getElementById('rsvpOverlay').style.opacity = '1';
+          // 스냅백 후 transform 완전 제거 → 시트에 transform이 남아 IME가 깨지지 않도록
+          setTimeout(function () { if (!dragging) sheet.style.transform = ''; }, 320);
         }
         currentY = 0;
       });
