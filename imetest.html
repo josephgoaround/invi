@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>IME 입력 진단</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Serif KR', serif; background: #f3efe8; color: #1a1a1a;
+      max-width: 480px; margin: 0 auto; padding: 20px 16px 120px;
+      touch-action: pan-x pan-y; /* 실제 페이지와 동일 */
+    }
+    h1 { font-size: 18px; margin-bottom: 6px; }
+    p.desc { font-size: 12px; color: #666; margin-bottom: 18px; line-height: 1.6; }
+    .case { background: #fff; border: 1px solid #e2d9c8; border-radius: 12px; padding: 14px; margin-bottom: 14px; }
+    .case b { display: block; font-size: 13px; margin-bottom: 8px; color: #b4925a; }
+    .plain { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; }
+    .fstyle {
+      width: 100%; padding: 14px 16px; background: #fff; border: 1px solid rgba(180,146,90,.3);
+      border-radius: 14px; font-family: 'Noto Serif KR', serif; font-size: 14px; color: #1a1a1a;
+      font-weight: 300; outline: none; -webkit-appearance: none; appearance: none;
+    }
+    /* C: 실제 RSVP와 동일 구조 (fixed overlay + relative overflow sheet) */
+    .ov { position: fixed; inset: 0; background: rgba(26,26,26,.86); z-index: 900;
+          display: none; align-items: flex-end; justify-content: center; }
+    .ov.open { display: flex; }
+    .sh { background: #f7f4ee; border-radius: 24px 24px 0 0; padding: 28px; width: 100%;
+          max-width: 480px; max-height: 92svh; overflow-y: auto; position: relative; touch-action: pan-y; }
+    .ov.blur { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .btn { width: 100%; padding: 14px; background: #1a1a1a; color: #fff; border: none;
+           border-radius: 12px; font-size: 15px; margin-top: 6px; }
+    .close { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>한글 입력 진단</h1>
+  <p class="desc">각 칸에 <b>“안녕”</b> 을 입력해 보세요. 어떤 칸이 되고 어떤 칸이 안 되는지 알려주시면 원인을 특정합니다.</p>
+
+  <div class="case">
+    <b>A. 아무 스타일 없는 기본 입력</b>
+    <input class="plain" placeholder="여기에 '안녕'" />
+  </div>
+
+  <div class="case">
+    <b>B. 실제 폼과 같은 스타일 (Noto Serif + appearance:none, 14px)</b>
+    <input class="fstyle" placeholder="여기에 '안녕'" />
+  </div>
+
+  <div class="case">
+    <b>C. 팝업(고정 오버레이+스크롤 시트) 안의 입력 — 실제 RSVP 구조</b>
+    <button class="btn" onclick="openOv(false)">C 팝업 열기</button>
+  </div>
+
+  <div class="case">
+    <b>D. 팝업 + backdrop-filter(blur) — 이전 버전 재현</b>
+    <button class="btn" onclick="openOv(true)">D 팝업 열기 (blur)</button>
+  </div>
+
+  <div class="ov" id="ov">
+    <div class="sh">
+      <button class="close" onclick="closeOv()">✕</button>
+      <p style="font-size:13px;color:#666;margin-bottom:14px;line-height:1.8">
+        예식과 식사가 같은 자리에서 함께 진행되어<br>참석 여부를 미리 여쭙고자 합니다.<br>번거로우시더라도 답변을 남겨주시면 감사하겠습니다.
+      </p>
+      <div style="font-size:12px;color:#b4925a;margin-bottom:6px">성함 *</div>
+      <input class="fstyle" placeholder="여기에 '안녕'" />
+      <div style="height:12px"></div>
+      <div style="font-size:12px;color:#b4925a;margin-bottom:6px">관계 *</div>
+      <input class="fstyle" placeholder="여기에 '안녕'" />
+      <div style="height:600px"></div>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+    /* 실제 페이지와 동일한 핀치줌 방지 핸들러 */
+    document.addEventListener('touchstart', function (e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    document.addEventListener('touchmove', function (e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    document.addEventListener('touchend', function (e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+
+    const ov = document.getElementById('ov');
+    function openOv(blur) { ov.classList.toggle('blur', !!blur); ov.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeOv() { ov.classList.remove('open'); document.body.style.overflow = ''; }
+  </script>
+</body>
+</html>
