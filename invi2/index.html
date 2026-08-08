@@ -3141,6 +3141,7 @@
       overlay.offsetHeight; // 리플로우 강제 → transform 없이 페이드인 (삼성 한글 IME 정상)
       overlay.style.opacity = '1';
       document.body.style.overflow = 'hidden';
+      if (window.__pauseCd) window.__pauseCd(); // 팝업 열려있는 동안 카운트다운 정지 (한글 IME 안정)
     }
 
     function selectAttend(val) {
@@ -3161,6 +3162,7 @@
       sheet.style.transition = 'transform .3s cubic-bezier(.22,.61,.36,1)';
       sheet.style.transform  = '';
       document.body.style.overflow = '';
+      if (window.__resumeCd) window.__resumeCd();
       setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = '1'; }, 260);
     }
 
@@ -3995,13 +3997,13 @@
       tick();
 
       // 입력 중에는 카운트다운 정지 — 매초 리플로우가 삼성 한글 IME 조합을 취소하는 문제 방지
-      function pauseCd() { if (timer) { clearInterval(timer); timer = null; } }
-      function resumeCd() { if (!timer && !isWeddingDay()) { timer = setInterval(tick, 1000); } }
+      window.__pauseCd = function () { if (timer) { clearInterval(timer); timer = null; } };
+      window.__resumeCd = function () { if (!timer && !isWeddingDay()) { timer = setInterval(tick, 1000); } };
       document.addEventListener('focusin', function (e) {
-        if (e.target && e.target.matches && e.target.matches('input, textarea')) pauseCd();
+        if (e.target && e.target.matches && e.target.matches('input, textarea')) window.__pauseCd();
       });
       document.addEventListener('focusout', function (e) {
-        if (e.target && e.target.matches && e.target.matches('input, textarea')) resumeCd();
+        if (e.target && e.target.matches && e.target.matches('input, textarea')) window.__resumeCd();
       });
     })();
 
