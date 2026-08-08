@@ -2181,7 +2181,7 @@
     /* RSVP 페이지 내 팝업 — rsvp.html을 iframe으로 격리 삽입(기종/캐시 무관 한글 입력) */
     .rsvpx-overlay { position: fixed; inset: 0; z-index: 1000; display: none; align-items: flex-end; justify-content: center; background: rgba(26,26,26,.82); }
     .rsvpx-overlay.open { display: flex; }
-    .rsvpx-sheet { position: relative; width: 100%; max-width: 480px; height: 94svh; background: #F7F4EE; border-radius: 20px 20px 0 0; overflow: hidden; box-shadow: 0 -8px 40px rgba(0,0,0,.28); }
+    .rsvpx-sheet { position: relative; width: 100%; max-width: 480px; height: 94svh; background: #F7F4EE; border-radius: 20px 20px 0 0; overflow: hidden; box-shadow: 0 -8px 40px rgba(0,0,0,.28); transition: transform .34s cubic-bezier(.22,.61,.36,1); }
     .rsvpx-frame { width: 100%; height: 100%; border: 0; display: block; background: #F7F4EE; }
     .rsvpx-close { position: absolute; top: 10px; right: 12px; z-index: 2; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.92); border: 1px solid rgba(180,146,90,.3); font-size: 17px; line-height: 1; color: #5A5248; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 </style>
@@ -3974,14 +3974,31 @@
     (function () {
       var ov = document.getElementById('rsvpxOverlay');
       var fr = document.getElementById('rsvpxFrame');
+      var sheet = ov.querySelector('.rsvpx-sheet');
+      var settleT;
       window.openRsvpModal = function () {
         fr.src = 'rsvp.html';           // 열 때마다 새 폼
+        clearTimeout(settleT);
+        sheet.style.transition = 'none';
+        sheet.style.transform = 'translateY(100%)';
         ov.classList.add('open');
         document.body.style.overflow = 'hidden';
+        // 아래 → 위 슬라이드업
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            sheet.style.transition = 'transform .34s cubic-bezier(.22,.61,.36,1)';
+            sheet.style.transform = 'translateY(0)';
+          });
+        });
+        // 애니메이션 종료 후 transform 완전 제거 → iframe 내부 한글 IME 보호
+        settleT = setTimeout(function () { sheet.style.transition = 'none'; sheet.style.transform = ''; }, 430);
       };
       window.closeRsvpModal = function () {
-        ov.classList.remove('open');
+        clearTimeout(settleT);
+        sheet.style.transition = 'transform .3s cubic-bezier(.22,.61,.36,1)';
+        sheet.style.transform = 'translateY(100%)';
         document.body.style.overflow = '';
+        setTimeout(function () { ov.classList.remove('open'); sheet.style.transition = 'none'; sheet.style.transform = ''; }, 300);
       };
       ov.addEventListener('click', function (e) { if (e.target === ov) closeRsvpModal(); });
       window.addEventListener('message', function (e) { if (e.data === 'rsvp-close') closeRsvpModal(); });
