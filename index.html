@@ -2304,7 +2304,7 @@
 ══════════════════════════════════════════ -->
   <header class="top-bar">
     <div class="top-bar-inner">
-      <button class="rsvp-fixed-btn" id="rsvpFixedBtn" onclick="openRsvp()">
+      <button class="rsvp-fixed-btn" id="rsvpFixedBtn" onclick="location.href='rsvp.html'">
         <span class="ko-text">참석 여부</span>
         <span class="en-text">RSVP</span>
       </button>
@@ -2890,7 +2890,7 @@
       <span class="en-text">As the ceremony and reception are held together in the same place,<br>we kindly ask that you let us
         know<br>whether you'll be able to join us.<br>Your thoughtful reply helps us welcome every guest and prepare a comfortable seat for you.</span>
     </p>
-    <button class="rsvp-open-btn" onclick="openRsvp()">
+    <button class="rsvp-open-btn" onclick="location.href='rsvp.html'">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -3059,7 +3059,7 @@
         if (rsvpTriggered) return;
         rsvpTriggered = true;
         window.removeEventListener('scroll', onFirstScroll);
-        setTimeout(() => openRsvp(), 10000);
+        /* 자동 팝업 비활성화 — RSVP는 rsvp.html 단독 페이지 사용 */
       }, { passive: true });
 
       // 갤러리 로드
