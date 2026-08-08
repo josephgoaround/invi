@@ -3980,7 +3980,7 @@
       var sheet = ov.querySelector('.rsvpx-sheet');
       var settleT;
       window.openRsvpModal = function () {
-        fr.src = 'rsvp.html';           // 열 때마다 새 폼
+        fr.src = '/rsvp.html';          // 루트 절대경로 — 하위 폴더(invi/invi2/test)에서도 정상 로드
         clearTimeout(settleT);
         sheet.style.transition = 'none';
         sheet.style.transform = 'translateY(100%)';
