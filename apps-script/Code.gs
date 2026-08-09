@@ -59,15 +59,7 @@ const COMMENT_SHEET_ID = '1jTZjlu9QQq69lSIV9TcgAU9q2yTUghnT3liXW9NS0LE'; // 축�
 const SNAP_SHEET_ID    = '1JpCAUW23zn1a_ZNiJrENMMtrHIhmt9tepHxJRc9jhAY'; // 스냅 제출 명단
 const DRIVE_FOLDER_ID  = '1pkuh2kDPZWCKxT62I_i5EXuzyURt4k3g';             // 하객 스냅 사진 폴더
 const GALLERY_FOLDER_ID = '1iWRsz2wizN_6Ofe_Lh4ROuKrrUoTh4n8';            // 갤러리 (우리의 이야기)
-const NOTIFY_EMAIL   = 'kang553492@gmail.com'; // 제출 알림 받을 이메일 (여러 명은 콤마로 구분)
-const NOTIFY_ENABLED = true;                   // 알림을 끄려면 false 로 변경
 // ─────────────────────────────────────────────────────
-
-// ── 제출 알림 메일 (실패해도 본 처리에는 영향 없음) ──
-function notify(subject, body) {
-  if (!NOTIFY_ENABLED || !NOTIFY_EMAIL) return;
-  try { MailApp.sendEmail({ to: NOTIFY_EMAIL, subject: subject, body: body }); } catch (err) {}
-}
 
 // ── GET: ?action=gallery → 갤러리 이미지 ID 목록 반환 ──
 function doGet(e) {
@@ -261,10 +253,6 @@ function handleRsvp(data) {
           data.message   || '',
           newRemark
         ]]);
-        notify('[청첩장] 참석 회신(수정) · ' + data.name,
-          '[수정된 회신]\n성함: ' + data.name + '\n관계: ' + (data.relation || '-') +
-          '\n연락처: ' + data.contact + '\n참석여부: ' + newAttend +
-          '\n인원수: ' + (data.partySize || '-') + '\n시간: ' + newTs);
         return;
       }
     }
@@ -281,10 +269,6 @@ function handleRsvp(data) {
     data.message   || '',
     ''
   ]);
-  notify('[청첩장] 참석 회신 · ' + data.name,
-    '성함: ' + data.name + '\n관계: ' + (data.relation || '-') +
-    '\n연락처: ' + data.contact + '\n참석여부: ' + newAttend +
-    '\n인원수: ' + (data.partySize || '-') + '\n시간: ' + newTs);
 }
 
 
@@ -315,8 +299,6 @@ function handleComment(data) {
     data.name,
     data.message
   ]);
-  notify('[청첩장] 축하 메시지 · ' + data.name,
-    '성함: ' + data.name + '\n메시지: ' + data.message);
 }
 
 // ── 스냅 → Drive 폴더에 업로드 + 제출 명단 기록 ──────
@@ -357,9 +339,6 @@ function handleSnap(data) {
     savedNames.join(' / '),
     posted
   ]);
-  notify('[청첩장] 하객 스냅 · ' + data.name,
-    '성함: ' + data.name + '\n연락처: ' + data.contact +
-    '\n파일 수: ' + savedNames.length + '\n게시(대표) 수: ' + posted);
 }
 
 // ── 피드(게시) 시트 가져오기/생성 ──────────────────────
